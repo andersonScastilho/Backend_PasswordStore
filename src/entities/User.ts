@@ -2,6 +2,7 @@ export interface UserProps {
   userFullName: string;
   userEmail: string;
   userPassword: string;
+  userId: string;
 }
 
 export class User {
@@ -15,6 +16,12 @@ export class User {
     return this.props.userFullName;
   }
 
+  get userPassword() {
+    return this.props.userPassword;
+  }
+  get userId() {
+    return this.props.userId;
+  }
   constructor(props: UserProps) {
     this.props = props;
   }

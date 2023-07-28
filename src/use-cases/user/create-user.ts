@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from "uuid";
 import { User } from "entities/User";
 import { UserRepository } from "repositories/user-repository";
 
@@ -22,10 +23,13 @@ export class CreateUser {
       throw Error("Email in use");
     }
 
+    const userId = uuidv4();
+
     const user = new User({
       userEmail,
       userFullName,
       userPassword,
+      userId,
     });
 
     await this.userRepository.create(user);
