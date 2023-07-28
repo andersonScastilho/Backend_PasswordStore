@@ -1,14 +1,8 @@
 import { Request, Response, Router } from "express";
 import { InMemoryUserRepository } from "repositories/in-memory/in-memory-users-repository";
-import { CreateUser } from "use-cases/create-user";
+import { CreateUser } from "use-cases/user/create-user";
 
-export const router = Router();
-
-router.get("/users", (req, res) => {
-  return res.status(200).json({
-    ok: true,
-  });
-});
+const router = Router();
 
 router.post("/users", async (req: Request, res: Response) => {
   const { email, fullName, password } = req.body;
@@ -31,3 +25,5 @@ router.post("/users", async (req: Request, res: Response) => {
     });
   }
 });
+
+export { router as userRouter };
