@@ -25,6 +25,23 @@ export class PostgresCreateUserRepository implements UserRepository {
   }
 
   async verifyUserExist(email: string): Promise<User | null> {
-    return null;
+    const user = await prismaClient.users.findUnique({
+      where: {
+        email: email,
+      },
+    });
+
+    if (!user) {
+      return null;
+    }
+
+    const userInstace = new User({
+      userEmail: user.email,
+      userFullName: user.fullName,
+      userPassword: user.password_hash,
+      userId: user.id,
+    });
+
+    return userInstace;
   }
 }
