@@ -1,4 +1,4 @@
-import jwt from "jsonwebtoken";
+import Auth from "entities/Auth";
 
 import { UserRepository } from "repositories/user-repository";
 
@@ -16,20 +16,8 @@ export class AuthUser {
       throw Error("User not found");
     }
 
-    const passwordIsValid = user.comparePasswords(password);
+    const authenticated = Auth.authentication(user, password);
 
-    if (!passwordIsValid) {
-      throw Error("Invalid password");
-    }
-
-    const token = jwt.sign(
-      { id: user.userId },
-      process.env.TOKEN_SECRET ?? "",
-      {
-        expiresIn: process.env.TOKEN_EXPIRATION,
-      }
-    );
-
-    return token;
+    return authenticated;
   }
 }
