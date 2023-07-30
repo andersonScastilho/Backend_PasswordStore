@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
+
 import { User } from "entities/User";
 import { UserRepository } from "repositories/user-repository";
 
@@ -28,9 +29,12 @@ export class CreateUser {
     const user = new User({
       userEmail,
       userFullName,
-      userPassword,
       userId,
+      userPassword,
     });
+
+    const hashPassword = await user.encryptedPassword(userPassword);
+    user.hashPasswordToUserPassword = hashPassword;
 
     await this.userRepository.create(user);
 
