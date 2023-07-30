@@ -22,7 +22,6 @@ export class AuthController {
 
       return res.status(200).json({ token });
     } catch (e) {
-      console.log(e);
       return res.status(401).json({
         error: "Não foi possivel se autenticar",
       });
