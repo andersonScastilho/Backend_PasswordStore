@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
 
 import { User } from "entities/User";
-import { UserRepository } from "repositories/user-repository";
+import { CreateUserRepository } from "repositories/user/create-user-repository";
 
 interface CreateUserRequest {
   userFullName: string;
@@ -12,7 +12,7 @@ interface CreateUserRequest {
 type CreateUserResponse = User;
 
 export class CreateUser {
-  constructor(private userRepository: UserRepository) {}
+  constructor(private userRepository: CreateUserRepository) {}
   async execute({
     userEmail,
     userFullName,

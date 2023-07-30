@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { CreateStorageController } from "use-cases/storage/create-storage-controller";
+import { CreateStorageController } from "use-cases/storage/create/create-storage-controller";
 
 import Auth from "middlewares/auth";
 const createStorageController = new CreateStorageController();

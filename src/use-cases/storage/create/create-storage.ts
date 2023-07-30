@@ -1,8 +1,8 @@
 import { v4 as uuidv4 } from "uuid";
 
 import { Storage } from "entities/Storage";
-import { StorageRepository } from "repositories/storage-repository";
-import { encrypt } from "../../utils/crypt";
+import { CreateStorageRepository } from "repositories/storage/create-storage-repository";
+import { encrypt } from "../../../utils/crypt";
 interface CreateStorageRequest {
   account: string;
   password: string;
@@ -15,7 +15,7 @@ interface CreateStorageRequest {
 type CreateStorageResponse = Storage;
 
 export class CreateStorage {
-  constructor(private storageRepository: StorageRepository) {}
+  constructor(private storageRepository: CreateStorageRepository) {}
   async execute({
     account,
     password,

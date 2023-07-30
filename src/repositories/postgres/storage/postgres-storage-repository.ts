@@ -1,8 +1,8 @@
 import { prismaClient } from "database/prisma-client";
 import { Storage } from "entities/Storage";
-import { StorageRepository } from "repositories/storage-repository";
+import { CreateStorageRepository } from "repositories/storage/create-storage-repository";
 
-export class PostgresStorageRepository implements StorageRepository {
+export class PostgresStorageRepository implements CreateStorageRepository {
   async create(storage: Storage): Promise<Storage> {
     const {
       account,

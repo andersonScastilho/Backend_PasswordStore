@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 
 import { CreateStorage } from "./create-storage";
-import { PostgresStorageRepository } from "../../repositories/postgres/postgres-storage-repository";
+import { PostgresStorageRepository } from "../../../repositories/postgres/storage/postgres-storage-repository";
 
 export class CreateStorageController {
   async handle(req: Request, res: Response) {

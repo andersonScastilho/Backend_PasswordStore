@@ -1,6 +1,6 @@
 import Auth from "entities/Auth";
 
-import { UserRepository } from "repositories/user-repository";
+import { UserRepository } from "repositories/user/create-user-repository";
 
 interface LoginUserRequest {
   email: string;
