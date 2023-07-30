@@ -24,7 +24,7 @@ export class CreateUserController {
       });
     } catch (e) {
       return res.status(400).json({
-        message: "Não foi possivel criar o usuario",
+        error: "Não foi possivel criar o usuario",
       });
     }
   }
