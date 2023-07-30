@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from "uuid";
 
 import { Storage } from "entities/Storage";
 import { StorageRepository } from "repositories/storage-repository";
-
+import { encrypt } from "../../utils/crypt";
 interface CreateStorageRequest {
   account: string;
   password: string;
@@ -26,8 +26,12 @@ export class CreateStorage {
   }: CreateStorageRequest): Promise<CreateStorageResponse> {
     const storageId = uuidv4();
 
+    const { iv, content } = encrypt(password);
+
+    const encryptedPassword = `${iv}:${content}`;
+
     const storage = new Storage({
-      password,
+      password: encryptedPassword,
       account,
       usageLocation,
       description,
