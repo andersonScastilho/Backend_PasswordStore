@@ -1,14 +1,14 @@
 import { Request, Response } from "express";
 
 import { CreateUser } from "./create-user";
-import { PostgresCreateUserRepository } from "repositories/postgres/postgres-user-repository";
+import { PostgresUserRepository } from "repositories/postgres/postgres-user-repository";
 
 export class CreateUserController {
   async handle(req: Request, res: Response) {
     const { email, fullName, password } = req.body;
 
     try {
-      const userRepository = new PostgresCreateUserRepository();
+      const userRepository = new PostgresUserRepository();
       const createUser = new CreateUser(userRepository);
 
       const user = await createUser.execute({

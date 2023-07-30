@@ -4,7 +4,7 @@ import { prismaClient } from "database/prisma-client";
 
 import { UserRepository } from "repositories/user-repository";
 
-export class PostgresCreateUserRepository implements UserRepository {
+export class PostgresUserRepository implements UserRepository {
   async create(user: User): Promise<User> {
     const { userEmail, userFullName, userPassword, userId } = user;
 
