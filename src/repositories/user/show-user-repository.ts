@@ -1,5 +1,5 @@
-import { User } from "entities/User";
+import { UserSchema } from "models/user-schema";
 
 export interface ShowUserRepository {
-  show(email: string): Promise<User | null>;
+  show(email: string): Promise<UserSchema | null>;
 }

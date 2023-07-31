@@ -14,13 +14,6 @@ export class PostgresShowUserRepository implements ShowUserRepository {
       return null;
     }
 
-    const userInstance = new User({
-      userEmail: user.email,
-      userFullName: user.fullName,
-      userId: user.id,
-      userPassword: user.password_hash,
-    });
-
-    return userInstance;
+    return user;
   }
 }
