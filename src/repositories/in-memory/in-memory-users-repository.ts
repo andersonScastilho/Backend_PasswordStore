@@ -1,7 +1,7 @@
 import { User } from "entities/User";
-import { UserRepository } from "repositories/user/create-user-repository";
+import { CreateUserRepository } from "repositories/user/create-user-repository";
 
-export class InMemoryUserRepository implements UserRepository {
+export class InMemoryUserRepository implements CreateUserRepository {
   public items: User[] = [];
 
   async create(user: User): Promise<User> {
