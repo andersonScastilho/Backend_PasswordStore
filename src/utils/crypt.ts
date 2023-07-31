@@ -2,7 +2,7 @@ import crypto from "crypto";
 
 const algorithm = "aes-256-gcm";
 
-const secretKey = Buffer.from(process.env.TESTE ?? "", "hex");
+const secretKey = Buffer.from(process.env.SECRET_CRYPTO ?? "", "hex");
 
 const iv = crypto.randomBytes(16);
 
