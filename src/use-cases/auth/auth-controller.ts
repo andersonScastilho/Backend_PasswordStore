@@ -2,8 +2,7 @@ import { Request, Response } from "express";
 
 import { AuthUser } from "./auth-user";
 
-import { PostgresUserRepository } from "repositories/postgres/user/postgres-create-user-repository";
-
+import { PostgresShowUserRepository } from "../../repositories/postgres/user/postgres-show-user-repository";
 export class AuthController {
   async handle(req: Request, res: Response) {
     try {
@@ -15,7 +14,7 @@ export class AuthController {
         });
       }
 
-      const userRepository = new PostgresUserRepository();
+      const userRepository = new PostgresShowUserRepository();
       const auth = new AuthUser(userRepository);
 
       const token = await auth.execute({ email, password });

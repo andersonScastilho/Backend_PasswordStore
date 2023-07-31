@@ -2,6 +2,7 @@ import { v4 as uuidv4 } from "uuid";
 
 import { User } from "entities/User";
 import { CreateUserRepository } from "repositories/user/create-user-repository";
+import { ShowUserRepository } from "repositories/user/show-user-repository";
 
 interface CreateUserRequest {
   userFullName: string;
@@ -12,13 +13,16 @@ interface CreateUserRequest {
 type CreateUserResponse = User;
 
 export class CreateUser {
-  constructor(private userRepository: CreateUserRepository) {}
+  constructor(
+    private createUserRepository: CreateUserRepository,
+    private showUserRepository: ShowUserRepository
+  ) {}
   async execute({
     userEmail,
     userFullName,
     userPassword,
   }: CreateUserRequest): Promise<CreateUserResponse> {
-    const userExist = await this.userRepository.verifyUserExist(userEmail);
+    const userExist = await this.showUserRepository.show(userEmail);
 
     if (userExist) {
       throw Error("Email in use");
@@ -36,7 +40,7 @@ export class CreateUser {
     const hashPassword = await user.encryptedPassword(userPassword);
     user.hashPasswordToUserPassword = hashPassword;
 
-    await this.userRepository.create(user);
+    await this.createUserRepository.create(user);
 
     return user;
   }
