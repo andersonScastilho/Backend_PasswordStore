@@ -26,9 +26,9 @@ export class CreateStorage {
   }: CreateStorageRequest): Promise<CreateStorageResponse> {
     const storageId = uuidv4();
 
-    const { iv, content } = encrypt(password);
+    const { iv, content, tag } = encrypt(password);
 
-    const encryptedPassword = `${iv}:${content}`;
+    const encryptedPassword = `${iv}:${content}:${tag}`;
 
     const storage = new Storage({
       password: encryptedPassword,
