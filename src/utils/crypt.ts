@@ -1,37 +1,48 @@
 import crypto from "crypto";
 
-const algorithm = "aes-256-ctr";
+const algorithm = "aes-256-gcm";
 
 const secretKey: string = process.env.SECRET_CRYPTO ?? "";
 const iv = crypto.randomBytes(16);
 
 export const encrypt = (text: string) => {
-  const cipher = crypto.createCipheriv(algorithm, secretKey, iv);
+  try {
+    const cipher = crypto.createCipheriv(algorithm, secretKey, iv);
 
-  const encrypted = Buffer.concat([
-    cipher.update(text.toString()),
-    cipher.final(),
-  ]);
+    const encrypted = Buffer.concat([
+      cipher.update(text.toString()),
+      cipher.final(),
+    ]);
 
-  return {
-    iv: iv.toString("hex"),
-    content: encrypted.toString("hex"),
-  };
+    const tag = cipher.getAuthTag();
+
+    return {
+      iv: iv.toString("hex"),
+      content: encrypted.toString("hex"),
+      tag: tag.toString("hex"),
+    };
+  } catch (e) {
+    throw Error("Erro ao criptografar os dados");
+  }
 };
 
-export const decrypt = (hash: string) => {
-  const [newIv, text] = hash.split(":");
+export const decrypt = (data: { iv: string; content: string; tag: string }) => {
+  try {
+    const decipher = crypto.createDecipheriv(
+      algorithm,
+      secretKey,
+      Buffer.from(data.iv, "hex")
+    );
+    decipher.setAuthTag(Buffer.from(data.tag, "hex")); // Define a tag de autenticação.
 
-  const decipher = crypto.createDecipheriv(
-    algorithm,
-    secretKey,
-    Buffer.from(newIv, "hex")
-  );
+    const encryptedContent = Buffer.from(data.content, "hex");
+    const decrypted = Buffer.concat([
+      decipher.update(encryptedContent),
+      decipher.final(),
+    ]);
 
-  const decrypted = Buffer.concat([
-    decipher.update(Buffer.from(text, "hex")),
-    decipher.final(),
-  ]);
-
-  return decrypted.toString();
+    return decrypted.toString("utf8");
+  } catch (e) {
+    throw new Error("Erro ao descriptografar os dados.");
+  }
 };
