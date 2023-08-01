@@ -1,8 +1,8 @@
 import { Storage } from "entities/Storage";
-import { PostgresIndexStorageRepository } from "repositories/postgres/storage/postgres-index-storage-repository";
+import { IndexStorageRepository } from "repositories/storage/index-storage-repository";
 
 export class IndexStorage {
-  constructor(private indexStorageRepository: PostgresIndexStorageRepository) {}
+  constructor(private indexStorageRepository: IndexStorageRepository) {}
 
   async execute(userId: string): Promise<Storage[]> {
     const dataStoraged = await this.indexStorageRepository.index(userId);

@@ -22,7 +22,7 @@ export class CreateUser {
     userFullName,
     userPassword,
   }: CreateUserRequest): Promise<CreateUserResponse> {
-    const userExist = await this.showUserRepository.show(userEmail);
+    const userExist = await this.showUserRepository.show({ email: userEmail });
 
     if (userExist) {
       throw Error("Email in use");
