@@ -14,6 +14,7 @@ export class PostgresUpdateStorageRepository
     link,
     usageLocation,
     storageId,
+    password,
   }: UpdateStorageParams): Promise<StorageSchema> {
     const storage = await prismaClient.storage.update({
       where: {
@@ -24,6 +25,7 @@ export class PostgresUpdateStorageRepository
         description: description,
         link: link,
         usageLocation: usageLocation,
+        password: password,
       },
     });
     return storage;

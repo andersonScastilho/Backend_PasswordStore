@@ -5,7 +5,7 @@ import { UpdateStorage } from "./update-storage";
 
 export class UpdateStorageController {
   async handle(req: Request, res: Response) {
-    const { account, usageLocation, description, link } = req.body;
+    const { account, usageLocation, description, link, password } = req.body;
     const { userId, storageId } = req.params;
 
     try {
@@ -30,6 +30,7 @@ export class UpdateStorageController {
         description,
         link,
         usageLocation,
+        password,
       });
 
       return res.status(200).json({ storage });

@@ -17,6 +17,7 @@ export class UpdateStorage {
     link,
     usageLocation,
     userId,
+    password,
   }: UpdateStorageParams) {
     const storage = await this.showStorageRepository.show(storageId, userId);
 
@@ -31,6 +32,7 @@ export class UpdateStorage {
       description: description,
       link: link,
       usageLocation: usageLocation,
+      password: password,
     });
 
     return updatedStorage;

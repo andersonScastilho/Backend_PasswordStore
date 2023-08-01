@@ -7,6 +7,7 @@ export interface UpdateStorageParams {
   link?: string;
   storageId: string;
   userId: string;
+  password?: string;
 }
 
 export interface UpdateStorageRepository {
@@ -16,5 +17,6 @@ export interface UpdateStorageRepository {
     link,
     usageLocation,
     storageId,
+    password,
   }: UpdateStorageParams): Promise<StorageSchema>;
 }
