@@ -1,19 +1,37 @@
 import { prismaClient } from "database/prisma-client";
-import { User } from "entities/User";
-import { ShowUserRepository } from "repositories/user/show-user-repository";
+import {
+  ShowUserParams,
+  ShowUserRepository,
+} from "repositories/user/show-user-repository";
 
 export class PostgresShowUserRepository implements ShowUserRepository {
-  async show(email: string) {
-    const user = await prismaClient.users.findUnique({
-      where: {
-        email: email,
-      },
-    });
+  async show({ email, userId }: ShowUserParams) {
+    const users = [];
 
-    if (!user) {
-      return null;
+    if (email) {
+      const user = await prismaClient.users.findUnique({
+        where: {
+          email: email,
+        },
+      });
+      if (!user) {
+        return null;
+      }
+
+      users.push(user);
     }
 
-    return user;
+    if (userId) {
+      const user = await prismaClient.users.findUnique({
+        where: {
+          id: userId,
+        },
+      });
+      if (!user) {
+        return null;
+      }
+      users.push(user);
+    }
+    return users[0];
   }
 }
