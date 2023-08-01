@@ -1,4 +1,4 @@
-import Auth from "entities/Auth";
+import Auth from "utils/Auth";
 import { User } from "entities/User";
 import { ShowUserPerEmailRepository } from "repositories/user/show-user-email-repository";
 

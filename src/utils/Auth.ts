@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 
-import { User } from "./User";
+import { User } from "../entities/User";
 
 type JwtPayload = {
   id: string;
