@@ -44,6 +44,7 @@ export const decrypt = (data: { iv: string; content: string; tag: string }) => {
 
     return decrypted.toString("utf8");
   } catch (e) {
+    console.log(e);
     throw new Error("Erro ao descriptografar os dados.");
   }
 };

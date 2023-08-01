@@ -1,4 +1,3 @@
-import bcrypt from "bcrypt";
 import { decrypt } from "utils/crypt";
 
 interface StorageProps {
@@ -40,14 +39,8 @@ export class Storage {
     this.props = props;
   }
 
-  showPassword(userPassword: string, hashPassword: string) {
-    const passwordIsValid = bcrypt.compare(userPassword, hashPassword);
-
-    if (!passwordIsValid) {
-      throw Error("Invalid password");
-    }
-
-    const [iv, content, tag] = userPassword.split(":");
+  showPassword(storgePassword: string) {
+    const [iv, content, tag] = storgePassword.split(":");
 
     const password = decrypt({ iv, content, tag });
 
