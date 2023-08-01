@@ -1,9 +1,10 @@
 import { prismaClient } from "database/prisma-client";
 import { Storage } from "entities/Storage";
+import { StorageSchema } from "models/storage-schema";
 import { CreateStorageRepository } from "repositories/storage/create-storage-repository";
 
 export class PostgresStorageRepository implements CreateStorageRepository {
-  async create(storage: Storage): Promise<Storage> {
+  async create(storage: Storage): Promise<StorageSchema> {
     const {
       account,
       description,
@@ -30,6 +31,6 @@ export class PostgresStorageRepository implements CreateStorageRepository {
       throw Error("Não foi possivel armazenar os dados");
     }
 
-    return storage;
+    return createdStorage;
   }
 }

@@ -1,11 +1,12 @@
 import { prismaClient } from "database/prisma-client";
+import { UserSchema } from "models/user-schema";
 import {
   ShowUserParams,
   ShowUserRepository,
 } from "repositories/user/show-user-repository";
 
 export class PostgresShowUserRepository implements ShowUserRepository {
-  async show({ email, userId }: ShowUserParams) {
+  async show({ email, userId }: ShowUserParams): Promise<UserSchema | null> {
     const users = [];
 
     if (email) {
