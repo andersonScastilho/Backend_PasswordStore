@@ -1,15 +1,26 @@
 import jwt from "jsonwebtoken";
+
 import { User } from "./User";
 
+type JwtPayload = {
+  id: string;
+};
 class Auth {
-  validAuth(token: string) {
+  validAuth(authorization: string) {
+    const [, token] = authorization.split(" ");
+
     const tokenIsValid = jwt.verify(token, process.env.TOKEN_SECRET ?? "");
 
     if (!tokenIsValid) {
       throw Error("Invalid token");
     }
 
-    return tokenIsValid;
+    const { id } = jwt.verify(
+      token,
+      process.env.TOKEN_SECRET ?? ""
+    ) as JwtPayload;
+
+    return id;
   }
 
   authentication(user: User, password: string) {
