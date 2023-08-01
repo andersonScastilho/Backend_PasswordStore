@@ -14,7 +14,6 @@ export class ShowStoragePassword {
     password: string
   ): Promise<string> {
     const storage = await this.showStorageRepository.show(storageId, userId);
-
     if (!storage) {
       throw Error("Storage not found");
     }
@@ -35,7 +34,7 @@ export class ShowStoragePassword {
       throw Error("User not found");
     }
 
-    const passwordIsValid = bcrypt.compare(password, user.password_hash);
+    const passwordIsValid = await bcrypt.compare(password, user.password_hash);
 
     if (!passwordIsValid) {
       throw Error("Invalid password");
