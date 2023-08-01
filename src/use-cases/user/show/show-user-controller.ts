@@ -13,7 +13,10 @@ export class ShowUserController {
 
       const user = await showUser.execute(userId);
 
-      return res.status(200).json({ user });
+      return res.status(200).json({
+        email: user.userEmail,
+        fullName: user.userFullName,
+      });
     } catch (e) {
       return res.status(400).json({
         error: "Login required",
