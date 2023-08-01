@@ -12,7 +12,7 @@ export class IndexStorage {
     dataStoraged.forEach((storage) => {
       const storageInstace = new Storage({
         account: storage.account,
-        password: storage.password,
+        password: "",
         storageId: storage.id,
         usageLocation: storage.usageLocation,
         userId: storage.userId,

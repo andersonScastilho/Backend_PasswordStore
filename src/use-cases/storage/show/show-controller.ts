@@ -11,7 +11,12 @@ export class ShowStorageController {
       const storage = await showStorage.execute(storageId, userId);
 
       return res.status(200).json({
-        storage,
+        id: storage.id,
+        account: storage.account,
+        password: "",
+        usageLocation: storage.usageLocation,
+        link: storage.link,
+        description: storage.description,
       });
     } catch (e) {
       return res.status(400).json({
