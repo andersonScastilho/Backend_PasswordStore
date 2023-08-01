@@ -30,7 +30,6 @@ export class CreateUserController {
         id: user.userId,
       });
     } catch (e) {
-      console.log(e);
       return res.status(400).json({
         error: "Não foi possivel criar o usuario",
       });
