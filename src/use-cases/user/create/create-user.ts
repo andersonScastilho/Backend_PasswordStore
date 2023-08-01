@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from "uuid";
 
 import { User } from "entities/User";
 import { CreateUserRepository } from "repositories/user/create-user-repository";
-import { ShowUserRepository } from "repositories/user/show-user-repository";
+import { ShowUserPerEmailRepository } from "repositories/user/show-user-email-repository";
 
 interface CreateUserRequest {
   userFullName: string;
@@ -15,14 +15,14 @@ type CreateUserResponse = User;
 export class CreateUser {
   constructor(
     private createUserRepository: CreateUserRepository,
-    private showUserRepository: ShowUserRepository
+    private showUserRepository: ShowUserPerEmailRepository
   ) {}
   async execute({
     userEmail,
     userFullName,
     userPassword,
   }: CreateUserRequest): Promise<CreateUserResponse> {
-    const userExist = await this.showUserRepository.show({ email: userEmail });
+    const userExist = await this.showUserRepository.show(userEmail);
 
     if (userExist) {
       throw Error("Email in use");

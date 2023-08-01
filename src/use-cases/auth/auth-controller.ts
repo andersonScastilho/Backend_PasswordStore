@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 
 import { AuthUser } from "./auth-user";
 
-import { PostgresShowUserRepository } from "../../repositories/postgres/user/postgres-show-user-repository";
+import { PostgresShowUserRepository } from "../../repositories/postgres/user/postgres-show-user-userId-repository";
 export class AuthController {
   async handle(req: Request, res: Response) {
     try {

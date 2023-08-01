@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 
 import { CreateUser } from "./create-user";
 import { PostgresCreateUserRepository } from "repositories/postgres/user/postgres-create-user-repository";
-import { PostgresShowUserRepository } from "repositories/postgres/user/postgres-show-user-repository";
+import { PostgresShowUserRepository } from "repositories/postgres/user/postgres-show-user-userId-repository";
 
 export class CreateUserController {
   async handle(req: Request, res: Response) {

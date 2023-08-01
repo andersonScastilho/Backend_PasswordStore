@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { PostgresShowUserRepository } from "repositories/postgres/user/postgres-show-user-repository";
+import { PostgresShowUserRepository } from "repositories/postgres/user/postgres-show-user-userId-repository";
 import { ShowUser } from "./show-user";
 
 export class ShowUserController {

@@ -1,6 +1,6 @@
 import Auth from "entities/Auth";
 import { User } from "entities/User";
-import { ShowUserRepository } from "repositories/user/show-user-repository";
+import { ShowUserPerEmailRepository } from "repositories/user/show-user-email-repository";
 
 interface LoginUserRequest {
   email: string;
@@ -8,9 +8,9 @@ interface LoginUserRequest {
 }
 
 export class AuthUser {
-  constructor(private userRepository: ShowUserRepository) {}
+  constructor(private userRepository: ShowUserPerEmailRepository) {}
   async execute({ email, password }: LoginUserRequest) {
-    const user = await this.userRepository.show({ email: email });
+    const user = await this.userRepository.show(email);
 
     if (!user) {
       throw Error("User not found");
