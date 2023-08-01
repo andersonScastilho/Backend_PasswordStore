@@ -8,9 +8,9 @@ interface LoginUserRequest {
 }
 
 export class AuthUser {
-  constructor(private userRepository: ShowUserPerEmailRepository) {}
+  constructor(private showUserPerEmailRepository: ShowUserPerEmailRepository) {}
   async execute({ email, password }: LoginUserRequest) {
-    const user = await this.userRepository.show(email);
+    const user = await this.showUserPerEmailRepository.show(email);
 
     if (!user) {
       throw Error("User not found");

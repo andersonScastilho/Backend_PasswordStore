@@ -1,8 +1,8 @@
 import { User } from "entities/User";
-import { ShowUserPeruserIdRepository } from "repositories/user/show-user-userId-repository";
+import { ShowUserPerUserIdRepository } from "repositories/user/show-user-userId-repository";
 
 export class ShowUser {
-  constructor(private showUserRepository: ShowUserPeruserIdRepository) {}
+  constructor(private showUserRepository: ShowUserPerUserIdRepository) {}
   async execute(userId: string) {
     const user = await this.showUserRepository.show(userId);
 

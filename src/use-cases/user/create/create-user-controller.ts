@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 
 import { CreateUser } from "./create-user";
 import { PostgresCreateUserRepository } from "repositories/postgres/user/postgres-create-user-repository";
-import { PostgresShowUserRepository } from "repositories/postgres/user/postgres-show-user-userId-repository";
+import { PostgresShowUserPerEmailRepository } from "repositories/postgres/user/postgres-show-user-email-repository";
 
 export class CreateUserController {
   async handle(req: Request, res: Response) {
@@ -10,11 +10,12 @@ export class CreateUserController {
 
     try {
       const createUserRepository = new PostgresCreateUserRepository();
-      const showUserRepository = new PostgresShowUserRepository();
+      const showUserPerEmailRepository =
+        new PostgresShowUserPerEmailRepository();
 
       const createUser = new CreateUser(
         createUserRepository,
-        showUserRepository
+        showUserPerEmailRepository
       );
 
       const user = await createUser.execute({
@@ -29,6 +30,7 @@ export class CreateUserController {
         id: user.userId,
       });
     } catch (e) {
+      console.log(e);
       return res.status(400).json({
         error: "Não foi possivel criar o usuario",
       });

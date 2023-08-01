@@ -15,14 +15,14 @@ type CreateUserResponse = User;
 export class CreateUser {
   constructor(
     private createUserRepository: CreateUserRepository,
-    private showUserRepository: ShowUserPerEmailRepository
+    private showUserperEmailRepository: ShowUserPerEmailRepository
   ) {}
   async execute({
     userEmail,
     userFullName,
     userPassword,
   }: CreateUserRequest): Promise<CreateUserResponse> {
-    const userExist = await this.showUserRepository.show(userEmail);
+    const userExist = await this.showUserperEmailRepository.show(userEmail);
 
     if (userExist) {
       throw Error("Email in use");

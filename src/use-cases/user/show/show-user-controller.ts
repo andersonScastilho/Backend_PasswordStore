@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { PostgresShowUserRepository } from "repositories/postgres/user/postgres-show-user-userId-repository";
+import { PostgresShowUserPerUserIdRepository } from "repositories/postgres/user/postgres-show-user-userId-repository";
 import { ShowUser } from "./show-user";
 
 export class ShowUserController {
@@ -7,7 +7,7 @@ export class ShowUserController {
     const { userId } = req.params;
 
     try {
-      const userRepository = new PostgresShowUserRepository();
+      const userRepository = new PostgresShowUserPerUserIdRepository();
 
       const showUser = new ShowUser(userRepository);
 
