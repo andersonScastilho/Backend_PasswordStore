@@ -24,7 +24,7 @@ export class CreateStorageController {
       return res.status(200).json(storagedPassword);
     } catch (e) {
       return res.status(400).json({
-        error: "F fuleco falecido",
+        error: "Não foi possivel armazenar os dados",
       });
     }
   }
