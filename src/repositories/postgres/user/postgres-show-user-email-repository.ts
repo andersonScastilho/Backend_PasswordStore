@@ -6,7 +6,7 @@ export class PostgresShowUserPerEmailRepository
   implements ShowUserPerEmailRepository
 {
   async show(email: string): Promise<UserSchema | null> {
-    const user = await prismaClient.users.findUnique({
+    const user = await prismaClient.user.findUnique({
       where: {
         email: email,
       },
