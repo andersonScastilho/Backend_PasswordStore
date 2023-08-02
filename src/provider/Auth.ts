@@ -31,14 +31,19 @@ class Auth {
       throw Error("Invalid password");
     }
 
-    const token = jwt.sign(
-      { id: user.userId },
-      process.env.TOKEN_SECRET ?? "",
-      {
-        expiresIn: process.env.TOKEN_EXPIRATION,
-      }
-    );
+    const token = jwt.sign({}, process.env.TOKEN_SECRET ?? "", {
+      subject: user.userId,
+      expiresIn: process.env.TOKEN_EXPIRATION,
+    });
 
+    return token;
+  }
+
+  async authenticationProvider(ueserId: string) {
+    const token = jwt.sign({}, process.env.TOKEN_SECRET ?? "", {
+      subject: ueserId,
+      expiresIn: "20s",
+    });
     return token;
   }
 }

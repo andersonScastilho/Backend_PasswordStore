@@ -4,6 +4,7 @@ import { userRouter } from "routes/user-routes";
 import { storageRoutes } from "routes/store-routes";
 import { auhRoutes } from "routes/auth";
 import { passwordRoutes } from "routes/password-routes";
+import { refreshTokenRoutes } from "./routes/refresh_token-routes";
 
 class App {
   public app: express.Application;
@@ -23,6 +24,7 @@ class App {
     this.app.use(storageRoutes);
     this.app.use(auhRoutes);
     this.app.use(passwordRoutes);
+    this.app.use(refreshTokenRoutes);
   }
 }
 export default new App();
