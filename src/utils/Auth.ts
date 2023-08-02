@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 
 import { User } from "../entities/User";
+import { GenerateRefreshToken } from "provider/GenerateRefreshToken";
 
 type JwtPayload = {
   id: string;
@@ -23,7 +24,7 @@ class Auth {
     return id;
   }
 
-  authentication(user: User, password: string) {
+  async authentication(user: User, password: string) {
     const passwordIsValid = user.comparePasswords(password);
 
     if (!passwordIsValid) {
@@ -37,8 +38,10 @@ class Auth {
         expiresIn: process.env.TOKEN_EXPIRATION,
       }
     );
+    const generateRefreshToken = new GenerateRefreshToken();
+    const refreshToken = await generateRefreshToken.execute(user.userId);
 
-    return token;
+    return { token, refreshToken };
   }
 }
 
