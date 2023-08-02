@@ -22,26 +22,15 @@ export class RefreshToken {
       throw Error("Refresh token invalid");
     }
 
-    const token = await auth.authenticationProvider(refreshToken.userId);
-
-    const uuid = uudiv4();
-    const expiresIn = dayjs().add(15, "second").unix();
-
     const refreshTokenExpired = dayjs().isAfter(
       dayjs.unix(refreshToken.expiresIn)
     );
 
     if (refreshTokenExpired) {
-      await this.deleteRefreshTokenRepository.delete(refreshToken.userId);
-
-      const newRefreshToken = await this.createRefreshTokenRepository.create({
-        expiresIn: expiresIn,
-        userId: refreshToken.userId,
-        id: uuid,
-      });
-
-      return { token, refresh_token: newRefreshToken };
+      throw Error("Refresh_token expired");
     }
+
+    const token = await auth.authenticationProvider(refreshToken.userId);
 
     return token;
   }
