@@ -5,6 +5,7 @@ import { User } from "../entities/User";
 type JwtPayload = {
   id: string;
 };
+
 class Auth {
   validAuth(authorization: string) {
     const [, token] = authorization.split(" ");
@@ -42,4 +43,4 @@ class Auth {
   }
 }
 
-export default new Auth();
+export default Auth;

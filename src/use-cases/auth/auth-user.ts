@@ -1,5 +1,5 @@
-import Auth from "utils/Auth";
 import { User } from "entities/User";
+import Auth from "provider/Auth";
 import { ShowUserPerEmailRepository } from "repositories/user/show-user-email-repository";
 
 interface LoginUserRequest {
@@ -22,7 +22,9 @@ export class AuthUser {
       userPassword: user.password_hash,
     });
 
-    const authenticated = Auth.authentication(instanceUser, password);
+    const auth = new Auth();
+
+    const authenticated = auth.authentication(instanceUser, password);
 
     return authenticated;
   }
