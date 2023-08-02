@@ -6,7 +6,7 @@ export class PostgresShowUserPerUserIdRepository
   implements ShowUserPerUserIdRepository
 {
   async show(userId: string): Promise<UserSchema | null> {
-    const user = await prismaClient.users.findUnique({
+    const user = await prismaClient.user.findUnique({
       where: {
         id: userId,
       },
