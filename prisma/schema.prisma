@@ -10,12 +10,14 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Users {
+model User {
   id            String    @id @unique
   email         String    @unique
   password_hash String
   fullName      String
   Storage       Storage[]
+
+  Refresh_Token Refresh_Token?
 
   @@map("users")
 }
@@ -28,8 +30,18 @@ model Storage {
   link          String?
   description   String?
 
-  user   Users  @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
   userId String
 
   @@map("storages")
+}
+
+model Refresh_Token {
+  id        String @id
+  expiresIn Int
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @unique
+
+  @@map("refresh_token")
 }
