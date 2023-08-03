@@ -1,13 +1,18 @@
 import jwt from "jsonwebtoken";
 
 import { User } from "../entities/User";
+import { ShowUserPerUserIdRepository } from "repositories/user/show-user-userId-repository";
 
 type JwtPayload = {
   id: string;
+  email: string;
 };
 
 class Auth {
-  validAuth(authorization: string) {
+  constructor(
+    private showUserPerUserIdRepository?: ShowUserPerUserIdRepository
+  ) {}
+  async validAuth(authorization: string) {
     const [, token] = authorization.split(" ");
 
     const tokenIsValid = jwt.verify(token, process.env.TOKEN_SECRET ?? "");
@@ -16,10 +21,16 @@ class Auth {
       throw Error("Invalid token");
     }
 
-    const { id } = jwt.verify(
+    const { id, email } = jwt.verify(
       token,
       process.env.TOKEN_SECRET ?? ""
     ) as JwtPayload;
+
+    const userEmail = await this.showUserPerUserIdRepository?.show(id);
+
+    if (email !== userEmail?.email) {
+      throw Error("Invalid token");
+    }
 
     return id;
   }
@@ -32,7 +43,7 @@ class Auth {
     }
 
     const token = jwt.sign(
-      { id: user.userId },
+      { id: user.userId, email: user.userEmail },
       process.env.TOKEN_SECRET ?? "",
       {
         expiresIn: process.env.TOKEN_EXPIRATION,
@@ -42,10 +53,14 @@ class Auth {
     return token;
   }
 
-  async authenticationProvider(ueserId: string) {
-    const token = jwt.sign({ id: ueserId }, process.env.TOKEN_SECRET ?? "", {
-      expiresIn: "20s",
-    });
+  async authenticationProvider(ueserId: string, email: string) {
+    const token = jwt.sign(
+      { id: ueserId, email: email },
+      process.env.TOKEN_SECRET ?? "",
+      {
+        expiresIn: process.env.TOKEN_EXPIRATION,
+      }
+    );
     return token;
   }
 }
