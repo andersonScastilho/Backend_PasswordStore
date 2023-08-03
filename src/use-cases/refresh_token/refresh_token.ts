@@ -1,16 +1,9 @@
 import dayjs from "dayjs";
 import Auth from "provider/Auth";
-import { CreateRefreshTokenRepository } from "repositories/refresh_token/create-refresh_token-repository";
-import { DeleteRefreshTokenRepository } from "repositories/refresh_token/delete-refresh_token-repository";
 import { ShowRefreshTokenRepository } from "repositories/refresh_token/show-refresh_token-repository";
-import { v4 as uudiv4 } from "uuid";
 
 export class RefreshToken {
-  constructor(
-    private showRefreshTokenRepository: ShowRefreshTokenRepository,
-    private createRefreshTokenRepository: CreateRefreshTokenRepository,
-    private deleteRefreshTokenRepository: DeleteRefreshTokenRepository
-  ) {}
+  constructor(private showRefreshTokenRepository: ShowRefreshTokenRepository) {}
   async execute(refresh_token: string) {
     const refreshToken = await this.showRefreshTokenRepository.show(
       refresh_token

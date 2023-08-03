@@ -1,8 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { RefreshToken } from "./refresh_token";
 import { PostgresShowRefreshTokenRepository } from "repositories/postgres/refresh_token/postgres-show-refresh_token-repository";
-import { PostgresCreateRefreshToken } from "repositories/postgres/refresh_token/postgres-create-refresh_token-repository";
-import { PostgresDeleteRefreshTokenRepository } from "repositories/postgres/refresh_token/postgres-delete-refresh_token-repository";
 import { z } from "zod";
 
 const ParamsSchema = z.object({
@@ -14,15 +12,8 @@ export class RefreshTokenController {
       const { refresh_token } = ParamsSchema.parse(req.body);
 
       const refreshTokenRepository = new PostgresShowRefreshTokenRepository();
-      const createRefreshTokenRepository = new PostgresCreateRefreshToken();
-      const deleteRefreshTokenRepository =
-        new PostgresDeleteRefreshTokenRepository();
 
-      const refreshToken = new RefreshToken(
-        refreshTokenRepository,
-        createRefreshTokenRepository,
-        deleteRefreshTokenRepository
-      );
+      const refreshToken = new RefreshToken(refreshTokenRepository);
 
       const token = await refreshToken.execute(refresh_token);
 
