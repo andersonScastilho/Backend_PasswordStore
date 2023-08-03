@@ -1,10 +1,14 @@
 import { NextFunction, Request, Response } from "express";
 import { PostgresIndexStorageRepository } from "repositories/postgres/storage/postgres-index-storage-repository";
 import { IndexStorage } from "./index-storage";
+import { z } from "zod";
 
+const ParamsSchema = z.object({
+  userId: z.string(),
+});
 export class IndexStorageController {
   async handle(req: Request, res: Response, next: NextFunction) {
-    const { userId } = req.params;
+    const { userId } = ParamsSchema.parse(req.params);
     try {
       if (!userId) {
         return res.status(401).json({

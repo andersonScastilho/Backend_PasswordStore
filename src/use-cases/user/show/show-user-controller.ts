@@ -1,10 +1,14 @@
 import { NextFunction, Request, Response } from "express";
 import { PostgresShowUserPerUserIdRepository } from "repositories/postgres/user/postgres-show-user-userId-repository";
 import { ShowUser } from "./show-user";
+import { z } from "zod";
 
+const ParamsSchema = z.object({
+  userId: z.string(),
+});
 export class ShowUserController {
   async handle(req: Request, res: Response, next: NextFunction) {
-    const { userId } = req.params;
+    const { userId } = ParamsSchema.parse(req.params);
 
     try {
       const userRepository = new PostgresShowUserPerUserIdRepository();

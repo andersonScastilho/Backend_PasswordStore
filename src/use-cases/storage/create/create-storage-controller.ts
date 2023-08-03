@@ -2,11 +2,24 @@ import { Request, Response, NextFunction } from "express";
 
 import { CreateStorage } from "./create-storage";
 import { PostgresStorageRepository } from "../../../repositories/postgres/storage/postgres-create-storage-repository";
+import { z } from "zod";
 
+const BodySchema = z.object({
+  password: z.string(),
+  account: z.string(),
+  usageLocation: z.string(),
+  link: z.string(),
+  description: z.string(),
+});
+
+const ParamsSchema = z.object({
+  userId: z.string(),
+});
 export class CreateStorageController {
   async handle(req: Request, res: Response, next: NextFunction) {
-    const { password, account, usageLocation, link, description } = req.body;
-    const { userId } = req.params;
+    const { password, account, usageLocation, link, description } =
+      BodySchema.parse(req.body);
+    const { userId } = ParamsSchema.parse(req.params);
 
     try {
       const storageRepository = new PostgresStorageRepository();

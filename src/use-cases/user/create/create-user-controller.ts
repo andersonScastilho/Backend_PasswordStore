@@ -1,12 +1,17 @@
 import { NextFunction, Request, Response } from "express";
-
+import { z } from "zod";
 import { CreateUser } from "./create-user";
 import { PostgresCreateUserRepository } from "repositories/postgres/user/postgres-create-user-repository";
 import { PostgresShowUserPerEmailRepository } from "repositories/postgres/user/postgres-show-user-email-repository";
 
+const BodySchema = z.object({
+  email: z.string().email(),
+  fullName: z.string(),
+  password: z.string(),
+});
 export class CreateUserController {
   async handle(req: Request, res: Response, next: NextFunction) {
-    const { email, fullName, password } = req.body;
+    const { email, fullName, password } = BodySchema.parse(req.body);
 
     try {
       const createUserRepository = new PostgresCreateUserRepository();
