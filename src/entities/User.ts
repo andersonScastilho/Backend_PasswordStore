@@ -42,12 +42,13 @@ export class User {
 
   async encryptedPassword(password: string) {
     const hashPassword = await bcrypt.hash(password, 10);
-
     return hashPassword;
   }
 
   async comparePasswords(password: string) {
-    return bcrypt.compare(password, this.userPassword);
+    const passwordIsValid = await bcrypt.compare(password, this.userPassword);
+
+    return passwordIsValid;
   }
 
   async updatePassword(
@@ -55,7 +56,7 @@ export class User {
     newPassword: string,
     newPasswordConfirmation: string
   ) {
-    const isMatchPassword = this.comparePasswords(oldPassword);
+    const isMatchPassword = await this.comparePasswords(oldPassword);
 
     if (!isMatchPassword) {
       throw Error("Invalid password");

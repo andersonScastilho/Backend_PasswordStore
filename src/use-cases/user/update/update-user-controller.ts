@@ -27,6 +27,15 @@ export class UpdateUserController {
       } = BodySchema.parse(req.body);
       const { userId } = ParamsSchema.parse(req.params);
 
+      if (newPassword) {
+        if (!newPasswordConfirmation) {
+          throw Error("newPasswordConfirmation is required to update password");
+        }
+        if (!oldPassword) {
+          throw Error("oldPassword is required to update password");
+        }
+      }
+
       if (
         !email &&
         !newPassword &&

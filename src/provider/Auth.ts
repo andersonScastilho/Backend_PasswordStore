@@ -25,7 +25,7 @@ class Auth {
   }
 
   async authentication(user: User, password: string) {
-    const passwordIsValid = user.comparePasswords(password);
+    const passwordIsValid = await user.comparePasswords(password);
 
     if (!passwordIsValid) {
       throw Error("Invalid password");

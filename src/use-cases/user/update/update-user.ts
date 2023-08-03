@@ -42,7 +42,7 @@ export class UpdateUser {
     }
 
     if (newPassword && oldPassword && newPasswordConfirmation) {
-      instanceUser.updatePassword(
+      await instanceUser.updatePassword(
         oldPassword,
         newPassword,
         newPasswordConfirmation
