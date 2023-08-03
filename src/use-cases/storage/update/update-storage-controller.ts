@@ -5,11 +5,11 @@ import { UpdateStorage } from "./update-storage";
 import { z } from "zod";
 
 const BodySchema = z.object({
-  account: z.string(),
-  usageLocation: z.string(),
-  description: z.string(),
-  link: z.string(),
-  password: z.string(),
+  account: z.string().optional(),
+  usageLocation: z.string().optional(),
+  description: z.string().optional(),
+  link: z.string().optional(),
+  password: z.string().optional(),
 });
 
 const ParamsSchema = z.object({
