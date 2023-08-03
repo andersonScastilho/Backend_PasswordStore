@@ -1,11 +1,11 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 
 import { CreateUser } from "./create-user";
 import { PostgresCreateUserRepository } from "repositories/postgres/user/postgres-create-user-repository";
 import { PostgresShowUserPerEmailRepository } from "repositories/postgres/user/postgres-show-user-email-repository";
 
 export class CreateUserController {
-  async handle(req: Request, res: Response) {
+  async handle(req: Request, res: Response, next: NextFunction) {
     const { email, fullName, password } = req.body;
 
     try {
@@ -29,9 +29,7 @@ export class CreateUserController {
         fullName: user.userFullName,
       });
     } catch (e) {
-      return res.status(400).json({
-        error: "Não foi possivel criar o usuario",
-      });
+      next(e);
     }
   }
 }

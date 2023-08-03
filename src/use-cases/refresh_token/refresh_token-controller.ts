@@ -1,11 +1,11 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { RefreshToken } from "./refresh_token";
 import { PostgresShowRefreshTokenRepository } from "repositories/postgres/refresh_token/postgres-show-refresh_token-repository";
 import { PostgresCreateRefreshToken } from "repositories/postgres/refresh_token/postgres-create-refresh_token-repository";
 import { PostgresDeleteRefreshTokenRepository } from "repositories/postgres/refresh_token/postgres-delete-refresh_token-repository";
 
 export class RefreshTokenController {
-  async handle(req: Request, res: Response) {
+  async handle(req: Request, res: Response, next: NextFunction) {
     const { refresh_token } = req.body;
 
     try {
@@ -24,9 +24,7 @@ export class RefreshTokenController {
 
       return res.status(200).json({ token });
     } catch (e) {
-      return res.status(400).json({
-        error: "Não foi possivel autenticar-se",
-      });
+      next(e);
     }
   }
 }

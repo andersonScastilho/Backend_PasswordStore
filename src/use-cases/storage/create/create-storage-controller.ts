@@ -1,10 +1,10 @@
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 
 import { CreateStorage } from "./create-storage";
 import { PostgresStorageRepository } from "../../../repositories/postgres/storage/postgres-create-storage-repository";
 
 export class CreateStorageController {
-  async handle(req: Request, res: Response) {
+  async handle(req: Request, res: Response, next: NextFunction) {
     const { password, account, usageLocation, link, description } = req.body;
     const { userId } = req.params;
 
@@ -23,9 +23,7 @@ export class CreateStorageController {
 
       return res.status(200).json(storagedPassword);
     } catch (e) {
-      return res.status(400).json({
-        error: "Não foi possivel armazenar os dados",
-      });
+      next(e);
     }
   }
 }

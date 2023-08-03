@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 
 import { AuthUser } from "./auth-user";
 
@@ -6,7 +6,7 @@ import { PostgresShowUserPerEmailRepository } from "../../repositories/postgres/
 import { PostgresCreateRefreshToken } from "repositories/postgres/refresh_token/postgres-create-refresh_token-repository";
 import { PostgresDeleteRefreshTokenRepository } from "repositories/postgres/refresh_token/postgres-delete-refresh_token-repository";
 export class AuthController {
-  async handle(req: Request, res: Response) {
+  async handle(req: Request, res: Response, next: NextFunction) {
     try {
       const { email, password } = req.body;
 
@@ -31,9 +31,7 @@ export class AuthController {
 
       return res.status(200).json(token);
     } catch (e) {
-      return res.status(401).json({
-        error: "Não foi possivel se autenticar",
-      });
+      next(e);
     }
   }
 }

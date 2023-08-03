@@ -1,9 +1,9 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { PostgresShowUserPerUserIdRepository } from "repositories/postgres/user/postgres-show-user-userId-repository";
 import { ShowUser } from "./show-user";
 
 export class ShowUserController {
-  async handle(req: Request, res: Response) {
+  async handle(req: Request, res: Response, next: NextFunction) {
     const { userId } = req.params;
 
     try {
@@ -18,9 +18,7 @@ export class ShowUserController {
         fullName: user.userFullName,
       });
     } catch (e) {
-      return res.status(400).json({
-        error: "Login required",
-      });
+      next(e);
     }
   }
 }

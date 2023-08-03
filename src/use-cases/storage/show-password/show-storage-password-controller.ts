@@ -1,10 +1,10 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { PostgresShowStorageRepository } from "repositories/postgres/storage/postgres-show-storage-repository";
 import { ShowStoragePassword } from "./show-storage-password";
 import { PostgresShowUserPerUserIdRepository } from "repositories/postgres/user/postgres-show-user-userId-repository";
 
 export class ShowStoragePasswordController {
-  async handle(req: Request, res: Response) {
+  async handle(req: Request, res: Response, next: NextFunction) {
     const { password } = req.body;
     const { storageId, userId } = req.params;
     try {
@@ -30,9 +30,7 @@ export class ShowStoragePasswordController {
 
       return res.status(200).json({ descryptedPassword });
     } catch (e) {
-      return res.status(400).json({
-        error: "Não foi possivel mostrar a senha",
-      });
+      next(e);
     }
   }
 }

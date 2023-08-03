@@ -5,6 +5,7 @@ import { storageRoutes } from "routes/store-routes";
 import { auhRoutes } from "routes/auth";
 import { passwordRoutes } from "routes/password-routes";
 import { refreshTokenRoutes } from "./routes/refresh_token-routes";
+import { errorHandler } from "middlewares/error";
 
 class App {
   public app: express.Application;
@@ -13,10 +14,15 @@ class App {
     this.app = express();
     this._middlewares();
     this._router();
+    this._lastMiddlewares();
   }
 
   private _middlewares() {
     this.app.use(express.json());
+  }
+
+  private _lastMiddlewares() {
+    this.app.use(errorHandler);
   }
 
   private _router() {
