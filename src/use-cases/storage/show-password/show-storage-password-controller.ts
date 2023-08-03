@@ -15,10 +15,10 @@ const ParamsSchema = z.object({
 
 export class ShowStoragePasswordController {
   async handle(req: Request, res: Response, next: NextFunction) {
-    const { password } = BodySchema.parse(req.body);
-
-    const { storageId, userId } = ParamsSchema.parse(req.params);
     try {
+      const { password } = BodySchema.parse(req.body);
+
+      const { storageId, userId } = ParamsSchema.parse(req.params);
       if (!password) {
         return res.status(400).json({
           error: "Missing data",

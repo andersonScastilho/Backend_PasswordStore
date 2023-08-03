@@ -11,9 +11,9 @@ const BodySchema = z.object({
 });
 export class CreateUserController {
   async handle(req: Request, res: Response, next: NextFunction) {
-    const { email, fullName, password } = BodySchema.parse(req.body);
-
     try {
+      const { email, fullName, password } = BodySchema.parse(req.body);
+
       const createUserRepository = new PostgresCreateUserRepository();
       const showUserPerEmailRepository =
         new PostgresShowUserPerEmailRepository();

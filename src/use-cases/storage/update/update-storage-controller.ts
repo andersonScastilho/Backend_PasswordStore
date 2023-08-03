@@ -18,12 +18,12 @@ const ParamsSchema = z.object({
 });
 export class UpdateStorageController {
   async handle(req: Request, res: Response, next: NextFunction) {
-    const { account, usageLocation, description, link, password } =
-      BodySchema.parse(req.body);
-
-    const { userId, storageId } = ParamsSchema.parse(req.params);
-
     try {
+      const { account, usageLocation, description, link, password } =
+        BodySchema.parse(req.body);
+
+      const { userId, storageId } = ParamsSchema.parse(req.params);
+
       if (!account && !usageLocation && !description && !link) {
         return res.status(400).json({
           error: "Missing data",

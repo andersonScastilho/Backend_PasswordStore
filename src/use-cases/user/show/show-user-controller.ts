@@ -8,9 +8,9 @@ const ParamsSchema = z.object({
 });
 export class ShowUserController {
   async handle(req: Request, res: Response, next: NextFunction) {
-    const { userId } = ParamsSchema.parse(req.params);
-
     try {
+      const { userId } = ParamsSchema.parse(req.params);
+
       const userRepository = new PostgresShowUserPerUserIdRepository();
 
       const showUser = new ShowUser(userRepository);

@@ -10,9 +10,9 @@ const ParamsSchema = z.object({
 });
 export class DeleteStorageController {
   async handle(req: Request, res: Response, next: NextFunction) {
-    const { userId, storageId } = ParamsSchema.parse(req.params);
-
     try {
+      const { userId, storageId } = ParamsSchema.parse(req.params);
+
       const deleteStorageRepository = new PostgresDeleteStorageRepository();
       const showStorageRepository = new PostgresShowStorageRepository();
 

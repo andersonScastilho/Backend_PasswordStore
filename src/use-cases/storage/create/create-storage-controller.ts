@@ -17,11 +17,11 @@ const ParamsSchema = z.object({
 });
 export class CreateStorageController {
   async handle(req: Request, res: Response, next: NextFunction) {
-    const { password, account, usageLocation, link, description } =
-      BodySchema.parse(req.body);
-    const { userId } = ParamsSchema.parse(req.params);
-
     try {
+      const { password, account, usageLocation, link, description } =
+        BodySchema.parse(req.body);
+      const { userId } = ParamsSchema.parse(req.params);
+
       const storageRepository = new PostgresStorageRepository();
       const createStorage = new CreateStorage(storageRepository);
 

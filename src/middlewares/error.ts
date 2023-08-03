@@ -1,5 +1,7 @@
 import { ErrorRequestHandler } from "express";
 import { Prisma } from "@prisma/client";
+import { ZodError } from "zod";
+import { fromZodError } from "zod-validation-error";
 
 export const errorHandler: ErrorRequestHandler = async (
   error,
@@ -21,6 +23,11 @@ export const errorHandler: ErrorRequestHandler = async (
     }
 
     return res.status(400).json({ error: error.message });
+  }
+
+  if (error instanceof ZodError) {
+    const { message } = fromZodError(error);
+    return res.status(400).json({ error: message });
   }
 
   if (error instanceof Error) {

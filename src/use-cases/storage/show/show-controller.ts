@@ -9,9 +9,9 @@ const ParamsSchema = z.object({
 });
 export class ShowStorageController {
   async handle(req: Request, res: Response, next: NextFunction) {
-    const { storageId, userId } = ParamsSchema.parse(req.params);
-
     try {
+      const { storageId, userId } = ParamsSchema.parse(req.params);
+
       const storageRepository = new PostgresShowStorageRepository();
       const showStorage = new ShowStorage(storageRepository);
       const storage = await showStorage.execute(storageId, userId);

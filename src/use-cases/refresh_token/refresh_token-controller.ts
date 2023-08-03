@@ -10,9 +10,9 @@ const ParamsSchema = z.object({
 });
 export class RefreshTokenController {
   async handle(req: Request, res: Response, next: NextFunction) {
-    const { refresh_token } = ParamsSchema.parse(req.body);
-
     try {
+      const { refresh_token } = ParamsSchema.parse(req.body);
+
       const refreshTokenRepository = new PostgresShowRefreshTokenRepository();
       const createRefreshTokenRepository = new PostgresCreateRefreshToken();
       const deleteRefreshTokenRepository =

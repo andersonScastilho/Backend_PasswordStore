@@ -8,8 +8,8 @@ const ParamsSchema = z.object({
 });
 export class IndexStorageController {
   async handle(req: Request, res: Response, next: NextFunction) {
-    const { userId } = ParamsSchema.parse(req.params);
     try {
+      const { userId } = ParamsSchema.parse(req.params);
       if (!userId) {
         return res.status(401).json({
           error: "Login required",
