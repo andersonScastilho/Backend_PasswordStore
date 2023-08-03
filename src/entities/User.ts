@@ -28,6 +28,14 @@ export class User {
     this.props.userPassword = hashPassword;
   }
 
+  set updateUserFullName(fullName: string) {
+    this.props.userFullName = fullName;
+  }
+
+  set updateUserEmail(email: string) {
+    this.props.userEmail = email;
+  }
+
   constructor(props: UserProps) {
     this.props = props;
   }
@@ -40,5 +48,27 @@ export class User {
 
   async comparePasswords(password: string) {
     return bcrypt.compare(password, this.userPassword);
+  }
+
+  async updatePassword(
+    oldPassword: string,
+    newPassword: string,
+    newPasswordConfirmation: string
+  ) {
+    const isMatchPassword = this.comparePasswords(oldPassword);
+
+    if (!isMatchPassword) {
+      throw Error("Invalid password");
+    }
+
+    if (newPassword !== newPasswordConfirmation) {
+      throw Error("Password confirmation must be the same as password");
+    }
+
+    const encryptedPassword = await this.encryptedPassword(newPassword);
+
+    this.props.userPassword = encryptedPassword;
+
+    return;
   }
 }
