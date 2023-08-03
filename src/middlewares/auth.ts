@@ -15,6 +15,6 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     req.params = { ...req.params, userId: id };
     return next();
   } catch (e) {
-    return res.status(401).json({ errors: ["Token expired or invalid"] });
+    return res.status(401).json({ error: "Token expired or invalid" });
   }
 };
