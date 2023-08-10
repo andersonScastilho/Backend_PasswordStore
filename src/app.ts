@@ -6,6 +6,7 @@ import { auhRoutes } from "routes/auth";
 import { passwordRoutes } from "routes/password-routes";
 import { refreshTokenRoutes } from "./routes/refresh_token-routes";
 import { errorHandler } from "middlewares/error";
+import cors from "cors";
 
 class App {
   public app: express.Application;
@@ -19,6 +20,7 @@ class App {
 
   private _middlewares() {
     this.app.use(express.json());
+    this.app.use(cors());
   }
 
   private _lastMiddlewares() {
