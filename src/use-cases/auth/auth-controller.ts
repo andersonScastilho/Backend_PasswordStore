@@ -8,7 +8,7 @@ import { PostgresDeleteRefreshTokenRepository } from "repositories/postgres/refr
 import { z } from "zod";
 
 const BodySchema = z.object({
-  email: z.string(),
+  email: z.string().email(),
   password: z.string(),
 });
 export class AuthController {
