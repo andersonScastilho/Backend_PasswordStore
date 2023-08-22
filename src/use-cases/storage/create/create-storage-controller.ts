@@ -25,7 +25,7 @@ export class CreateStorageController {
       const storageRepository = new PostgresStorageRepository();
       const createStorage = new CreateStorage(storageRepository);
 
-      const storagedPassword = await createStorage.execute({
+      const { storageId } = await createStorage.execute({
         account,
         password,
         usageLocation,
@@ -34,7 +34,9 @@ export class CreateStorageController {
         userId,
       });
 
-      return res.status(200).json(storagedPassword);
+      return res
+        .status(200)
+        .json({ account, usageLocation, description, link, storageId });
     } catch (e) {
       next(e);
     }
