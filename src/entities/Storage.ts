@@ -26,7 +26,7 @@ export class Storage {
     return this.props.usageLocation;
   }
   get link() {
-    return this.props.usageLocation;
+    return this.props.link;
   }
   get description() {
     return this.props.description;
