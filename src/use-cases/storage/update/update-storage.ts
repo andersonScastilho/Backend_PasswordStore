@@ -1,3 +1,4 @@
+import { Storage } from "entities/Storage";
 import { ShowStorageRepository } from "repositories/storage/show-storage-repository";
 import {
   UpdateStorageParams,
@@ -35,6 +36,16 @@ export class UpdateStorage {
       password: password,
     });
 
-    return updatedStorage;
+    const instanceStorage = new Storage({
+      account: updatedStorage.account,
+      password: "",
+      storageId: updatedStorage.id,
+      usageLocation: updatedStorage.usageLocation,
+      userId: updatedStorage.userId,
+      description: updatedStorage.description || "",
+      link: updatedStorage.link || "",
+    });
+
+    return instanceStorage;
   }
 }

@@ -1,3 +1,4 @@
+import { Storage } from "entities/Storage";
 import { ShowStorageRepository } from "repositories/storage/show-storage-repository";
 
 export class ShowStorage {
@@ -9,6 +10,16 @@ export class ShowStorage {
       throw Error("Storage not found");
     }
 
-    return storage;
+    const instanceStorage = new Storage({
+      account: storage.account,
+      password: "",
+      storageId: storage.id,
+      usageLocation: storage.usageLocation,
+      userId: storage.userId,
+      description: storage.description || "",
+      link: storage.link || "",
+    });
+
+    return instanceStorage;
   }
 }
