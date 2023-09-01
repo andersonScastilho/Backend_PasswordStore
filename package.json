@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node ./dist/index.js",
     "build": "tsc --build tsconfig.build.json && tsup src --minify",
+    "start": "node ./dist/index.js",
     "start:dev": "npx tsx watch ./src/index.ts"
   },
   "keywords": [],
@@ -32,6 +32,7 @@
     "prisma": "^5.0.0",
     "sucrase": "^3.34.0",
     "ts-node": "^10.9.1",
+    "tsup": "^7.2.0",
     "typescript": "^5.1.6",
     "vitest": "^0.33.0"
   }
