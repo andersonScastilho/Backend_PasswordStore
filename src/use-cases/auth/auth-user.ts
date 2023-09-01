@@ -38,7 +38,7 @@ export class AuthUser {
     const token = await auth.authentication(instanceUser, password);
 
     const uuid = uudiv4();
-    const expiresIn = dayjs().add(7, "day").unix();
+    const expiresIn = dayjs().add(7, "days").unix();
 
     const refreshToken = await this.createRefreshTokenRepository.create({
       expiresIn: expiresIn,
