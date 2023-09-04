@@ -16,6 +16,7 @@ export declare class Storage {
     get link(): string | undefined;
     get description(): string | undefined;
     get userId(): string;
+    set updatePassword(data: string);
     constructor(props: StorageProps);
     showPassword(storgePassword: string): string;
 }
