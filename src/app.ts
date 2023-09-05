@@ -6,8 +6,9 @@ import { auhRoutes } from "routes/auth";
 import { passwordRoutes } from "routes/password-routes";
 import { refreshTokenRoutes } from "./routes/refresh_token-routes";
 import { errorHandler } from "middlewares/error";
-import cors, { CorsOptions } from "cors";
+import cors from "cors";
 import helmet from "helmet";
+
 class App {
   public app: express.Application;
 
