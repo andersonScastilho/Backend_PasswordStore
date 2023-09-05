@@ -42,6 +42,8 @@ export class CreateUser {
 
     await this.createUserRepository.create(user);
 
+    user.sendEmailToVerify();
+
     return user;
   }
 }

@@ -1,4 +1,5 @@
 import bcrypt from "bcrypt";
+import SendEmail from "service/SendEmail";
 export interface UserProps {
   userFullName: string;
   userEmail: string;
@@ -69,6 +70,16 @@ export class User {
     const encryptedPassword = await this.encryptedPassword(newPassword);
 
     this.props.userPassword = encryptedPassword;
+
+    return;
+  }
+
+  async sendEmailToVerify() {
+    const subject = "Verificação de Email";
+    const text = "Teste";
+    const sendEmail = new SendEmail(this.props.userEmail, subject, text);
+
+    sendEmail.sendEmail();
 
     return;
   }
