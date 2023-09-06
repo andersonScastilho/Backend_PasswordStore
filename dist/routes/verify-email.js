@@ -1,1 +1,61 @@
-"use strict";var U=Object.create;var a=Object.defineProperty;var R=Object.getOwnPropertyDescriptor;var P=Object.getOwnPropertyNames;var T=Object.getPrototypeOf,k=Object.prototype.hasOwnProperty;var x=(s,e)=>{for(var r in e)a(s,r,{get:e[r],enumerable:!0})},u=(s,e,r,t)=>{if(e&&typeof e=="object"||typeof e=="function")for(let o of P(e))!k.call(s,o)&&o!==r&&a(s,o,{get:()=>e[o],enumerable:!(t=R(e,o))||t.enumerable});return s};var N=(s,e,r)=>(r=s!=null?U(T(s)):{},u(e||!s||!s.__esModule?a(r,"default",{value:s,enumerable:!0}):r,s)),g=s=>u(a({},"__esModule",{value:!0}),s);var O={};x(O,{verifyEmail:()=>I});module.exports=g(O);var v=require("express");var y=require("zod");var i=N(require("jsonwebtoken")),d=class{constructor(e){this.showUserPerUserIdRepository=e}async validAuth(e){let[,r]=e.split(" ");if(!i.default.verify(r,process.env.TOKEN_SECRET??""))throw Error("Invalid token");let{id:o,email:m}=i.default.verify(r,process.env.TOKEN_SECRET??""),c=await this.showUserPerUserIdRepository?.show(o);if(m!==c?.email)throw Error("Invalid token");return o}async authentication(e,r){if(!await e.comparePasswords(r))throw Error("Invalid password");return i.default.sign({id:e.userId,email:e.userEmail},process.env.TOKEN_SECRET??"",{expiresIn:process.env.TOKEN_EXPIRATION})}async authenticationProvider(e,r){return i.default.sign({id:e,email:r},process.env.TOKEN_SECRET??"",{expiresIn:process.env.TOKEN_EXPIRATION})}},h=d;var p=class{constructor(e){this.showUserPerIdRepository=e}async execute(e){let t=await new h(this.showUserPerIdRepository).validAuth(e);return!!await this.showUserPerIdRepository.show(t)}};var w=require("@prisma/client"),f=new w.PrismaClient;var l=class{async show(e){return await f.user.findUnique({where:{id:e}})}};var S=y.z.string(),n=class{async handle(e,r,t){try{let o=S.parse(e.query.token);if(!o)return r.status(401).send("<h1>N\xE3o foi possivel validar seu e-mail</h1>");let m=new l,c=new p(m),E=`Bearer ${o}`;return await c.execute(E)===!1?r.status(400).send("<h1>N\xE3o foi possivel validar seu e-mail</h1>"):r.status(200).send("<h1>Email validado com sucesso</h1>")}catch{return r.status(400).send("<h1>N\xE3o foi possivel validar seu e-mail</h1>")}}};var I=(0,v.Router)(),C=new n;I.get("/verify-email",C.handle);0&&(module.exports={verifyEmail});
+"use strict";var U=Object.create;var n=Object.defineProperty;var R=Object.getOwnPropertyDescriptor;var P=Object.getOwnPropertyNames;var k=Object.getPrototypeOf,T=Object.prototype.hasOwnProperty;var S=(o,e)=>{for(var r in e)n(o,r,{get:e[r],enumerable:!0})},u=(o,e,r,s)=>{if(e&&typeof e=="object"||typeof e=="function")for(let t of P(e))!T.call(o,t)&&t!==r&&n(o,t,{get:()=>e[t],enumerable:!(s=R(e,t))||s.enumerable});return o};var C=(o,e,r)=>(r=o!=null?U(k(o)):{},u(e||!o||!o.__esModule?n(r,"default",{value:o,enumerable:!0}):r,o)),N=o=>u(n({},"__esModule",{value:!0}),o);var V={};S(V,{verifyEmail:()=>I});module.exports=N(V);var g=require("express");var E=require("zod");var i=C(require("jsonwebtoken")),c=class{constructor(e){this.showUserPerUserIdRepository=e}async validAuth(e){let[,r]=e.split(" ");if(!i.default.verify(r,process.env.TOKEN_SECRET??""))throw Error("Invalid token");let{id:t,email:p}=i.default.verify(r,process.env.TOKEN_SECRET??""),m=await this.showUserPerUserIdRepository?.show(t);if(p!==m?.email)throw Error("Invalid token");return t}async authentication(e,r){if(!await e.comparePasswords(r))throw Error("Invalid password");return i.default.sign({id:e.userId,email:e.userEmail},process.env.TOKEN_SECRET??"",{expiresIn:process.env.TOKEN_EXPIRATION})}async authenticationProvider(e,r){return i.default.sign({id:e,email:r},process.env.TOKEN_SECRET??"",{expiresIn:process.env.TOKEN_EXPIRATION})}},h=c;var l=class{constructor(e){this.showUserPerIdRepository=e}async execute(e){let s=await new h(this.showUserPerIdRepository).validAuth(e);return!!await this.showUserPerIdRepository.show(s)}};var y=require("@prisma/client"),w=new y.PrismaClient;var d=class{async show(e){return await w.user.findUnique({where:{id:e}})}};var v=`<!DOCTYPE html>
+<html>
+<head>
+    <title>Verifica\xE7\xE3o de E-mail Conclu\xEDda</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            background-color: #007BFF;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+
+        p {
+            text-align: center;
+            font-size: 18px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Verifica\xE7\xE3o de E-mail Conclu\xEDda com Sucesso</h1>
+    <p>O seu endere\xE7o de e-mail foi validado com sucesso. Agora voc\xEA pode acessar nossos servi\xE7os.</p>
+</body>
+</html>`,f=`<!DOCTYPE html>
+<html>
+<head>
+    <title>Valida\xE7\xE3o de E-mail</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            background-color: #FF4500;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+
+        p {
+            text-align: center;
+            font-size: 18px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Valida\xE7\xE3o de E-mail Falhou</h1>
+    <p>N\xE3o foi poss\xEDvel validar o endere\xE7o de e-mail. Por favor, verifique o endere\xE7o e tente novamente.</p>
+</body>
+</html>`;var O=E.z.string(),a=class{async handle(e,r,s){try{let t=O.parse(e.query.token);if(!t)return r.status(401).send(`${f}`);let p=new d,m=new l(p),x=`Bearer ${t}`;return await m.execute(x)===!1?r.status(400).send(`${f}`):r.status(200).send(`${v}`)}catch{return r.status(400).send("<h1>N\xE3o foi possivel validar seu e-mail</h1>")}}};var I=(0,g.Router)(),b=new a;I.get("/verify-email",b.handle);0&&(module.exports={verifyEmail});
