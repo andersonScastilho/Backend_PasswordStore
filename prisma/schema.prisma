@@ -11,12 +11,12 @@ datasource db {
 }
 
 model User {
-  id            String    @id @unique
-  email         String    @unique
+  id            String         @id @unique
+  email         String         @unique
   password_hash String
   fullName      String
   Storage       Storage[]
-
+  verifiedEmail Boolean        @default(false)
   Refresh_Token Refresh_Token?
 
   @@map("users")
