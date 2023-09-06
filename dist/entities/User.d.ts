@@ -17,4 +17,5 @@ export declare class User {
     encryptedPassword(password: string): Promise<string>;
     comparePasswords(password: string): Promise<boolean>;
     updatePassword(oldPassword: string, newPassword: string, newPasswordConfirmation: string): Promise<void>;
+    sendEmailToVerify(): Promise<void>;
 }
