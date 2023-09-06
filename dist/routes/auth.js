@@ -358,7 +358,7 @@
                                     <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                                       <tbody>
                                         <tr>
-                                          <td> <a href=${`${process.env.API_URL}/verify-email/${t}`} target="_blank">Call To Action</a> </td>
+                                          <td> <a href=${`${process.env.API_URL}/verify-email?token=${t}`} target="_blank">Call To Action</a> </td>
                                         </tr>
                                       </tbody>
                                     </table>
