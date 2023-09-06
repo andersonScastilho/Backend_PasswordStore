@@ -25,7 +25,7 @@ class SendEmail {
       from: this.sender,
       to: this._recipient,
       subject: this._subject,
-      text: this._text,
+      html: this._text,
     };
 
     transporter.sendMail(mailOptions, function (err, data) {

@@ -53,9 +53,9 @@ class Auth {
     return token;
   }
 
-  async authenticationProvider(ueserId: string, email: string) {
+  async authenticationProvider(userId: string, email: string) {
     const token = jwt.sign(
-      { id: ueserId, email: email },
+      { id: userId, email: email },
       process.env.TOKEN_SECRET ?? "",
       {
         expiresIn: process.env.TOKEN_EXPIRATION,

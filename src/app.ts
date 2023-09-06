@@ -6,6 +6,7 @@ import { auhRoutes } from "routes/auth";
 import { passwordRoutes } from "routes/password-routes";
 import { refreshTokenRoutes } from "./routes/refresh_token-routes";
 import { errorHandler } from "middlewares/error";
+import { verifyEmail } from "./routes/verify-email";
 import cors from "cors";
 import helmet from "helmet";
 
@@ -51,6 +52,7 @@ class App {
     this.app.use(auhRoutes);
     this.app.use(passwordRoutes);
     this.app.use(refreshTokenRoutes);
+    this.app.use(verifyEmail);
   }
 }
 export default new App();
