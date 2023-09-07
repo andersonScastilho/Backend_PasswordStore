@@ -1,4 +1,4 @@
-"use strict";var x=Object.create;var l=Object.defineProperty;var T=Object.getOwnPropertyDescriptor;var R=Object.getOwnPropertyNames;var v=Object.getPrototypeOf,I=Object.prototype.hasOwnProperty;var P=(r,t)=>{for(var e in t)l(r,e,{get:t[e],enumerable:!0})},g=(r,t,e,o)=>{if(t&&typeof t=="object"||typeof t=="function")for(let i of R(t))!I.call(r,i)&&i!==e&&l(r,i,{get:()=>t[i],enumerable:!(o=T(t,i))||o.enumerable});return r};var p=(r,t,e)=>(e=r!=null?x(v(r)):{},g(t||!r||!r.__esModule?l(e,"default",{value:r,enumerable:!0}):e,r)),k=r=>g(l({},"__esModule",{value:!0}),r);var N={};P(N,{CreateUser:()=>b});module.exports=k(N);var E=require("uuid");var h=p(require("bcrypt"));var n=p(require("jsonwebtoken")),c=class{constructor(t){this.showUserPerUserIdRepository=t}async validAuth(t){let[,e]=t.split(" ");if(!n.default.verify(e,process.env.TOKEN_SECRET??""))throw Error("Invalid token");let{id:i,email:a}=n.default.verify(e,process.env.TOKEN_SECRET??""),s=await this.showUserPerUserIdRepository?.show(i);if(a!==s?.email)throw Error("Invalid token");return i}async authentication(t,e){if(!await t.comparePasswords(e))throw Error("Invalid password");return n.default.sign({id:t.userId,email:t.userEmail},process.env.TOKEN_SECRET??"",{expiresIn:process.env.TOKEN_EXPIRATION})}async authenticationProvider(t,e){return n.default.sign({id:t,email:e},process.env.TOKEN_SECRET??"",{expiresIn:process.env.TOKEN_EXPIRATION})}},f=c;var w=p(require("nodemailer")),m=class{constructor(t,e,o){this._recipient=t;this._subject=e;this._text=o;this.sender="leosilvacast@gmail.com"}sendEmail(){let t=w.default.createTransport({service:"gmail",auth:{type:"OAuth2",user:process.env.MAIL_USERNAME,clientId:process.env.OAUTH_CLIENTID,clientSecret:process.env.OAUTH_CLIENT_SECRET,refreshToken:process.env.OAUTH_REFRESH_TOKEN}}),e={from:this.sender,to:this._recipient,subject:this._subject,html:this._text};t.sendMail(e,function(o,i){console.log(o?"Error "+o:"Email sent successfully")})}},u=m;var d=class{get userEmail(){return this.props.userEmail}get userFullName(){return this.props.userFullName}get userPassword(){return this.props.userPassword}get userId(){return this.props.userId}set hashPasswordToUserPassword(t){this.props.userPassword=t}set updateUserFullName(t){this.props.userFullName=t}set updateUserEmail(t){this.props.userEmail=t}constructor(t){this.props=t}async encryptedPassword(t){return await h.default.hash(t,10)}async comparePasswords(t){return await h.default.compare(t,this.userPassword)}async updatePassword(t,e,o){if(!await this.comparePasswords(t))throw Error("Invalid password");if(e!==o)throw Error("Password confirmation must be the same as password");let a=await this.encryptedPassword(e);this.props.userPassword=a}async sendEmailToVerify(){let e=await new f().authenticationProvider(this.props.userId,this.props.userEmail),o="Verifica\xE7\xE3o de Email",i=`<!doctype html>
+"use strict";var x=Object.create;var l=Object.defineProperty;var T=Object.getOwnPropertyDescriptor;var v=Object.getOwnPropertyNames;var R=Object.getPrototypeOf,I=Object.prototype.hasOwnProperty;var P=(r,t)=>{for(var e in t)l(r,e,{get:t[e],enumerable:!0})},f=(r,t,e,o)=>{if(t&&typeof t=="object"||typeof t=="function")for(let a of v(t))!I.call(r,a)&&a!==e&&l(r,a,{get:()=>t[a],enumerable:!(o=T(t,a))||o.enumerable});return r};var p=(r,t,e)=>(e=r!=null?x(R(r)):{},f(t||!r||!r.__esModule?l(e,"default",{value:r,enumerable:!0}):e,r)),N=r=>f(l({},"__esModule",{value:!0}),r);var U={};P(U,{CreateUser:()=>b});module.exports=N(U);var E=require("uuid");var h=p(require("bcrypt"));var n=p(require("jsonwebtoken")),c=class{constructor(t){this.showUserPerUserIdRepository=t}async validAuth(t){let[,e]=t.split(" ");if(!n.default.verify(e,process.env.TOKEN_SECRET??""))throw Error("Invalid token");let{id:a,email:i}=n.default.verify(e,process.env.TOKEN_SECRET??""),s=await this.showUserPerUserIdRepository?.show(a);if(!s)throw Error("User not found");if(i!==s.email)throw Error("Invalid token");return a}async authentication(t,e){if(!await t.comparePasswords(e))throw Error("Invalid password");return n.default.sign({id:t.userId,email:t.userEmail},process.env.TOKEN_SECRET??"",{expiresIn:process.env.TOKEN_EXPIRATION})}async authenticationProvider(t,e){return n.default.sign({id:t,email:e},process.env.TOKEN_SECRET??"",{expiresIn:process.env.TOKEN_EXPIRATION})}},g=c;var w=p(require("nodemailer")),m=class{constructor(t,e,o){this._recipient=t;this._subject=e;this._text=o;this.sender="leosilvacast@gmail.com"}sendEmail(){let t=w.default.createTransport({service:"gmail",auth:{type:"OAuth2",user:process.env.MAIL_USERNAME,clientId:process.env.OAUTH_CLIENTID,clientSecret:process.env.OAUTH_CLIENT_SECRET,refreshToken:process.env.OAUTH_REFRESH_TOKEN}}),e={from:this.sender,to:this._recipient,subject:this._subject,html:this._text};t.sendMail(e,function(o,a){console.log(o?"Error "+o:"Email sent successfully")})}},u=m;var d=class{get userEmail(){return this.props.userEmail}get userFullName(){return this.props.userFullName}get userPassword(){return this.props.userPassword}get userId(){return this.props.userId}set hashPasswordToUserPassword(t){this.props.userPassword=t}set updateUserFullName(t){this.props.userFullName=t}set updateUserEmail(t){this.props.userEmail=t}constructor(t){this.props=t}async encryptedPassword(t){return await h.default.hash(t,10)}async comparePasswords(t){return await h.default.compare(t,this.userPassword)}async updatePassword(t,e,o){if(!await this.comparePasswords(t))throw Error("Invalid password");if(e!==o)throw Error("Password confirmation must be the same as password");let i=await this.encryptedPassword(e);this.props.userPassword=i}async sendEmailToVerify(){let e=await new g().authenticationProvider(this.props.userId,this.props.userEmail),o="Verifica\xE7\xE3o de Email",a=`<!doctype html>
     <html>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -349,8 +349,8 @@
                       <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                         <tr>
                           <td>
-                            <p>Hi there,</p>
-                            <p>Sometimes you just want to send a simple HTML email with a simple design and clear call to action. This is it.</p>
+                            <p>Ol\xE1</p>
+                            <p>Valide seu email clicando no botao abaixo.</p>
                             <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
                               <tbody>
                                 <tr>
@@ -358,7 +358,7 @@
                                     <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                                       <tbody>
                                         <tr>
-                                          <td> <a href=${`${process.env.API_URL}/verify-email?token=${e}`} target="_blank">Call To Action</a> </td>
+                                          <td> <a href=${`${process.env.API_URL}/verify-email?token=${e}`} target="_blank">Validar Email</a> </td>
                                         </tr>
                                       </tbody>
                                     </table>
@@ -366,8 +366,8 @@
                                 </tr>
                               </tbody>
                             </table>
-                            <p>This is a really simple email template. Its sole purpose is to get the recipient to click the button with no distractions.</p>
-                            <p>Good luck! Hope it works.</p>
+                            <p>Este email serve apenas para voc\xEA confirmar que o email que deseja cadastrar em nosso website \xE9 valido.</p>
+                            <p>Fa\xE7a um bom uso do nosso website.</p>
                           </td>
                         </tr>
                       </table>
@@ -381,15 +381,10 @@
                 <!-- START FOOTER -->
                 <div class="footer">
                   <table role="presentation" border="0" cellpadding="0" cellspacing="0">
-                    <tr>
-                      <td class="content-block">
-                        <span class="apple-link">Company Inc, 3 Abbey Road, San Francisco CA 94102</span>
-                        <br> Don't like these emails? <a href="http://i.imgur.com/CScmqnj.gif">Unsubscribe</a>.
-                      </td>
-                    </tr>
+             
                     <tr>
                       <td class="content-block powered-by">
-                        Powered by <a href="http://htmlemail.io">HTMLemail</a>.
+                        Desenvolvido por <a href="https://www.linkedin.com/in/andersonscastilho/">Anderson Leonardo</a>.
                       </td>
                     </tr>
                   </table>
@@ -402,4 +397,4 @@
           </tr>
         </table>
       </body>
-    </html>`;new u(this.props.userEmail,o,i).sendEmail()}};var b=class{constructor(t,e){this.createUserRepository=t;this.showUserperEmailRepository=e}async execute({userEmail:t,userFullName:e,userPassword:o}){if(await this.showUserperEmailRepository.show(t))throw Error("Email in use");let a=(0,E.v4)(),s=new d({userEmail:t,userFullName:e,userId:a,userPassword:o}),y=await s.encryptedPassword(o);return s.hashPasswordToUserPassword=y,await this.createUserRepository.create(s),s.sendEmailToVerify(),s}};0&&(module.exports={CreateUser});
+    </html>`;new u(this.props.userEmail,o,a).sendEmail()}};var b=class{constructor(t,e){this.createUserRepository=t;this.showUserperEmailRepository=e}async execute({userEmail:t,userFullName:e,userPassword:o}){if(await this.showUserperEmailRepository.show(t))throw Error("Email in use");let i=(0,E.v4)(),s=new d({userEmail:t,userFullName:e,userId:i,userPassword:o}),y=await s.encryptedPassword(o);return s.hashPasswordToUserPassword=y,await this.createUserRepository.create(s),s.sendEmailToVerify(),s}};0&&(module.exports={CreateUser});

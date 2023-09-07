@@ -3,4 +3,5 @@ export interface UserSchema {
     email: string;
     password_hash: string;
     fullName: string;
+    verifiedEmail: boolean;
 }
