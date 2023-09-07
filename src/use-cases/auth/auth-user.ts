@@ -23,7 +23,7 @@ export class AuthUser {
     if (!user) {
       throw Error("User not found");
     }
-
+    console.log(user);
     if (user.verifiedEmail !== true) {
       throw Error("Unverified email");
     }

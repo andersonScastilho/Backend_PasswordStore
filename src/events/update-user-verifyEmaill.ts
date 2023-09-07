@@ -11,9 +11,8 @@ export function initializeEventsOn() {
       where: {
         id: userId,
       },
-      data: {
-        verifiedEmail: true,
-      },
+
+      data: { verifiedEmail: true },
     });
   });
 }
