@@ -1,3 +1,4 @@
+import { myEmitter } from "events/update-user-verifyEmaill";
 import { ShowUserPerUserIdRepository } from "repositories/user/show-user-userId-repository";
 import Auth from "service/Auth";
 
@@ -11,6 +12,8 @@ export class VerifyEmail {
     if (!user) {
       return false;
     }
+
+    myEmitter.emit("user/verifiedEmail-update", userId);
 
     return true;
   }
