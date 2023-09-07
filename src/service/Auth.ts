@@ -26,9 +26,13 @@ class Auth {
       process.env.TOKEN_SECRET ?? ""
     ) as JwtPayload;
 
-    const userEmail = await this.showUserPerUserIdRepository?.show(id);
+    const userPerId = await this.showUserPerUserIdRepository?.show(id);
 
-    if (email !== userEmail?.email) {
+    if (!userPerId) {
+      throw Error("User not found");
+    }
+
+    if (email !== userPerId.email) {
       throw Error("Invalid token");
     }
 

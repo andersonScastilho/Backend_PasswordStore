@@ -24,6 +24,10 @@ export class AuthUser {
       throw Error("User not found");
     }
 
+    if (user.verifiedEmail !== true) {
+      throw Error("Unverified email");
+    }
+
     const instanceUser = new User({
       userEmail: user.email,
       userFullName: user.fullName,

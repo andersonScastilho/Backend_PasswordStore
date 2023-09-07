@@ -25,6 +25,10 @@ export class RefreshToken {
       throw Error("User not found");
     }
 
+    if (user.verifiedEmail !== true) {
+      throw Error("Unverified email");
+    }
+
     const auth = new Auth();
 
     const refreshTokenExpired = dayjs().isAfter(
