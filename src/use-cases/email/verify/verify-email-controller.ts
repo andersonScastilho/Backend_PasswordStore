@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { z } from "zod";
 import { VerifyEmail } from "./verify-email";
 import { PostgresShowUserPerUserIdRepository } from "repositories/postgres/user/postgres-show-user-userId-repository";
-import { validEmail, invalidEmail } from "../../../html/validemail";
+import { validEmail, invalidEmail } from "../../../html/verifyEmail";
 const paramRequest = z.string();
 
 export default class VerifyEmailController {
