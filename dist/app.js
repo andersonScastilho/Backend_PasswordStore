@@ -1,4 +1,4 @@
-"use strict";var cr=Object.create;var C=Object.defineProperty;var dr=Object.getOwnPropertyDescriptor;var mr=Object.getOwnPropertyNames;var lr=Object.getPrototypeOf,ur=Object.prototype.hasOwnProperty;var hr=(s,e)=>{for(var r in e)C(s,r,{get:e[r],enumerable:!0})},je=(s,e,r,o)=>{if(e&&typeof e=="object"||typeof e=="function")for(let t of mr(e))!ur.call(s,t)&&t!==r&&C(s,t,{get:()=>e[t],enumerable:!(o=dr(e,t))||o.enumerable});return s};var h=(s,e,r)=>(r=s!=null?cr(lr(s)):{},je(e||!s||!s.__esModule?C(r,"default",{value:s,enumerable:!0}):r,s)),fr=s=>je(C({},"__esModule",{value:!0}),s);var Yr={};hr(Yr,{default:()=>Mr});module.exports=fr(Yr);var Ne=h(require("express"));var ze=require("express");var Ae=require("@prisma/client"),c=new Ae.PrismaClient;var l=class{async show(e){return await c.user.findUnique({where:{id:e}})}};var v=h(require("jsonwebtoken")),fe=class{constructor(e){this.showUserPerUserIdRepository=e}async validAuth(e){let[,r]=e.split(" ");if(!v.default.verify(r,process.env.TOKEN_SECRET??""))throw Error("Invalid token");let{id:t,email:a}=v.default.verify(r,process.env.TOKEN_SECRET??""),i=await this.showUserPerUserIdRepository?.show(t);if(!i)throw Error("User not found");if(a!==i.email)throw Error("Invalid token");return t}async authentication(e,r){if(!await e.comparePasswords(r))throw Error("Invalid password");return v.default.sign({id:e.userId,email:e.userEmail},process.env.TOKEN_SECRET??"",{expiresIn:process.env.TOKEN_EXPIRATION})}async authenticationProvider(e,r){return v.default.sign({id:e,email:r},process.env.TOKEN_SECRET??"",{expiresIn:process.env.TOKEN_EXPIRATION})}},g=fe;var f=async(s,e,r)=>{let{authorization:o}=s.headers;try{let t=new l;if(!o)return e.status(401).json({errors:["Login required"]});let i=await new g(t).validAuth(o);return s.params={...s.params,userId:i},r()}catch{return e.status(401).json({error:"Token expired or invalid"})}};var k=require("zod");var Oe=require("uuid");var we=h(require("bcrypt"));var qe=h(require("nodemailer")),ge=class{constructor(e,r,o){this._recipient=e;this._subject=r;this._text=o;this.sender="leosilvacast@gmail.com"}sendEmail(){let e=qe.default.createTransport({service:"gmail",auth:{type:"OAuth2",user:process.env.MAIL_USERNAME,clientId:process.env.OAUTH_CLIENTID,clientSecret:process.env.OAUTH_CLIENT_SECRET,refreshToken:process.env.OAUTH_REFRESH_TOKEN}}),r={from:this.sender,to:this._recipient,subject:this._subject,html:this._text};e.sendMail(r,function(o,t){console.log(o?"Error "+o:"Email sent successfully")})}},_e=ge;var w=class{get userEmail(){return this.props.userEmail}get userFullName(){return this.props.userFullName}get userPassword(){return this.props.userPassword}get userId(){return this.props.userId}set hashPasswordToUserPassword(e){this.props.userPassword=e}set updateUserFullName(e){this.props.userFullName=e}set updateUserEmail(e){this.props.userEmail=e}constructor(e){this.props=e}async encryptedPassword(e){return await we.default.hash(e,10)}async comparePasswords(e){return await we.default.compare(e,this.userPassword)}async updatePassword(e,r,o){if(!await this.comparePasswords(e))throw Error("Invalid password");if(r!==o)throw Error("Password confirmation must be the same as password");let a=await this.encryptedPassword(r);this.props.userPassword=a}async sendEmailToVerify(){let r=await new g().authenticationProvider(this.props.userId,this.props.userEmail),o="Verifica\xE7\xE3o de Email",t=`<!doctype html>
+"use strict";var yt=Object.create;var F=Object.defineProperty;var bt=Object.getOwnPropertyDescriptor;var Rt=Object.getOwnPropertyNames;var xt=Object.getPrototypeOf,Et=Object.prototype.hasOwnProperty;var St=(s,e)=>{for(var t in e)F(s,t,{get:e[t],enumerable:!0})},He=(s,e,t,o)=>{if(e&&typeof e=="object"||typeof e=="function")for(let r of Rt(e))!Et.call(s,r)&&r!==t&&F(s,r,{get:()=>e[r],enumerable:!(o=bt(e,r))||o.enumerable});return s};var g=(s,e,t)=>(t=s!=null?yt(xt(s)):{},He(e||!s||!s.__esModule?F(t,"default",{value:s,enumerable:!0}):t,s)),Ut=s=>He(F({},"__esModule",{value:!0}),s);var or={};St(or,{default:()=>rr});module.exports=Ut(or);var _e=g(require("express"));var Ye=require("express");var Be=require("@prisma/client"),d=new Be.PrismaClient;var m=class{async show(e){return await d.user.findUnique({where:{id:e}})}};var v=g(require("jsonwebtoken")),xe=class{constructor(e){this.showUserPerUserIdRepository=e}async validAuth(e){let[,t]=e.split(" ");if(!v.default.verify(t,process.env.TOKEN_SECRET??""))throw Error("Invalid token");let{id:r,email:a}=v.default.verify(t,process.env.TOKEN_SECRET??""),i=await this.showUserPerUserIdRepository?.show(r);if(!i)throw Error("User not found");if(a!==i.email)throw Error("Invalid token");return r}async authentication(e,t){if(!await e.comparePasswords(t))throw Error("Invalid password");return v.default.sign({id:e.userId,email:e.userEmail},process.env.TOKEN_SECRET??"",{expiresIn:process.env.TOKEN_EXPIRATION})}async authenticationProvider(e,t){return v.default.sign({id:e,email:t},process.env.TOKEN_SECRET??"",{expiresIn:process.env.TOKEN_EXPIRATION})}},h=xe;var w=async(s,e,t)=>{let{authorization:o}=s.headers;try{let r=new m;if(!o)return e.status(401).json({errors:["Login required"]});let i=await new h(r).validAuth(o);return s.params={...s.params,userId:i},t()}catch{return e.status(401).json({error:"Token expired or invalid"})}};var k=require("zod");var Ve=require("uuid");var Ue=g(require("bcrypt"));var Me=g(require("nodemailer")),Ee=class{constructor(e,t,o){this._recipient=e;this._subject=t;this._text=o;this.sender="leosilvacast@gmail.com"}sendEmail(){let e=Me.default.createTransport({service:"gmail",auth:{type:"OAuth2",user:process.env.MAIL_USERNAME,clientId:process.env.OAUTH_CLIENTID,clientSecret:process.env.OAUTH_CLIENT_SECRET,refreshToken:process.env.OAUTH_REFRESH_TOKEN}}),t={from:this.sender,to:this._recipient,subject:this._subject,html:this._text};e.sendMail(t,function(o,r){console.log(o?"Error "+o:"Email sent successfully")})}},Se=Ee;var u=class{get userEmail(){return this.props.userEmail}get userFullName(){return this.props.userFullName}get userPassword(){return this.props.userPassword}get userId(){return this.props.userId}set hashPasswordToUserPassword(e){this.props.userPassword=e}set updateUserFullName(e){this.props.userFullName=e}set updateUserEmail(e){this.props.userEmail=e}constructor(e){this.props=e}async encryptedPassword(e){return await Ue.default.hash(e,10)}async comparePasswords(e){return await Ue.default.compare(e,this.userPassword)}async updatePassword(e,t,o){if(!await this.comparePasswords(e))throw Error("Invalid password");if(t!==o)throw Error("Password confirmation must be the same as password");let a=await this.encryptedPassword(t);this.props.userPassword=a}async sendEmailToVerify(){let t=await new h().authenticationProvider(this.props.userId,this.props.userEmail),o="Verifica\xE7\xE3o de Email",r=`<!doctype html>
     <html>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -333,7 +333,7 @@
         </style>
       </head>
       <body>
-        <span class="preheader">This is preheader text. Some clients will show this text as a preview.</span>
+        <span class="preheader">Verificar email.</span>
         <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="body">
           <tr>
             <td>&nbsp;</td>
@@ -358,7 +358,7 @@
                                     <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                                       <tbody>
                                         <tr>
-                                          <td> <a href=${`${process.env.API_URL}/verify-email?token=${r}`} target="_blank">Validar Email</a> </td>
+                                          <td> <a href=${`${process.env.FRONTEND_URL}/verify-email?token=${t}`} target="_blank">Validar Email</a> </td>
                                         </tr>
                                       </tbody>
                                     </table>
@@ -397,7 +397,406 @@
           </tr>
         </table>
       </body>
-    </html>`;new _e(this.props.userEmail,o,t).sendEmail()}};var F=class{constructor(e,r){this.createUserRepository=e;this.showUserperEmailRepository=r}async execute({userEmail:e,userFullName:r,userPassword:o}){if(await this.showUserperEmailRepository.show(e))throw Error("Email in use");let a=(0,Oe.v4)(),i=new w({userEmail:e,userFullName:r,userId:a,userPassword:o}),n=await i.encryptedPassword(o);return i.hashPasswordToUserPassword=n,await this.createUserRepository.create(i),i.sendEmailToVerify(),i}};var j=class{async create(e){let{userEmail:r,userFullName:o,userPassword:t,userId:a}=e,i=await c.user.create({data:{email:r,fullName:o,id:a,password_hash:t}});if(!i)throw Error("N\xE3o foi possivel criar o usuario");return i}};var P=class{async show(e){return await c.user.findUnique({where:{email:e}})}};var gr=k.z.object({email:k.z.string().email(),fullName:k.z.string(),password:k.z.string()}),A=class{async handle(e,r,o){try{let{email:t,fullName:a,password:i}=gr.parse(e.body),n=new j,p=new P,m=await new F(n,p).execute({userEmail:t,userFullName:a,userPassword:i});return r.status(200).json({email:m.userEmail,fullName:m.userFullName})}catch(t){o(t)}}};var q=class{constructor(e){this.showUserRepository=e}async execute(e){let r=await this.showUserRepository.show(e);if(!r)throw Error("User not found");return new w({userEmail:r.email,userFullName:r.fullName,userId:r.id,userPassword:r.password_hash})}};var ye=require("zod"),wr=ye.z.object({userId:ye.z.string()}),_=class{async handle(e,r,o){try{let{userId:t}=wr.parse(e.params),a=new l,n=await new q(a).execute(t);return r.status(200).json({email:n.userEmail,fullName:n.userFullName})}catch(t){o(t)}}};var S=require("zod");var O=class{constructor(e,r){this.showUserPerUserIdRepository=e;this.updateUserRepository=r}async handle({userId:e,email:r,fullName:o,oldPassword:t,newPassword:a,newPasswordConfirmation:i}){let n=await this.showUserPerUserIdRepository.show(e);if(!n)throw Error("User not found");let p=new w({userId:n.id,userEmail:n.email,userFullName:n.fullName,userPassword:n.password_hash});return o&&(p.updateUserFullName=o),a&&t&&i&&await p.updatePassword(t,a,i),r&&(p.updateUserEmail=r),await this.updateUserRepository.update({userId:p.userId,email:p.userEmail,fullName:p.userFullName,newPassword:p.userPassword})}};var z=class{async update({email:e,fullName:r,newPassword:o,userId:t}){return await c.user.update({where:{id:t},data:{email:e,fullName:r,password_hash:o}})}};var yr=S.z.object({email:S.z.string().email().optional(),oldPassword:S.z.string().optional(),newPassword:S.z.string().optional(),newPasswordConfirmation:S.z.string().optional(),fullName:S.z.string().optional()}),Rr=S.z.object({userId:S.z.string()}),L=class{async handle(e,r,o){try{let{email:t,newPassword:a,newPasswordConfirmation:i,oldPassword:n,fullName:p}=yr.parse(e.body),{userId:d}=Rr.parse(e.params);if(a){if(!i)throw Error("newPasswordConfirmation is required to update password");if(!n)throw Error("oldPassword is required to update password")}if(!t&&!a&&!i&&!n&&!p)throw Error("Missing data");let m=new l,U=new z,x=new O(m,U),{email:Fe,fullName:he,id:pr}=await x.handle({userId:d,email:t,fullName:p,newPassword:a,newPasswordConfirmation:i,oldPassword:n});return r.status(200).json({user:{email:Fe,fullName:he,id:pr}})}catch(t){o(t)}}};var T=(0,ze.Router)(),xr=new A,Sr=new _,br=new L;T.post("/users",xr.handle);T.get("/users",f,Sr.handle);T.put("/users",f,br.handle);var Ye=require("express");var Me=require("uuid");var D=h(require("crypto")),De="aes-256-gcm",Ve=Buffer.from(process.env.SECRET_CRYPTO??"","hex"),Le=D.default.randomBytes(16),Be=s=>{try{let e=D.default.createCipheriv(De,Ve,Le),r=Buffer.concat([e.update(s.toString()),e.final()]),o=e.getAuthTag();return{iv:Le.toString("hex"),content:r.toString("hex"),tag:o.toString("hex")}}catch{throw Error("Erro ao criptografar os dados")}},He=s=>{try{let e=D.default.createDecipheriv(De,Ve,Buffer.from(s.iv,"hex"));e.setAuthTag(Buffer.from(s.tag,"hex"));let r=Buffer.from(s.content,"hex");return Buffer.concat([e.update(r),e.final()]).toString("utf8")}catch{throw new Error("Erro ao descriptografar os dados.")}};var u=class{get storageId(){return this.props.storageId}get password(){return this.props.password}get account(){return this.props.account}get usageLocation(){return this.props.usageLocation}get link(){return this.props.link}get description(){return this.props.description}get userId(){return this.props.userId}set updatePassword(e){this.props.password=e}constructor(e){this.props=e}showPassword(e){let[r,o,t]=e.split(":");return He({iv:r,content:o,tag:t})}};var V=class{constructor(e){this.storageRepository=e}async execute({account:e,password:r,usageLocation:o,description:t,link:a,userId:i}){let n=(0,Me.v4)(),{iv:p,content:d,tag:m}=Be(r),U=`${p}:${d}:${m}`,x=new u({password:U,account:e,usageLocation:o,description:t,link:a,userId:i,storageId:n});return await this.storageRepository.create(x),x.updatePassword="",x}};var B=class{async create(e){let{account:r,description:o,link:t,password:a,usageLocation:i,userId:n,storageId:p}=e,d=await c.storage.create({data:{account:r,id:p,password:a,usageLocation:i,description:o,link:t,userId:n}});if(!d)throw Error("N\xE3o foi possivel armazenar os dados");return d}};var b=require("zod"),Er=b.z.object({password:b.z.string(),account:b.z.string(),usageLocation:b.z.string(),link:b.z.string(),description:b.z.string()}),Ur=b.z.object({userId:b.z.string()}),H=class{async handle(e,r,o){try{let{password:t,account:a,usageLocation:i,link:n,description:p}=Er.parse(e.body),{userId:d}=Ur.parse(e.params),m=new B,x=await new V(m).execute({account:a,password:t,usageLocation:i,description:p,link:n,userId:d});return r.status(200).json(x)}catch(t){o(t)}}};var M=class{async index(e){return await c.storage.findMany({where:{userId:e}})}};var Y=class{constructor(e){this.indexStorageRepository=e}async execute(e){let r=await this.indexStorageRepository.index(e),o=[];return r.forEach(t=>{let a=new u({account:t.account,password:"",storageId:t.id,usageLocation:t.usageLocation,userId:t.userId,description:t.description||void 0,link:t.link||void 0});o.push(a)}),o}};var Re=require("zod"),Pr=Re.z.object({userId:Re.z.string()}),$=class{async handle(e,r,o){try{let{userId:t}=Pr.parse(e.params);if(!t)return r.status(401).json({error:"Login required"});let a=new M,n=await new Y(a).execute(t);return r.status(200).json({storages:n})}catch(t){o(t)}}};var y=class{async show(e,r){return await c.storage.findFirst({where:{AND:{id:e,userId:r}}})}};var K=class{constructor(e){this.showStorageRepository=e}async execute(e,r){let o=await this.showStorageRepository.show(e,r);if(!o)throw Error("Storage not found");return new u({account:o.account,password:"",storageId:o.id,usageLocation:o.usageLocation,userId:o.userId,description:o.description||"",link:o.link||""})}};var G=require("zod"),Ir=G.z.object({storageId:G.z.string(),userId:G.z.string()}),J=class{async handle(e,r,o){try{let{storageId:t,userId:a}=Ir.parse(e.params),i=new y,p=await new K(i).execute(t,a);return r.status(200).json(p)}catch(t){o(t)}}};var W=class{async update({account:e,description:r,link:o,usageLocation:t,storageId:a,password:i}){return await c.storage.update({where:{id:a},data:{account:e,description:r,link:o,usageLocation:t,password:i}})}};var X=class{constructor(e,r){this.updateStorageReposirory=e;this.showStorageRepository=r}async execute({storageId:e,account:r,description:o,link:t,usageLocation:a,userId:i,password:n}){if(!await this.showStorageRepository.show(e,i))throw Error("Storage not found");let d=await this.updateStorageReposirory.update({storageId:e,account:r,userId:i,description:o,link:t,usageLocation:a,password:n});return new u({account:d.account,password:"",storageId:d.id,usageLocation:d.usageLocation,userId:d.userId,description:d.description||"",link:d.link||""})}};var R=require("zod"),vr=R.z.object({account:R.z.string().optional(),usageLocation:R.z.string().optional(),description:R.z.string().optional(),link:R.z.string().optional(),password:R.z.string().optional()}),kr=R.z.object({userId:R.z.string(),storageId:R.z.string()}),Z=class{async handle(e,r,o){try{let{account:t,usageLocation:a,description:i,link:n,password:p}=vr.parse(e.body),{userId:d,storageId:m}=kr.parse(e.params);if(!t&&!a&&!i&&!n)return r.status(400).json({error:"Missing data"});let U=new W,x=new y,he=await new X(U,x).execute({account:t,storageId:m,userId:d,description:i,link:n,usageLocation:a,password:p});return r.status(200).json({storage:he})}catch(t){o(t)}}};var Q=class{async delete(e){await c.storage.delete({where:{id:e}})}};var ee=class{constructor(e,r){this.deleteStorageRepository=e;this.showStorageRepository=r}async execute(e,r){if(!await this.showStorageRepository.show(e,r))throw Error("Storage not found");await this.deleteStorageRepository.delete(e)}};var re=require("zod"),Tr=re.z.object({userId:re.z.string(),storageId:re.z.string()}),te=class{async handle(e,r,o){try{let{userId:t,storageId:a}=Tr.parse(e.params),i=new Q,n=new y;return await new ee(i,n).execute(a,t),r.status(200).json({})}catch(t){o(t)}}};var Nr=new H,Cr=new $,Fr=new J,jr=new Z,Ar=new te,E=(0,Ye.Router)();E.post("/storages",f,Nr.handle);E.get("/storages",f,Cr.handle);E.get("/storages/:storageId",f,Fr.handle);E.put("/storages/:storageId",f,jr.handle);E.delete("/storages/:storageId",f,Ar.handle);var Ge=require("express");var $e=h(require("dayjs")),Ke=require("uuid"),oe=class{constructor(e,r,o){this.showUserPerEmailRepository=e;this.createRefreshTokenRepository=r;this.deleteRefreshTokenRepository=o}async execute({email:e,password:r}){let o=await this.showUserPerEmailRepository.show(e);if(!o)throw Error("User not found");if(o.verifiedEmail!==!0)throw Error("Unverified email");let t=new w({userEmail:o.email,userFullName:o.fullName,userId:o.id,userPassword:o.password_hash}),a=new g;await this.deleteRefreshTokenRepository.delete(o.id);let i=await a.authentication(t,r),n=(0,Ke.v4)(),p=(0,$e.default)().add(7,"days").unix(),d=await this.createRefreshTokenRepository.create({expiresIn:p,id:n,userId:t.userId});return{token:i,refreshToken:d}}};var se=class{async create({expiresIn:e,id:r,userId:o}){return await c.refresh_Token.create({data:{expiresIn:e,id:r,userId:o}})}};var ae=class{async delete(e){await c.refresh_Token.deleteMany({where:{userId:e}})}};var ie=require("zod"),qr=ie.z.object({email:ie.z.string().email(),password:ie.z.string()}),ne=class{async handle(e,r,o){try{let{email:t,password:a}=qr.parse(e.body);if(!t||!a)return r.status(400).json({error:"Missing data"});let i=new P,n=new se,p=new ae,m=await new oe(i,n,p).execute({email:t,password:a});return r.status(200).json(m)}catch(t){o(t)}}};var xe=(0,Ge.Router)(),_r=new ne;xe.post("/auth",_r.handle);var We=require("express");var Je=h(require("bcrypt")),pe=class{constructor(e,r){this.showStorageRepository=e;this.showUserPerUserIdRepository=r}async execute(e,r,o){let t=await this.showStorageRepository.show(e,r);if(!t)throw Error("Storage not found");let a=new u({account:t.account,password:t.password,storageId:t.id,usageLocation:t.usageLocation,userId:t.userId,description:t.description??"",link:t.link??""}),i=await this.showUserPerUserIdRepository.show(r);if(!i)throw Error("User not found");if(!await Je.default.compare(o,i.password_hash))throw Error("Invalid password");return a.showPassword(a.password)}};var I=require("zod"),Or=I.z.object({password:I.z.string()}),zr=I.z.object({storageId:I.z.string(),userId:I.z.string()}),ce=class{async handle(e,r,o){try{let{password:t}=Or.parse(e.body),{storageId:a,userId:i}=zr.parse(e.params);if(!t)return r.status(400).json({error:"Missing data"});let n=new y,p=new l,m=await new pe(n,p).execute(a,i,t);return r.status(200).json({descryptedPassword:m})}catch(t){o(t)}}};var Se=(0,We.Router)(),Lr=new ce;Se.post("/passwords/storages/:storageId",f,Lr.handle);var Xe=require("express");var be=h(require("dayjs"));var de=class{constructor(e,r){this.showRefreshTokenRepository=e;this.showUserPerUserIdRepository=r}async execute(e){let r=await this.showRefreshTokenRepository.show(e);if(!r)throw Error("Refresh token invalid");let o=await this.showUserPerUserIdRepository.show(r.userId);if(!o)throw Error("User not found");if(o.verifiedEmail!==!0)throw Error("Unverified email");let t=new g;if((0,be.default)().isAfter(be.default.unix(r.expiresIn)))throw Error("Refresh_token expired");return await t.authenticationProvider(r.userId,o.email)}};var me=class{async show(e){return await c.refresh_Token.findFirst({where:{id:e}})}};var Ee=require("zod");var Dr=Ee.z.object({refresh_token:Ee.z.string()}),le=class{async handle(e,r,o){try{let{refresh_token:t}=Dr.parse(e.body),a=new me,i=new l,p=await new de(a,i).execute(t);return r.status(200).json({token:p})}catch(t){o(t)}}};var Ue=(0,Xe.Router)(),Vr=new le;Ue.post("/refresh-token",Vr.handle);var Pe=require("@prisma/client"),Ze=require("zod"),Qe=require("zod-validation-error"),er=async(s,e,r,o)=>{if(s instanceof Pe.Prisma.PrismaClientInitializationError)return r.status(500).json({error:"Failed to connect to the database"});if(s instanceof Pe.Prisma.PrismaClientKnownRequestError)return s.code==="P2025"?r.status(400).json({error:"The record no exists"}):s.code==="P2002"?r.status(400).json({error:"Record already exists"}):r.status(400).json({error:s.message});if(s instanceof Ze.ZodError){let{message:t}=(0,Qe.fromZodError)(s);return r.status(400).json({error:t})}if(s instanceof Error)return s.message==="invalid token"?r.status(401).json({error:s.message}):r.status(400).json({error:s.message});if(s)return r.status(400).json({error:"An error occurred"});o()};var ar=require("express");var sr=require("zod");var rr=h(require("events"));var Ie=class extends rr.default{},ve=new Ie;function tr(){ve.on("user/verifiedEmail-update",async s=>{await c.user.update({where:{id:s},data:{verifiedEmail:!0}})})}var ue=class{constructor(e){this.showUserPerIdRepository=e}async execute(e){let o=await new g(this.showUserPerIdRepository).validAuth(e);return await this.showUserPerIdRepository.show(o)?(ve.emit("user/verifiedEmail-update",o),!0):!1}};var or=`<!DOCTYPE html>
+    </html>`;new Se(this.props.userEmail,o,r).sendEmail()}async sendEmailToForgotPassword(){let t=await new h().authenticationProvider(this.props.userId,this.props.userEmail),o="Esqueci Minha Senha",r=`<!doctype html>
+    <html>
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>Simple Transactional Email</title>
+        <style>
+          /* -------------------------------------
+              GLOBAL RESETS
+          --------------------------------- ---- */
+          
+          /*All the styling goes here*/
+          
+          img {
+            border: none;
+            -ms-interpolation-mode: bicubic;
+            max-width: 100%; 
+          }
+    
+          body {
+            background-color: #f6f6f6;
+            font-family: sans-serif;
+            -webkit-font-smoothing: antialiased;
+            font-size: 14px;
+            line-height: 1.4;
+            margin: 0;
+            padding: 0;
+            -ms-text-size-adjust: 100%;
+            -webkit-text-size-adjust: 100%; 
+          }
+    
+          table {
+            border-collapse: separate;
+            mso-table-lspace: 0pt;
+            mso-table-rspace: 0pt;
+            width: 100%; }
+            table td {
+              font-family: sans-serif;
+              font-size: 14px;
+              vertical-align: top; 
+          }
+    
+          /* -------------------------------------
+              BODY & CONTAINER
+          ------------------------------------- */
+    
+          .body {
+            background-color: #f6f6f6;
+            width: 100%; 
+          }
+    
+          /* Set a max-width, and make it display as block so it will automatically stretch to that width, but will also shrink down on a phone or something */
+          .container {
+            display: block;
+            margin: 0 auto !important;
+            /* makes it centered */
+            max-width: 580px;
+            padding: 10px;
+            width: 580px; 
+          }
+    
+          /* This should also be a block element, so that it will fill 100% of the .container */
+          .content {
+            box-sizing: border-box;
+            display: block;
+            margin: 0 auto;
+            max-width: 580px;
+            padding: 10px; 
+          }
+    
+          /* -------------------------------------
+              HEADER, FOOTER, MAIN
+          ------------------------------------- */
+          .main {
+            background: #ffffff;
+            border-radius: 3px;
+            width: 100%; 
+          }
+    
+          .wrapper {
+            box-sizing: border-box;
+            padding: 20px; 
+          }
+    
+          .content-block {
+            padding-bottom: 10px;
+            padding-top: 10px;
+          }
+    
+          .footer {
+            clear: both;
+            margin-top: 10px;
+            text-align: center;
+            width: 100%; 
+          }
+            .footer td,
+            .footer p,
+            .footer span,
+            .footer a {
+              color: #999999;
+              font-size: 12px;
+              text-align: center; 
+          }
+    
+          /* -------------------------------------
+              TYPOGRAPHY
+          ------------------------------------- */
+          h1,
+          h2,
+          h3,
+          h4 {
+            color: #000000;
+            font-family: sans-serif;
+            font-weight: 400;
+            line-height: 1.4;
+            margin: 0;
+            margin-bottom: 30px; 
+          }
+    
+          h1 {
+            font-size: 35px;
+            font-weight: 300;
+            text-align: center;
+            text-transform: capitalize; 
+          }
+    
+          p,
+          ul,
+          ol {
+            font-family: sans-serif;
+            font-size: 14px;
+            font-weight: normal;
+            margin: 0;
+            margin-bottom: 15px; 
+          }
+            p li,
+            ul li,
+            ol li {
+              list-style-position: inside;
+              margin-left: 5px; 
+          }
+    
+          a {
+            color: #3498db;
+            text-decoration: underline; 
+          }
+    
+          /* -------------------------------------
+              BUTTONS
+          ------------------------------------- */
+          .btn {
+            box-sizing: border-box;
+            width: 100%; }
+            .btn > tbody > tr > td {
+              padding-bottom: 15px; }
+            .btn table {
+              width: auto; 
+          }
+            .btn table td {
+              background-color: #ffffff;
+              border-radius: 5px;
+              text-align: center; 
+          }
+            .btn a {
+              background-color: #ffffff;
+              border: solid 1px #3498db;
+              border-radius: 5px;
+              box-sizing: border-box;
+              color: #3498db;
+              cursor: pointer;
+              display: inline-block;
+              font-size: 14px;
+              font-weight: bold;
+              margin: 0;
+              padding: 12px 25px;
+              text-decoration: none;
+              text-transform: capitalize; 
+          }
+    
+          .btn-primary table td {
+            background-color: #3498db; 
+          }
+    
+          .btn-primary a {
+            background-color: #3498db;
+            border-color: #3498db;
+            color: #ffffff; 
+          }
+    
+          /* -------------------------------------
+              OTHER STYLES THAT MIGHT BE USEFUL
+          ------------------------------------- */
+          .last {
+            margin-bottom: 0; 
+          }
+    
+          .first {
+            margin-top: 0; 
+          }
+    
+          .align-center {
+            text-align: center; 
+          }
+    
+          .align-right {
+            text-align: right; 
+          }
+    
+          .align-left {
+            text-align: left; 
+          }
+    
+          .clear {
+            clear: both; 
+          }
+    
+          .mt0 {
+            margin-top: 0; 
+          }
+    
+          .mb0 {
+            margin-bottom: 0; 
+          }
+    
+          .preheader {
+            color: transparent;
+            display: none;
+            height: 0;
+            max-height: 0;
+            max-width: 0;
+            opacity: 0;
+            overflow: hidden;
+            mso-hide: all;
+            visibility: hidden;
+            width: 0; 
+          }
+    
+          .powered-by a {
+            text-decoration: none; 
+          }
+    
+          hr {
+            border: 0;
+            border-bottom: 1px solid #f6f6f6;
+            margin: 20px 0; 
+          }
+    
+          /* -------------------------------------
+              RESPONSIVE AND MOBILE FRIENDLY STYLES
+          ------------------------------------- */
+          @media only screen and (max-width: 620px) {
+            table.body h1 {
+              font-size: 28px !important;
+              margin-bottom: 10px !important; 
+            }
+            table.body p,
+            table.body ul,
+            table.body ol,
+            table.body td,
+            table.body span,
+            table.body a {
+              font-size: 16px !important; 
+            }
+            table.body .wrapper,
+            table.body .article {
+              padding: 10px !important; 
+            }
+            table.body .content {
+              padding: 0 !important; 
+            }
+            table.body .container {
+              padding: 0 !important;
+              width: 100% !important; 
+            }
+            table.body .main {
+              border-left-width: 0 !important;
+              border-radius: 0 !important;
+              border-right-width: 0 !important; 
+            }
+            table.body .btn table {
+              width: 100% !important; 
+            }
+            table.body .btn a {
+              width: 100% !important; 
+            }
+            table.body .img-responsive {
+              height: auto !important;
+              max-width: 100% !important;
+              width: auto !important; 
+            }
+          }
+    
+          /* -------------------------------------
+              PRESERVE THESE STYLES IN THE HEAD
+          ------------------------------------- */
+          @media all {
+            .ExternalClass {
+              width: 100%; 
+            }
+            .ExternalClass,
+            .ExternalClass p,
+            .ExternalClass span,
+            .ExternalClass font,
+            .ExternalClass td,
+            .ExternalClass div {
+              line-height: 100%; 
+            }
+            .apple-link a {
+              color: inherit !important;
+              font-family: inherit !important;
+              font-size: inherit !important;
+              font-weight: inherit !important;
+              line-height: inherit !important;
+              text-decoration: none !important; 
+            }
+            #MessageViewBody a {
+              color: inherit;
+              text-decoration: none;
+              font-size: inherit;
+              font-family: inherit;
+              font-weight: inherit;
+              line-height: inherit;
+            }
+            .btn-primary table td:hover {
+              background-color: #34495e !important; 
+            }
+            .btn-primary a:hover {
+              background-color: #34495e !important;
+              border-color: #34495e !important; 
+            } 
+          }
+    
+        </style>
+      </head>
+      <body>
+        <span class="preheader">Esqueci minha senha</span>
+        <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="body">
+          <tr>
+            <td>&nbsp;</td>
+            <td class="container">
+              <div class="content">
+    
+                <!-- START CENTERED WHITE CONTAINER -->
+                <table role="presentation" class="main">
+    
+                  <!-- START MAIN CONTENT AREA -->
+                  <tr>
+                    <td class="wrapper">
+                      <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+                        <tr>
+                          <td>
+                            <p>Ol\xE1</p>
+                            <p>N\xE3o tem problema esquecer a senha, clica no botao abaixo para redefinir sua senha</p>
+                            <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
+                              <tbody>
+                                <tr>
+                                  <td align="left">
+                                    <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+                                      <tbody>
+                                        <tr>
+                                          <td> <a href=${`${process.env.FRONTEND_URL}/reset-password?token=${t}`} target="_blank">Redefinir senha</a> </td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                            <p>Este email serve apenas para voc\xEA redefinir sua senha</p>
+                            <p>Fa\xE7a um bom uso do nosso website.</p>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+    
+                <!-- END MAIN CONTENT AREA -->
+                </table>
+                <!-- END CENTERED WHITE CONTAINER -->
+    
+                <!-- START FOOTER -->
+                <div class="footer">
+                  <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+             
+                    <tr>
+                      <td class="content-block powered-by">
+                        Desenvolvido por <a href="https://www.linkedin.com/in/andersonscastilho/">Anderson Leonardo</a>.
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <!-- END FOOTER -->
+    
+              </div>
+            </td>
+            <td>&nbsp;</td>
+          </tr>
+        </table>
+      </body>
+    </html>`;new Se(this.props.userEmail,o,r).sendEmail()}};var A=class{constructor(e,t){this.createUserRepository=e;this.showUserperEmailRepository=t}async execute({userEmail:e,userFullName:t,userPassword:o}){if(await this.showUserperEmailRepository.show(e))throw Error("Email in use");let a=(0,Ve.v4)(),i=new u({userEmail:e,userFullName:t,userId:a,userPassword:o}),n=await i.encryptedPassword(o);return i.hashPasswordToUserPassword=n,await this.createUserRepository.create(i),await i.sendEmailToVerify(),i}};var O=class{async create(e){let{userEmail:t,userFullName:o,userPassword:r,userId:a}=e,i=await d.user.create({data:{email:t,fullName:o,id:a,password_hash:r}});if(!i)throw Error("N\xE3o foi possivel criar o usuario");return i}};var S=class{async show(e){return await d.user.findUnique({where:{email:e}})}};var Pt=k.z.object({email:k.z.string().email(),fullName:k.z.string(),password:k.z.string()}),j=class{async handle(e,t,o){try{let{email:r,fullName:a,password:i}=Pt.parse(e.body),n=new O,p=new S,l=await new A(n,p).execute({userEmail:r,userFullName:a,userPassword:i});return t.status(200).json({email:l.userEmail,fullName:l.userFullName})}catch(r){o(r)}}};var z=class{constructor(e){this.showUserRepository=e}async execute(e){let t=await this.showUserRepository.show(e);if(!t)throw Error("User not found");return new u({userEmail:t.email,userFullName:t.fullName,userId:t.id,userPassword:t.password_hash})}};var Pe=require("zod"),It=Pe.z.object({userId:Pe.z.string()}),q=class{async handle(e,t,o){try{let{userId:r}=It.parse(e.params),a=new m,n=await new z(a).execute(r);return t.status(200).json({email:n.userEmail,fullName:n.userFullName})}catch(r){o(r)}}};var x=require("zod");var _=class{constructor(e,t){this.showUserPerUserIdRepository=e;this.updateUserRepository=t}async handle({userId:e,email:t,fullName:o,oldPassword:r,newPassword:a,newPasswordConfirmation:i}){let n=await this.showUserPerUserIdRepository.show(e);if(!n)throw Error("User not found");let p=new u({userId:n.id,userEmail:n.email,userFullName:n.fullName,userPassword:n.password_hash});return o&&(p.updateUserFullName=o),a&&r&&i&&await p.updatePassword(r,a,i),t&&(p.updateUserEmail=t),await this.updateUserRepository.update({userId:p.userId,email:p.userEmail,fullName:p.userFullName,newPassword:p.userPassword})}};var L=class{async update({email:e,fullName:t,newPassword:o,userId:r}){return await d.user.update({where:{id:r},data:{email:e,fullName:t,password_hash:o}})}};var Tt=x.z.object({email:x.z.string().email().optional(),oldPassword:x.z.string().optional(),newPassword:x.z.string().optional(),newPasswordConfirmation:x.z.string().optional(),fullName:x.z.string().optional()}),vt=x.z.object({userId:x.z.string()}),D=class{async handle(e,t,o){try{let{email:r,newPassword:a,newPasswordConfirmation:i,oldPassword:n,fullName:p}=Tt.parse(e.body),{userId:c}=vt.parse(e.params);if(a){if(!i)throw Error("newPasswordConfirmation is required to update password");if(!n)throw Error("oldPassword is required to update password")}if(!r&&!a&&!i&&!n&&!p)throw Error("Missing data");let l=new m,P=new L,R=new _(l,P),{email:De,fullName:Re,id:wt}=await R.handle({userId:c,email:r,fullName:p,newPassword:a,newPasswordConfirmation:i,oldPassword:n});return t.status(200).json({user:{email:De,fullName:Re,id:wt}})}catch(r){o(r)}}};var N=(0,Ye.Router)(),kt=new j,Nt=new q,Ct=new D;N.post("/users",kt.handle);N.get("/users",w,Nt.handle);N.put("/users",w,Ct.handle);var Ze=require("express");var Xe=require("uuid");var H=g(require("crypto")),Ke="aes-256-gcm",Ge=Buffer.from(process.env.SECRET_CRYPTO??"","hex"),$e=H.default.randomBytes(16),We=s=>{try{let e=H.default.createCipheriv(Ke,Ge,$e),t=Buffer.concat([e.update(s.toString()),e.final()]),o=e.getAuthTag();return{iv:$e.toString("hex"),content:t.toString("hex"),tag:o.toString("hex")}}catch{throw Error("Erro ao criptografar os dados")}},Je=s=>{try{let e=H.default.createDecipheriv(Ke,Ge,Buffer.from(s.iv,"hex"));e.setAuthTag(Buffer.from(s.tag,"hex"));let t=Buffer.from(s.content,"hex");return Buffer.concat([e.update(t),e.final()]).toString("utf8")}catch{throw new Error("Erro ao descriptografar os dados.")}};var f=class{get storageId(){return this.props.storageId}get password(){return this.props.password}get account(){return this.props.account}get usageLocation(){return this.props.usageLocation}get link(){return this.props.link}get description(){return this.props.description}get userId(){return this.props.userId}set updatePassword(e){this.props.password=e}constructor(e){this.props=e}showPassword(e){let[t,o,r]=e.split(":");return Je({iv:t,content:o,tag:r})}};var B=class{constructor(e){this.storageRepository=e}async execute({account:e,password:t,usageLocation:o,description:r,link:a,userId:i}){let n=(0,Xe.v4)(),{iv:p,content:c,tag:l}=We(t),P=`${p}:${c}:${l}`,R=new f({password:P,account:e,usageLocation:o,description:r,link:a,userId:i,storageId:n});return await this.storageRepository.create(R),R.updatePassword="",R}};var M=class{async create(e){let{account:t,description:o,link:r,password:a,usageLocation:i,userId:n,storageId:p}=e,c=await d.storage.create({data:{account:t,id:p,password:a,usageLocation:i,description:o,link:r,userId:n}});if(!c)throw Error("N\xE3o foi possivel armazenar os dados");return c}};var E=require("zod"),Ft=E.z.object({password:E.z.string(),account:E.z.string(),usageLocation:E.z.string(),link:E.z.string(),description:E.z.string()}),At=E.z.object({userId:E.z.string()}),V=class{async handle(e,t,o){try{let{password:r,account:a,usageLocation:i,link:n,description:p}=Ft.parse(e.body),{userId:c}=At.parse(e.params),l=new M,R=await new B(l).execute({account:a,password:r,usageLocation:i,description:p,link:n,userId:c});return t.status(200).json(R)}catch(r){o(r)}}};var Y=class{async index(e){return await d.storage.findMany({where:{userId:e}})}};var $=class{constructor(e){this.indexStorageRepository=e}async execute(e){let t=await this.indexStorageRepository.index(e),o=[];return t.forEach(r=>{let a=new f({account:r.account,password:"",storageId:r.id,usageLocation:r.usageLocation,userId:r.userId,description:r.description||void 0,link:r.link||void 0});o.push(a)}),o}};var Ie=require("zod"),Ot=Ie.z.object({userId:Ie.z.string()}),K=class{async handle(e,t,o){try{let{userId:r}=Ot.parse(e.params);if(!r)return t.status(401).json({error:"Login required"});let a=new Y,n=await new $(a).execute(r);return t.status(200).json({storages:n})}catch(r){o(r)}}};var y=class{async show(e,t){return await d.storage.findFirst({where:{AND:{id:e,userId:t}}})}};var G=class{constructor(e){this.showStorageRepository=e}async execute(e,t){let o=await this.showStorageRepository.show(e,t);if(!o)throw Error("Storage not found");return new f({account:o.account,password:"",storageId:o.id,usageLocation:o.usageLocation,userId:o.userId,description:o.description||"",link:o.link||""})}};var W=require("zod"),jt=W.z.object({storageId:W.z.string(),userId:W.z.string()}),J=class{async handle(e,t,o){try{let{storageId:r,userId:a}=jt.parse(e.params),i=new y,p=await new G(i).execute(r,a);return t.status(200).json(p)}catch(r){o(r)}}};var X=class{async update({account:e,description:t,link:o,usageLocation:r,storageId:a,password:i}){return await d.storage.update({where:{id:a},data:{account:e,description:t,link:o,usageLocation:r,password:i}})}};var Z=class{constructor(e,t){this.updateStorageReposirory=e;this.showStorageRepository=t}async execute({storageId:e,account:t,description:o,link:r,usageLocation:a,userId:i,password:n}){if(!await this.showStorageRepository.show(e,i))throw Error("Storage not found");let c=await this.updateStorageReposirory.update({storageId:e,account:t,userId:i,description:o,link:r,usageLocation:a,password:n});return new f({account:c.account,password:"",storageId:c.id,usageLocation:c.usageLocation,userId:c.userId,description:c.description||"",link:c.link||""})}};var b=require("zod"),zt=b.z.object({account:b.z.string().optional(),usageLocation:b.z.string().optional(),description:b.z.string().optional(),link:b.z.string().optional(),password:b.z.string().optional()}),qt=b.z.object({userId:b.z.string(),storageId:b.z.string()}),Q=class{async handle(e,t,o){try{let{account:r,usageLocation:a,description:i,link:n,password:p}=zt.parse(e.body),{userId:c,storageId:l}=qt.parse(e.params);if(!r&&!a&&!i&&!n)return t.status(400).json({error:"Missing data"});let P=new X,R=new y,Re=await new Z(P,R).execute({account:r,storageId:l,userId:c,description:i,link:n,usageLocation:a,password:p});return t.status(200).json({storage:Re})}catch(r){o(r)}}};var ee=class{async delete(e){await d.storage.delete({where:{id:e}})}};var te=class{constructor(e,t){this.deleteStorageRepository=e;this.showStorageRepository=t}async execute(e,t){if(!await this.showStorageRepository.show(e,t))throw Error("Storage not found");await this.deleteStorageRepository.delete(e)}};var re=require("zod"),_t=re.z.object({userId:re.z.string(),storageId:re.z.string()}),oe=class{async handle(e,t,o){try{let{userId:r,storageId:a}=_t.parse(e.params),i=new ee,n=new y;return await new te(i,n).execute(a,r),t.status(200).json({})}catch(r){o(r)}}};var Lt=new V,Dt=new K,Ht=new J,Bt=new Q,Mt=new oe,U=(0,Ze.Router)();U.post("/storages",w,Lt.handle);U.get("/storages",w,Dt.handle);U.get("/storages/:storageId",w,Ht.handle);U.put("/storages/:storageId",w,Bt.handle);U.delete("/storages/:storageId",w,Mt.handle);var tt=require("express");var Qe=g(require("dayjs")),et=require("uuid"),se=class{constructor(e,t,o){this.showUserPerEmailRepository=e;this.createRefreshTokenRepository=t;this.deleteRefreshTokenRepository=o}async execute({email:e,password:t}){let o=await this.showUserPerEmailRepository.show(e);if(!o)throw Error("User not found");if(o.verifiedEmail!==!0)throw Error("Unverified email");let r=new u({userEmail:o.email,userFullName:o.fullName,userId:o.id,userPassword:o.password_hash}),a=new h;await this.deleteRefreshTokenRepository.delete(o.id);let i=await a.authentication(r,t),n=(0,et.v4)(),p=(0,Qe.default)().add(7,"days").unix(),c=await this.createRefreshTokenRepository.create({expiresIn:p,id:n,userId:r.userId});return{token:i,refreshToken:c}}};var ae=class{async create({expiresIn:e,id:t,userId:o}){return await d.refresh_Token.create({data:{expiresIn:e,id:t,userId:o}})}};var ie=class{async delete(e){await d.refresh_Token.deleteMany({where:{userId:e}})}};var ne=require("zod"),Vt=ne.z.object({email:ne.z.string().email(),password:ne.z.string()}),pe=class{async handle(e,t,o){try{let{email:r,password:a}=Vt.parse(e.body);if(!r||!a)return t.status(400).json({error:"Missing data"});let i=new S,n=new ae,p=new ie,l=await new se(i,n,p).execute({email:r,password:a});return t.status(200).json(l)}catch(r){o(r)}}};var Te=(0,tt.Router)(),Yt=new pe;Te.post("/auth",Yt.handle);var ot=require("express");var rt=g(require("bcrypt")),de=class{constructor(e,t){this.showStorageRepository=e;this.showUserPerUserIdRepository=t}async execute(e,t,o){let r=await this.showStorageRepository.show(e,t);if(!r)throw Error("Storage not found");let a=new f({account:r.account,password:r.password,storageId:r.id,usageLocation:r.usageLocation,userId:r.userId,description:r.description??"",link:r.link??""}),i=await this.showUserPerUserIdRepository.show(t);if(!i)throw Error("User not found");if(!await rt.default.compare(o,i.password_hash))throw Error("Invalid password");return a.showPassword(a.password)}};var I=require("zod"),$t=I.z.object({password:I.z.string()}),Kt=I.z.object({storageId:I.z.string(),userId:I.z.string()}),ce=class{async handle(e,t,o){try{let{password:r}=$t.parse(e.body),{storageId:a,userId:i}=Kt.parse(e.params);if(!r)return t.status(400).json({error:"Missing data"});let n=new y,p=new m,l=await new de(n,p).execute(a,i,r);return t.status(200).json({descryptedPassword:l})}catch(r){o(r)}}};var ve=(0,ot.Router)(),Gt=new ce;ve.post("/passwords/storages/:storageId",w,Gt.handle);var st=require("express");var ke=g(require("dayjs"));var me=class{constructor(e,t){this.showRefreshTokenRepository=e;this.showUserPerUserIdRepository=t}async execute(e){let t=await this.showRefreshTokenRepository.show(e);if(!t)throw Error("Refresh token invalid");let o=await this.showUserPerUserIdRepository.show(t.userId);if(!o)throw Error("User not found");if(o.verifiedEmail!==!0)throw Error("Unverified email");let r=new h;if((0,ke.default)().isAfter(ke.default.unix(t.expiresIn)))throw Error("Refresh_token expired");return await r.authenticationProvider(t.userId,o.email)}};var le=class{async show(e){return await d.refresh_Token.findFirst({where:{id:e}})}};var Ne=require("zod");var Wt=Ne.z.object({refresh_token:Ne.z.string()}),ue=class{async handle(e,t,o){try{let{refresh_token:r}=Wt.parse(e.body),a=new le,i=new m,p=await new me(a,i).execute(r);return t.status(200).json({token:p})}catch(r){o(r)}}};var Ce=(0,st.Router)(),Jt=new ue;Ce.post("/refresh-token",Jt.handle);var Fe=require("@prisma/client"),at=require("zod"),it=require("zod-validation-error"),nt=async(s,e,t,o)=>{if(s instanceof Fe.Prisma.PrismaClientInitializationError)return t.status(500).json({error:"Failed to connect to the database"});if(s instanceof Fe.Prisma.PrismaClientKnownRequestError)return s.code==="P2025"?t.status(400).json({error:"The record no exists"}):s.code==="P2002"?t.status(400).json({error:"Record already exists"}):t.status(400).json({error:s.message});if(s instanceof at.ZodError){let{message:r}=(0,it.fromZodError)(s);return t.status(400).json({error:r})}if(s instanceof Error)return s.message==="invalid token"?t.status(401).json({error:s.message}):t.status(400).json({error:s.message});if(s)return t.status(400).json({error:"An error occurred"});o()};var mt=require("express");var ct=require("zod");var pt=g(require("events"));var Ae=class extends pt.default{},T=new Ae,he=class{constructor(){this._resetPassword(),this._verifiedEmail()}_verifiedEmail(){T.on("user/verifiedEmail-update",async e=>{await d.user.update({where:{id:e},data:{verifiedEmail:!0}})})}_resetPassword(){T.on("user/reset-password",async(e,t)=>{await d.user.update({where:{id:t},data:{password_hash:e}})})}};var fe=class{constructor(e){this.showUserPerIdRepository=e}async execute(e){let o=await new h(this.showUserPerIdRepository).validAuth(e);return await this.showUserPerIdRepository.show(o)?(T.emit("user/verifiedEmail-update",o),!0):!1}};var dt=`<!DOCTYPE html>
 <html>
 <head>
     <title>Verifica\xE7\xE3o de E-mail Conclu\xEDda</title>
@@ -427,7 +826,7 @@
     <h1>Verifica\xE7\xE3o de E-mail Conclu\xEDda com Sucesso</h1>
     <p>O seu endere\xE7o de e-mail foi validado com sucesso. Agora voc\xEA pode acessar nossos servi\xE7os.</p>
 </body>
-</html>`,ke=`<!DOCTYPE html>
+</html>`,Oe=`<!DOCTYPE html>
 <html>
 <head>
     <title>Valida\xE7\xE3o de E-mail</title>
@@ -457,4 +856,4 @@
     <h1>Valida\xE7\xE3o de E-mail Falhou</h1>
     <p>N\xE3o foi poss\xEDvel validar o endere\xE7o de e-mail. Por favor, verifique o endere\xE7o e tente novamente.</p>
 </body>
-</html>`;var Br=sr.z.string(),N=class{async handle(e,r,o){try{let t=Br.parse(e.query.token);if(!t)return r.status(401).send(`${ke}`);let a=new l,i=new ue(a),n=`Bearer ${t}`;return await i.execute(n)===!1?r.status(400).send(`${ke}`):r.status(200).send(`${or}`)}catch{return r.status(400).send("<h1>N\xE3o foi possivel validar seu e-mail</h1>")}}};var Te=(0,ar.Router)(),Hr=new N;Te.get("/verify-email",Hr.handle);var ir=h(require("cors")),nr=h(require("helmet"));var Ce=class{constructor(){this.app=(0,Ne.default)(),this._middlewares(),this._router(),this._lastMiddlewares(),tr()}_middlewares(){this.app.use(Ne.default.json()),this.app.use((0,ir.default)()),this.app.use((0,nr.default)())}_lastMiddlewares(){this.app.use(er)}_router(){this.app.use(T),this.app.use(E),this.app.use(xe),this.app.use(Se),this.app.use(Ue),this.app.use(Te)}},Mr=new Ce;
+</html>`;var Xt=ct.z.string(),C=class{async handle(e,t,o){try{let r=Xt.parse(e.query.token);if(!r)return t.status(401).send(`${Oe}`);let a=new m,i=new fe(a),n=`Bearer ${r}`;return await i.execute(n)===!1?t.status(400).send(`${Oe}`):t.status(200).send(`${dt}`)}catch{return t.status(400).send("<h1>N\xE3o foi possivel validar seu e-mail</h1>")}}};var je=(0,mt.Router)(),Zt=new C;je.post("/verify-email",Zt.handle);var ft=g(require("cors")),gt=g(require("helmet"));var lt=require("express");var ge=class{constructor(e){this.showUserPerEmail=e}async execute(e){let t=await this.showUserPerEmail.show(e);if(!t)throw Error("User not found");await new u({userEmail:t.email,userFullName:t.fullName,userId:t.id,userPassword:t.password_hash}).sendEmailToForgotPassword()}};var we=class{async handle(e,t,o){try{let r=e.body.email;if(!r)return t.status(400).json({error:"Missing data"});let a=new S;return await new ge(a).execute(r),t.status(200).json({message:"Foi enviado um e-mail para redefinir sua senha"})}catch(r){o(r)}}};var ze=(0,lt.Router)(),Qt=new we;ze.post("/forgot-password",Qt.handle);var ht=require("express");var ye=class{constructor(e){this.showUserPerIdRepository=e}async execute(e,t){let o=new h(this.showUserPerIdRepository),r=`Bearer ${e}`,a=await o.validAuth(r);if(!a)throw Error("Invalid token");let i=await this.showUserPerIdRepository.show(a);if(!i)throw Error("User not found");let p=await new u({userEmail:i.email,userFullName:i.fullName,userId:i.id,userPassword:i.password_hash}).encryptedPassword(t);T.emit("user/reset-password",p,i.id)}};var ut=require("zod");var er=ut.z.string(),be=class{async handle(e,t,o){try{let r=er.parse(e.query.token),a=e.body.newPassword;if(!r)throw Error("Missing token to reset password");if(!a)throw Error("Missing data");let i=new m;return await new ye(i).execute(r,a),t.status(200).json({message:"Senha atualizada com sucesso"})}catch(r){o(r)}}};var qe=(0,ht.Router)(),tr=new be;qe.post("/reset-password",tr.handle);var Le=class{constructor(){this.app=(0,_e.default)(),this._middlewares(),this._router(),this._lastMiddlewares(),new he}_middlewares(){this.app.use(_e.default.json()),this.app.use((0,ft.default)()),this.app.use((0,gt.default)())}_lastMiddlewares(){this.app.use(nt)}_router(){this.app.use(N),this.app.use(U),this.app.use(Te),this.app.use(ve),this.app.use(Ce),this.app.use(je),this.app.use(ze),this.app.use(qe)}},rr=new Le;

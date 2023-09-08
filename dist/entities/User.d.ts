@@ -18,4 +18,5 @@ export declare class User {
     comparePasswords(password: string): Promise<boolean>;
     updatePassword(oldPassword: string, newPassword: string, newPasswordConfirmation: string): Promise<void>;
     sendEmailToVerify(): Promise<void>;
+    sendEmailToForgotPassword(): Promise<void>;
 }
