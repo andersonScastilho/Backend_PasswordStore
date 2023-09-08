@@ -860,7 +860,7 @@ export class User {
                                     <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                                       <tbody>
                                         <tr>
-                                          <td> <a href=${`${process.env.FRONTEND_URL}/forgot-password?token=${token}`} target="_blank">Redefinir senha</a> </td>
+                                          <td> <a href=${`${process.env.FRONTEND_URL}/reset-password?token=${token}`} target="_blank">Redefinir senha</a> </td>
                                         </tr>
                                       </tbody>
                                     </table>
