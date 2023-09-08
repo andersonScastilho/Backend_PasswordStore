@@ -9,8 +9,9 @@ import { errorHandler } from "middlewares/error";
 import { verifyEmail } from "./routes/verify-email";
 import cors from "cors";
 import helmet from "helmet";
-import { initializeEventsOn } from "events/update-user-verifyEmaill";
+import { initializeEventsOn } from "events/user-events";
 import { forgotPassword } from "routes/forgotPassword";
+import { resetPassword } from "routes/reset-password";
 
 class App {
   public app: express.Application;
@@ -20,7 +21,7 @@ class App {
     this._middlewares();
     this._router();
     this._lastMiddlewares();
-    initializeEventsOn();
+    new initializeEventsOn();
   }
 
   private _middlewares() {
@@ -57,6 +58,7 @@ class App {
     this.app.use(refreshTokenRoutes);
     this.app.use(verifyEmail);
     this.app.use(forgotPassword);
+    this.app.use(resetPassword);
   }
 }
 export default new App();

@@ -1,4 +1,4 @@
-import { myEmitter } from "events/update-user-verifyEmaill";
+import { myEmitter } from "events/user-events";
 import { ShowUserPerUserIdRepository } from "repositories/user/show-user-userId-repository";
 import Auth from "service/Auth";
 
@@ -9,6 +9,7 @@ export class VerifyEmail {
 
     const userId = await auth.validAuth(token);
     const user = await this.showUserPerIdRepository.show(userId);
+
     if (!user) {
       return false;
     }

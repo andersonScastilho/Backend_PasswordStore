@@ -31,7 +31,6 @@ class Auth {
     if (!userPerId) {
       throw Error("User not found");
     }
-
     if (email !== userPerId.email) {
       throw Error("Invalid token");
     }
