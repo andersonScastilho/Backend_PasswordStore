@@ -42,7 +42,7 @@ class App {
       },
     };
 
-    this.app.use(cors());
+    this.app.use(cors(corsOptions));
     this.app.use(helmet());
   }
 
