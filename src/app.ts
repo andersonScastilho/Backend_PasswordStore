@@ -10,6 +10,7 @@ import { verifyEmail } from "./routes/verify-email";
 import cors from "cors";
 import helmet from "helmet";
 import { initializeEventsOn } from "events/update-user-verifyEmaill";
+import { forgotPassword } from "routes/forgotPassword";
 
 class App {
   public app: express.Application;
@@ -55,6 +56,7 @@ class App {
     this.app.use(passwordRoutes);
     this.app.use(refreshTokenRoutes);
     this.app.use(verifyEmail);
+    this.app.use(forgotPassword);
   }
 }
 export default new App();

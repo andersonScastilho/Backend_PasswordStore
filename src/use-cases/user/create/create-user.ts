@@ -42,7 +42,7 @@ export class CreateUser {
 
     await this.createUserRepository.create(user);
 
-    user.sendEmailToVerify();
+    await user.sendEmailToVerify();
 
     return user;
   }
