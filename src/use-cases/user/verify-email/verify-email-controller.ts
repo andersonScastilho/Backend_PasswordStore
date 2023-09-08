@@ -20,14 +20,14 @@ export default class VerifyEmailController {
       const isValidToken = await verifyEmail.execute(fullFieldToken);
 
       if (isValidToken === false) {
-        return res.status(400).send(`${invalidEmail}`);
+        return res.status(400).json({
+          error: "Não foi possivel validar o email",
+        });
       }
 
-      return res.status(200).send(`${validEmail}`);
+      return res.status(200).json({ message: "Email validado com sucesso" });
     } catch (e) {
-      return res
-        .status(400)
-        .send("<h1>Não foi possivel validar seu e-mail</h1>");
+      next(e);
     }
   }
 }
