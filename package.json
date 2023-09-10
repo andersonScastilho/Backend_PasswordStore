@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc --build tsconfig.build.json && tsup src --minify",
-    "start": "node ./dist/index.js",
+    "start": "node dist/index.js",
     "start:dev": "npx tsx watch ./src/index.ts"
   },
   "keywords": [],
