@@ -27,22 +27,22 @@ class App {
   private _middlewares() {
     this.app.use(express.json());
 
-    const allowedOrigin = "https://passtorage.vercel.app";
+    // const allowedOrigin = "https://passtorage.vercel.app";
 
-    const corsOptions = {
-      origin: (
-        origin: string | undefined,
-        callback: (err: Error | null, allow?: boolean) => void
-      ) => {
-        if (origin === allowedOrigin) {
-          callback(null, true);
-        } else {
-          callback(new Error("Acesso não permitido por CORS"));
-        }
-      },
-    };
+    // const corsOptions = {
+    //   origin: (
+    //     origin: string | undefined,
+    //     callback: (err: Error | null, allow?: boolean) => void
+    //   ) => {
+    //     if (origin === allowedOrigin) {
+    //       callback(null, true);
+    //     } else {
+    //       callback(new Error("Acesso não permitido por CORS"));
+    //     }
+    //   },
+    // };
 
-    this.app.use(cors(corsOptions));
+    this.app.use(cors());
     this.app.use(helmet());
   }
 
