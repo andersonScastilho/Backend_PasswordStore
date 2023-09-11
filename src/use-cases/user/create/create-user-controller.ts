@@ -7,7 +7,12 @@ import { PostgresShowUserPerEmailRepository } from "repositories/postgres/user/p
 const BodySchema = z.object({
   email: z.string().email(),
   fullName: z.string(),
-  password: z.string().min(8),
+  password: z
+    .string()
+    .min(8)
+    .regex(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
+    ),
 });
 export class CreateUserController {
   async handle(req: Request, res: Response, next: NextFunction) {

@@ -7,7 +7,12 @@ const querySchema = z.object({
   token: z.string(),
 });
 const bodySchema = z.object({
-  newPassword: z.string().min(8),
+  newPassword: z
+    .string()
+    .min(8)
+    .regex(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
+    ),
 });
 export class ResetPasswordController {
   async handle(req: Request, res: Response, next: NextFunction) {

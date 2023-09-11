@@ -7,7 +7,13 @@ import { PostgresUpdateUserRepository } from "repositories/postgres/user/postgre
 const BodySchema = z.object({
   email: z.string().email().optional(),
   oldPassword: z.string().optional(),
-  newPassword: z.string().min(7).optional(),
+  newPassword: z
+    .string()
+    .min(7)
+    .regex(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
+    )
+    .optional(),
   newPasswordConfirmation: z.string().min(7).optional(),
   fullName: z.string().optional(),
 });
