@@ -2,7 +2,6 @@ import { NextFunction, Request, Response } from "express";
 import { z } from "zod";
 import { VerifyEmail } from "./verify-email";
 import { PostgresShowUserPerUserIdRepository } from "repositories/postgres/user/postgres-show-user-userId-repository";
-import { validEmail, invalidEmail } from "../../../html/verifyEmail";
 const paramRequest = z.string();
 
 export default class VerifyEmailController {
@@ -10,7 +9,9 @@ export default class VerifyEmailController {
     try {
       const token = paramRequest.parse(req.query.token);
       if (!token) {
-        return res.status(401).send(`${invalidEmail}`);
+        return res.status(401).json({
+          error: "Não foi possivel validar o email",
+        });
       }
 
       const showUserPerIdRepository = new PostgresShowUserPerUserIdRepository();
