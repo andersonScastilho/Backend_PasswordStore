@@ -2,12 +2,16 @@ import { NextFunction, Request, Response } from "express";
 import { z } from "zod";
 import { VerifyEmail } from "./verify-email";
 import { PostgresShowUserPerUserIdRepository } from "repositories/postgres/user/postgres-show-user-userId-repository";
-const paramRequest = z.string();
+
+const querySchema = z.object({
+  token: z.string(),
+});
 
 export default class VerifyEmailController {
   async handle(req: Request, res: Response, next: NextFunction) {
     try {
-      const token = paramRequest.parse(req.query.token);
+      const { token } = querySchema.parse(req.query);
+
       if (!token) {
         return res.status(401).json({
           error: "Não foi possivel validar o email",

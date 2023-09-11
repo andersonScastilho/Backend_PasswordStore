@@ -3,13 +3,17 @@ import { ResetPassword } from "./reset-password";
 import { z } from "zod";
 import { PostgresShowUserPerUserIdRepository } from "repositories/postgres/user/postgres-show-user-userId-repository";
 
-const paramRequest = z.string();
-
+const querySchema = z.object({
+  token: z.string(),
+});
+const bodySchema = z.object({
+  newPassword: z.string().min(8),
+});
 export class ResetPasswordController {
   async handle(req: Request, res: Response, next: NextFunction) {
     try {
-      const token = paramRequest.parse(req.query.token);
-      const newPassword = req.body.newPassword;
+      const { token } = querySchema.parse(req.query);
+      const { newPassword } = bodySchema.parse(req.body);
 
       if (!token) {
         throw Error("Missing token to reset password");

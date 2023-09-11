@@ -7,8 +7,8 @@ import { PostgresUpdateUserRepository } from "repositories/postgres/user/postgre
 const BodySchema = z.object({
   email: z.string().email().optional(),
   oldPassword: z.string().optional(),
-  newPassword: z.string().optional(),
-  newPasswordConfirmation: z.string().optional(),
+  newPassword: z.string().min(7).optional(),
+  newPasswordConfirmation: z.string().min(7).optional(),
   fullName: z.string().optional(),
 });
 const ParamsSchema = z.object({
@@ -33,6 +33,9 @@ export class UpdateUserController {
         }
         if (!oldPassword) {
           throw Error("oldPassword is required to update password");
+        }
+        if (newPasswordConfirmation !== newPassword) {
+          throw Error("the password and newPasswordConfirmation not is macth");
         }
       }
 

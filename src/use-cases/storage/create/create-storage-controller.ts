@@ -8,8 +8,8 @@ const BodySchema = z.object({
   password: z.string(),
   account: z.string(),
   usageLocation: z.string(),
-  link: z.string(),
-  description: z.string(),
+  link: z.string().optional(),
+  description: z.string().optional(),
 });
 
 const ParamsSchema = z.object({
