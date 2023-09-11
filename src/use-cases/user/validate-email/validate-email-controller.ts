@@ -1,13 +1,13 @@
 import { NextFunction, Request, Response } from "express";
 import { z } from "zod";
-import { VerifyEmail } from "./verify-email";
+import { ValidateEmail } from "./validate-email";
 import { PostgresShowUserPerUserIdRepository } from "repositories/postgres/user/postgres-show-user-userId-repository";
 
 const querySchema = z.object({
   token: z.string(),
 });
 
-export default class VerifyEmailController {
+export default class ValidateEmailController {
   async handle(req: Request, res: Response, next: NextFunction) {
     try {
       const { token } = querySchema.parse(req.query);
@@ -19,7 +19,7 @@ export default class VerifyEmailController {
       }
 
       const showUserPerIdRepository = new PostgresShowUserPerUserIdRepository();
-      const verifyEmail = new VerifyEmail(showUserPerIdRepository);
+      const verifyEmail = new ValidateEmail(showUserPerIdRepository);
 
       const fullFieldToken = `Bearer ${token}`;
       const isValidToken = await verifyEmail.execute(fullFieldToken);

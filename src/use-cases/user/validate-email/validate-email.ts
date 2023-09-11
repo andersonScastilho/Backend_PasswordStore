@@ -2,7 +2,7 @@ import { myEmitter } from "events/user-events";
 import { ShowUserPerUserIdRepository } from "repositories/user/show-user-userId-repository";
 import Auth from "service/Auth";
 
-export class VerifyEmail {
+export class ValidateEmail {
   constructor(private showUserPerIdRepository: ShowUserPerUserIdRepository) {}
   async execute(token: string) {
     const auth = new Auth(this.showUserPerIdRepository);
