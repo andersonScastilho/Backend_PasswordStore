@@ -30,8 +30,11 @@ export class CreateUserController {
       });
 
       return res.status(200).json({
-        email: user.userEmail,
-        fullName: user.userFullName,
+        props: {
+          email: user.userEmail,
+          fullName: user.userFullName,
+          id: user.userId,
+        },
       });
     } catch (e) {
       next(e);

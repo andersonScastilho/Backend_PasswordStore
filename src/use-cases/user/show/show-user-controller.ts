@@ -18,8 +18,11 @@ export class ShowUserController {
       const user = await showUser.execute(userId);
 
       return res.status(200).json({
-        email: user.userEmail,
-        fullName: user.userFullName,
+        props: {
+          email: user.userEmail,
+          fullName: user.userFullName,
+          id: userId,
+        },
       });
     } catch (e) {
       next(e);

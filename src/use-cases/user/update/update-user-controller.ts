@@ -67,7 +67,7 @@ export class UpdateUserController {
       });
 
       return res.status(200).json({
-        user: {
+        props: {
           email: responseEmail,
           fullName: responseFullName,
           id: responseId,
