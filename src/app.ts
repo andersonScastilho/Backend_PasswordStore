@@ -12,6 +12,7 @@ import helmet from "helmet";
 import { initializeEventsOn } from "events/user-events";
 import { forgotPassword } from "routes/forgotPassword";
 import { resetPassword } from "routes/reset-password";
+import { verifyEmail } from "routes/verify-email";
 
 class App {
   public app: express.Application;
@@ -59,6 +60,7 @@ class App {
     this.app.use(validateEmail);
     this.app.use(forgotPassword);
     this.app.use(resetPassword);
+    this.app.use(verifyEmail);
   }
 }
 export default new App();
