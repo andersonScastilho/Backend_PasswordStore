@@ -19,10 +19,10 @@ export default class ValidateEmailController {
       }
 
       const showUserPerIdRepository = new PostgresShowUserPerUserIdRepository();
-      const verifyEmail = new ValidateEmail(showUserPerIdRepository);
+      const validateEmail = new ValidateEmail(showUserPerIdRepository);
 
       const fullFieldToken = `Bearer ${token}`;
-      const isValidToken = await verifyEmail.execute(fullFieldToken);
+      const isValidToken = await validateEmail.execute(fullFieldToken);
 
       if (isValidToken === false) {
         return res.status(400).json({
