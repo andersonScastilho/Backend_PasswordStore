@@ -443,7 +443,7 @@ export class User {
                                     <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                                       <tbody>
                                         <tr>
-                                          <td> <a href=${`${process.env.FRONTEND_URL}/verify-email?token=${token}`} target="_blank">Validar Email</a> </td>
+                                          <td> <a href=${`${process.env.FRONTEND_URL}/validate-email?token=${token}`} target="_blank">Validar Email</a> </td>
                                         </tr>
                                       </tbody>
                                     </table>
