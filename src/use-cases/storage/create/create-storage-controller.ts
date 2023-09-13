@@ -34,7 +34,7 @@ export class CreateStorageController {
         userId,
       });
 
-      return res.status(200).json(storage);
+      return res.status(200).json({ storage });
     } catch (e) {
       next(e);
     }
