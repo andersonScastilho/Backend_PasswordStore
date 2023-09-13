@@ -3,7 +3,7 @@ export interface StorageSchema {
   password: string;
   account: string;
   usageLocation: string;
-  link: string | null;
-  description: string | null;
+  link?: string;
+  description?: string;
   userId: string;
 }
