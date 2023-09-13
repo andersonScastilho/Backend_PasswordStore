@@ -54,8 +54,8 @@ export class UpdateStorage {
       storageId: updatedStorage.id,
       usageLocation: updatedStorage.usageLocation,
       userId: updatedStorage.userId,
-      description: updatedStorage.description,
-      link: updatedStorage.link,
+      description: updatedStorage.description || "",
+      link: updatedStorage.link || "",
     });
 
     return storage;

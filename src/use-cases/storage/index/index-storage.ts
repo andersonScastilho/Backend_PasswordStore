@@ -16,8 +16,8 @@ export class IndexStorage {
         storageId: storage.id,
         usageLocation: storage.usageLocation,
         userId: storage.userId,
-        description: storage.description,
-        link: storage.link,
+        description: storage.description || undefined,
+        link: storage.link || undefined,
       });
 
       storages.push(storageInstace);
