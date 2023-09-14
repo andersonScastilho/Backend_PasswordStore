@@ -24,7 +24,7 @@ export class UpdateStorageController {
 
       const { userId, storageId } = ParamsSchema.parse(req.params);
 
-      if (!account && !usageLocation && !description && !link) {
+      if (!account && !usageLocation && !description && !link && !password) {
         return res.status(400).json({
           error: "Missing data",
         });
