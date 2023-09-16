@@ -15,7 +15,6 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     const auth = new Auth(showUserPerUserIdRepository);
 
     const id = await auth.validAuth(authorization);
-
     req.params = { ...req.params, userId: id };
     return next();
   } catch (e) {

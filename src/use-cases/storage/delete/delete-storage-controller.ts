@@ -9,15 +9,10 @@ const ParamsSchema = z.object({
   userId: z.string(),
   storageId: z.string(),
 });
-
-const BodySchema = z.object({
-  password: z.string(),
-});
 export class DeleteStorageController {
   async handle(req: Request, res: Response, next: NextFunction) {
     try {
       const { userId, storageId } = ParamsSchema.parse(req.params);
-      const { password } = BodySchema.parse(req.body);
 
       const deleteStorageRepository = new PostgresDeleteStorageRepository();
       const showStorageRepository = new PostgresShowStorageRepository();
@@ -26,11 +21,10 @@ export class DeleteStorageController {
 
       const deleteStorage = new DeleteStorage(
         deleteStorageRepository,
-        showStorageRepository,
-        showUserPerUserIdRepository
+        showStorageRepository
       );
 
-      await deleteStorage.execute(storageId, userId, password);
+      await deleteStorage.execute(storageId, userId);
 
       return res.status(200).json({});
     } catch (e) {
