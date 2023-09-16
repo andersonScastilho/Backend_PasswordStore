@@ -20,6 +20,25 @@ export class CreateStorageController {
     try {
       const { password, account, usageLocation, link, description } =
         BodySchema.parse(req.body);
+
+      if (!password) {
+        return res.status(400).json({
+          error: "password is required",
+        });
+      }
+
+      if (!account) {
+        return res.status(400).json({
+          error: "account is required",
+        });
+      }
+
+      if (!usageLocation) {
+        return res.status(400).json({
+          error: "usageLocation is required",
+        });
+      }
+
       const { userId } = ParamsSchema.parse(req.params);
 
       const storageRepository = new PostgresStorageRepository();
