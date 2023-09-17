@@ -1,4 +1,4 @@
-import { User } from "entities/User";
+import { myEmitter } from "events/user-events";
 import { ShowUserPerEmailRepository } from "repositories/user/show-user-email-repository";
 
 export class ForgotPassword {
@@ -9,15 +9,7 @@ export class ForgotPassword {
     if (!user) {
       throw Error("User not found");
     }
-
-    const instanceUser = new User({
-      userEmail: user.email,
-      userFullName: user.fullName,
-      userId: user.id,
-      userPassword: user.password_hash,
-    });
-
-    await instanceUser.sendEmailToForgotPassword();
+    myEmitter.emit("user/sendEmail-forgotPassword", user.id, user.email);
 
     return;
   }
