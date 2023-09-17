@@ -1,5 +1,6 @@
-import { User } from "entities/User";
+import { myEmitter } from "events/user-events";
 import { ShowUserPerEmailRepository } from "repositories/user/show-user-email-repository";
+import Auth from "service/Auth";
 
 export class VerifyEmail {
   constructor(private showUserPerEmailRepository: ShowUserPerEmailRepository) {}
@@ -10,14 +11,14 @@ export class VerifyEmail {
       throw Error("User not found");
     }
 
-    const user = new User({
-      userEmail: userSchema.email,
-      userFullName: userSchema.fullName,
-      userId: userSchema.id,
-      userPassword: "",
-    });
+    const auth = new Auth();
 
-    await user.sendEmailToVerify();
+    myEmitter.emit(
+      "user/sendEmail-verify",
+      auth,
+      userSchema.email,
+      userSchema.id
+    );
 
     return;
   }

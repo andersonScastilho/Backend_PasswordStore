@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 import { User } from "entities/User";
 import { CreateUserRepository } from "repositories/user/create-user-repository";
 import { ShowUserPerEmailRepository } from "repositories/user/show-user-email-repository";
+import { myEmitter } from "events/user-events";
 
 interface CreateUserRequest {
   userFullName: string;
@@ -27,7 +28,6 @@ export class CreateUser {
     if (userExist) {
       throw Error("Email in use");
     }
-
     const userId = uuidv4();
 
     const user = new User({
@@ -38,11 +38,12 @@ export class CreateUser {
     });
 
     const hashPassword = await user.encryptedPassword(userPassword);
+
     user.hashPasswordToUserPassword = hashPassword;
 
     await this.createUserRepository.create(user);
 
-    await user.sendEmailToVerify();
+    myEmitter.emit("user/sendEmail-verify", user.userEmail, user.userId);
 
     return user;
   }
