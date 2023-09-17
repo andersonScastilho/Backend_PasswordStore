@@ -11,14 +11,7 @@ export class VerifyEmail {
       throw Error("User not found");
     }
 
-    const auth = new Auth();
-
-    myEmitter.emit(
-      "user/sendEmail-verify",
-      auth,
-      userSchema.email,
-      userSchema.id
-    );
+    myEmitter.emit("user/sendEmail-verify", userSchema.email, userSchema.id);
 
     return;
   }
