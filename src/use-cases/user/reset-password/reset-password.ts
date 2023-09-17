@@ -1,5 +1,5 @@
 import { User } from "entities/User";
-import { myEmitter } from "events/user-events";
+import { myEmitter } from "service/events/user-events";
 import { ShowUserPerUserIdRepository } from "repositories/user/show-user-userId-repository";
 import Auth from "service/Auth";
 

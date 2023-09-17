@@ -1,4 +1,4 @@
-import { myEmitter } from "events/user-events";
+import { myEmitter } from "service/events/user-events";
 import { ShowUserPerEmailRepository } from "repositories/user/show-user-email-repository";
 
 export class ForgotPassword {

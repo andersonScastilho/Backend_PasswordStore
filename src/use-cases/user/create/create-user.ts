@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 import { User } from "entities/User";
 import { CreateUserRepository } from "repositories/user/create-user-repository";
 import { ShowUserPerEmailRepository } from "repositories/user/show-user-email-repository";
-import { myEmitter } from "events/user-events";
+import { myEmitter } from "service/events/user-events";
 
 interface CreateUserRequest {
   userFullName: string;
