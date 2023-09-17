@@ -9,7 +9,7 @@ import { errorHandler } from "middlewares/error";
 import { validateEmail } from "./routes/validate-email";
 import cors from "cors";
 import helmet from "helmet";
-import { initializeEventsOn } from "events/user-events";
+import { initializeEventsOn } from "./service/events/user-events";
 import { forgotPassword } from "routes/forgotPassword";
 import { resetPassword } from "routes/reset-password";
 import { verifyEmail } from "routes/verify-email";
