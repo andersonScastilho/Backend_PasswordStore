@@ -1,29 +1,21 @@
 import { prismaClient } from "database/prisma-client";
+import { User } from "entities/User";
 import { UserSchema } from "models/user-schema";
-import {
-  UpdateUserParams,
-  UpdateUserRepository,
-} from "repositories/user/update-user-repository";
+import { UpdateUserRepository } from "repositories/user/update-user-repository";
 
 export class PostgresUpdateUserRepository implements UpdateUserRepository {
-  async update({
-    email,
-    fullName,
-    newPassword,
-
-    userId,
-  }: UpdateUserParams): Promise<UserSchema> {
-    const user = await prismaClient.user.update({
+  async update(user: User): Promise<UserSchema> {
+    const userSchema = await prismaClient.user.update({
       where: {
-        id: userId,
+        id: user.userId,
       },
       data: {
-        email: email,
-        fullName: fullName,
-        password_hash: newPassword,
+        email: user.userEmail,
+        fullName: user.userFullName,
+        password_hash: user.userPassword,
       },
     });
 
-    return user;
+    return userSchema;
   }
 }

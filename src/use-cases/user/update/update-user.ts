@@ -24,41 +24,28 @@ export class UpdateUser {
     newPassword,
     newPasswordConfirmation,
   }: UpdateUserRequest) {
-    const user = await this.showUserPerUserIdRepository.show(userId);
+    const userSchema = await this.showUserPerUserIdRepository.show(userId);
 
-    if (!user) {
+    if (!userSchema) {
       throw Error("User not found");
     }
 
-    const instanceUser = new User({
-      userId: user.id,
-      userEmail: user.email,
-      userFullName: user.fullName,
-      userPassword: user.password_hash,
+    const user = new User({
+      userId: userSchema.id,
+      userEmail: email || userSchema.email,
+      userFullName: fullName || userSchema.fullName,
+      userPassword: userSchema.password_hash,
     });
 
-    if (fullName) {
-      instanceUser.updateUserFullName = fullName;
-    }
-
     if (newPassword && oldPassword && newPasswordConfirmation) {
-      await instanceUser.updatePassword(
+      await user.updatePassword(
         oldPassword,
         newPassword,
         newPasswordConfirmation
       );
     }
 
-    if (email) {
-      instanceUser.updateUserEmail = email;
-    }
-
-    const updatedUser = await this.updateUserRepository.update({
-      userId: instanceUser.userId,
-      email: instanceUser.userEmail,
-      fullName: instanceUser.userFullName,
-      newPassword: instanceUser.userPassword,
-    });
+    const updatedUser = await this.updateUserRepository.update(user);
 
     return updatedUser;
   }

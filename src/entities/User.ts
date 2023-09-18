@@ -30,20 +30,13 @@ export class User {
     this.props.userPassword = hashPassword;
   }
 
-  set updateUserFullName(fullName: string) {
-    this.props.userFullName = fullName;
-  }
-
-  set updateUserEmail(email: string) {
-    this.props.userEmail = email;
-  }
-
   constructor(props: UserProps) {
     this.props = props;
   }
 
   async encryptedPassword(password: string) {
     const hashPassword = await bcrypt.hash(password, 10);
+
     return hashPassword;
   }
 
