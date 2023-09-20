@@ -42,8 +42,6 @@ export class CreateStorage {
 
     await this.storageRepository.create(storage);
 
-    storage.updatePassword = "";
-
     return storage;
   }
 }

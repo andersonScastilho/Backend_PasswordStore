@@ -35,10 +35,6 @@ export class Storage {
     return this.props.userId;
   }
 
-  set updatePassword(data: string) {
-    this.props.password = data;
-  }
-
   constructor(props: StorageProps) {
     this.props = props;
   }

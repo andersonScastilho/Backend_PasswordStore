@@ -43,8 +43,6 @@ export class CreateUser {
 
     await this.createUserRepository.create(user);
 
-    // myEmitter.emit("user/sendEmail-verify", user.userEmail, user.userId);
-
     return user;
   }
 }

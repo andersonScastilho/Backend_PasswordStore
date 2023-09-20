@@ -3,6 +3,7 @@ import { Request, Response, NextFunction } from "express";
 import { CreateStorage } from "./create-storage";
 import { PostgresStorageRepository } from "../../../repositories/postgres/storage/postgres-create-storage-repository";
 import { z } from "zod";
+import { Storage } from "entities/Storage";
 
 const BodySchema = z.object({
   password: z.string(),
@@ -44,13 +45,23 @@ export class CreateStorageController {
       const storageRepository = new PostgresStorageRepository();
       const createStorage = new CreateStorage(storageRepository);
 
-      const storage = await createStorage.execute({
+      const { storageId } = await createStorage.execute({
         account,
         password,
         usageLocation,
         description,
         link,
         userId,
+      });
+
+      const storage = new Storage({
+        account,
+        password: "",
+        storageId,
+        usageLocation,
+        userId,
+        description,
+        link,
       });
 
       return res.status(200).json({ storage });
