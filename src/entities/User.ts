@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
-import Auth from "service/Auth";
-import SendEmail from "utils/SendEmail";
+import { v4 as uuidv4 } from "uuid";
+
 export interface UserProps {
   userFullName: string;
   userEmail: string;
@@ -9,32 +9,29 @@ export interface UserProps {
 }
 
 export class User {
-  private props: UserProps;
+  private _props: UserProps;
+
   get userEmail() {
-    return this.props.userEmail;
+    return this._props.userEmail;
   }
 
   get userFullName() {
-    return this.props.userFullName;
+    return this._props.userFullName;
   }
 
   get userPassword() {
-    return this.props.userPassword;
+    return this._props.userPassword;
   }
 
   get userId() {
-    return this.props.userId;
-  }
-
-  set hashPasswordToUserPassword(hashPassword: string) {
-    this.props.userPassword = hashPassword;
+    return this._props.userId;
   }
 
   constructor(props: UserProps) {
-    this.props = props;
+    this._props = props;
   }
 
-  async encryptedPassword(password: string) {
+  private async _encryptedPassword(password: string) {
     const hashPassword = await bcrypt.hash(password, 10);
 
     return hashPassword;
@@ -51,6 +48,11 @@ export class User {
     newPassword: string,
     newPasswordConfirmation: string
   ) {
+    const verifyPasswordIsStrong = (value: string) =>
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(
+        value
+      );
+
     const isMatchPassword = await this.comparePasswords(oldPassword);
 
     if (!isMatchPassword) {
@@ -61,9 +63,29 @@ export class User {
       throw Error("Password confirmation must be the same as password");
     }
 
-    const encryptedPassword = await this.encryptedPassword(newPassword);
+    const passwordIsStrong = verifyPasswordIsStrong(newPassword);
 
-    this.props.userPassword = encryptedPassword;
+    if (!passwordIsStrong) {
+      throw Error(
+        "Senha deve conter 8+ caracteres, minúscula, maiúscula e especial"
+      );
+    }
+
+    const encryptedPassword = await this._encryptedPassword(newPassword);
+
+    this._props.userPassword = encryptedPassword;
+
+    return;
+  }
+
+  async createUser() {
+    const userId = uuidv4();
+
+    this._props.userId = userId;
+
+    const password = await this._encryptedPassword(this._props.userId);
+
+    this._props.userPassword = password;
 
     return;
   }
