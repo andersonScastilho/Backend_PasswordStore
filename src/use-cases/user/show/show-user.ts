@@ -4,19 +4,19 @@ import { ShowUserPerUserIdRepository } from "repositories/user/show-user-userId-
 export class ShowUser {
   constructor(private showUserRepository: ShowUserPerUserIdRepository) {}
   async execute(userId: string) {
-    const user = await this.showUserRepository.show(userId);
+    const userSchema = await this.showUserRepository.show(userId);
 
-    if (!user) {
+    if (!userSchema) {
       throw Error("User not found");
     }
 
-    const instanceUser = new User({
-      userEmail: user.email,
-      userFullName: user.fullName,
-      userId: user.id,
-      userPassword: user.password_hash,
+    const user = new User({
+      userEmail: userSchema.email,
+      userFullName: userSchema.fullName,
+      userId: userSchema.id,
+      userPassword: userSchema.password_hash,
     });
 
-    return instanceUser;
+    return user;
   }
 }
