@@ -13,22 +13,22 @@ export class ResetPassword {
     if (!userId) {
       throw Error("Invalid token");
     }
-    const user = await this.showUserPerIdRepository.show(userId);
+    const userSchema = await this.showUserPerIdRepository.show(userId);
 
-    if (!user) {
+    if (!userSchema) {
       throw Error("User not found");
     }
 
-    const instanceUser = new User({
-      userEmail: user.email,
-      userFullName: user.fullName,
-      userId: user.id,
-      userPassword: user.password_hash,
+    const user = new User({
+      userEmail: userSchema.email,
+      userFullName: userSchema.fullName,
+      userId: userSchema.id,
+      userPassword: userSchema.password_hash,
     });
 
-    const newPasswordHash = await instanceUser.encryptedPassword(newPassword);
+    await user.resetPassword(newPassword);
 
-    myEmitter.emit("user/reset-password", newPasswordHash, user.id);
+    myEmitter.emit("user/reset-password", user.userPassword, userSchema.id);
 
     return;
   }

@@ -89,4 +89,11 @@ export class User {
 
     return;
   }
+  async resetPassword(newPassword: string) {
+    const newPasswordHash = await this._encryptedPassword(newPassword);
+
+    this._props.userPassword = newPasswordHash;
+
+    return;
+  }
 }
