@@ -1,6 +1,6 @@
 import { myEmitter } from "service/events/user-events";
 import { ShowUserPerUserIdRepository } from "repositories/user/show-user-userId-repository";
-import Auth from "service/Auth";
+import Auth from "service/auth";
 
 export class ValidateEmail {
   constructor(private showUserPerIdRepository: ShowUserPerUserIdRepository) {}

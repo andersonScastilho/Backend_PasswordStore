@@ -1,5 +1,5 @@
 import { PostgresShowUserPerUserIdRepository } from "repositories/postgres/user/postgres-show-user-userId-repository";
-import Auth from "../service/Auth";
+import Auth from "../service/auth";
 import { NextFunction, Request, Response } from "express";
 
 export default async (req: Request, res: Response, next: NextFunction) => {

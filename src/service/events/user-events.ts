@@ -1,6 +1,6 @@
 import EventEmitter from "events";
 import { prismaClient } from "database/prisma-client";
-import Auth from "service/Auth";
+import Auth from "service/auth";
 import SendEmail from "utils/SendEmail";
 
 class MyEmitter extends EventEmitter {}
