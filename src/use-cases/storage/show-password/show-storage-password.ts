@@ -13,19 +13,22 @@ export class ShowStoragePassword {
     userId: string,
     password: string
   ): Promise<string> {
-    const storage = await this.showStorageRepository.show(storageId, userId);
-    if (!storage) {
+    const storageSchema = await this.showStorageRepository.show(
+      storageId,
+      userId
+    );
+    if (!storageSchema) {
       throw Error("Storage not found");
     }
 
-    const instanceStorage = new Storage({
-      account: storage.account,
-      password: storage.password,
-      storageId: storage.id,
-      usageLocation: storage.usageLocation,
-      userId: storage.userId,
-      description: storage.description ?? "",
-      link: storage.link ?? "",
+    const storage = new Storage({
+      account: storageSchema.account,
+      password: storageSchema.password,
+      storageId: storageSchema.id,
+      usageLocation: storageSchema.usageLocation,
+      userId: storageSchema.userId,
+      description: storageSchema.description,
+      link: storageSchema.link,
     });
 
     const user = await this.showUserPerUserIdRepository.show(userId);
@@ -40,9 +43,7 @@ export class ShowStoragePassword {
       throw Error("Invalid password");
     }
 
-    const descryptedPassword = instanceStorage.showPassword(
-      instanceStorage.password
-    );
+    const descryptedPassword = storage.showPassword(storage.password);
 
     return descryptedPassword;
   }

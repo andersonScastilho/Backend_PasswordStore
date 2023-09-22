@@ -16,8 +16,8 @@ export class ShowStorage {
       storageId: storage.id,
       usageLocation: storage.usageLocation,
       userId: storage.userId,
-      description: storage.description || "",
-      link: storage.link || "",
+      description: storage.description,
+      link: storage.link,
     });
 
     return instanceStorage;

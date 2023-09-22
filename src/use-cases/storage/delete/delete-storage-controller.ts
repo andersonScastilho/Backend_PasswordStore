@@ -16,8 +16,6 @@ export class DeleteStorageController {
 
       const deleteStorageRepository = new PostgresDeleteStorageRepository();
       const showStorageRepository = new PostgresShowStorageRepository();
-      const showUserPerUserIdRepository =
-        new PostgresShowUserPerUserIdRepository();
 
       const deleteStorage = new DeleteStorage(
         deleteStorageRepository,

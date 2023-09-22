@@ -10,6 +10,7 @@ export class IndexStorageController {
   async handle(req: Request, res: Response, next: NextFunction) {
     try {
       const { userId } = ParamsSchema.parse(req.params);
+
       if (!userId) {
         return res.status(401).json({
           error: "Login required",

@@ -7,8 +7,8 @@ interface StorageProps {
   password: string;
   account: string;
   usageLocation: string;
-  link?: string;
-  description?: string;
+  link: string | null;
+  description: string | null;
   userId: string;
 }
 
