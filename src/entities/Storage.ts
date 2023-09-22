@@ -1,4 +1,6 @@
 import { decrypt } from "utils/crypt";
+import { v4 as uuidv4 } from "uuid";
+import { encrypt } from "../utils/crypt";
 
 interface StorageProps {
   storageId: string;
@@ -45,5 +47,18 @@ export class Storage {
     const password = decrypt({ iv, content, tag });
 
     return password;
+  }
+
+  createStorage() {
+    const uuid = uuidv4();
+
+    const { iv, content, tag } = encrypt(this.props.password);
+
+    const encryptedPassword = `${iv}:${content}:${tag}`;
+
+    this.props.password = encryptedPassword;
+    this.props.storageId = uuid;
+
+    return;
   }
 }

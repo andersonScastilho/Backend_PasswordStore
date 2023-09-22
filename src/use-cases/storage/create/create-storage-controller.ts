@@ -22,49 +22,33 @@ export class CreateStorageController {
       const { password, account, usageLocation, link, description } =
         BodySchema.parse(req.body);
 
-      if (!password) {
-        return res.status(400).json({
-          error: "password is required",
-        });
-      }
-
-      if (!account) {
-        return res.status(400).json({
-          error: "account is required",
-        });
-      }
-
-      if (!usageLocation) {
-        return res.status(400).json({
-          error: "usageLocation is required",
-        });
-      }
-
       const { userId } = ParamsSchema.parse(req.params);
 
-      const storageRepository = new PostgresStorageRepository();
-      const createStorage = new CreateStorage(storageRepository);
-
-      const { storageId } = await createStorage.execute({
+      const storage = new Storage({
         account,
         password,
         usageLocation,
         description,
         link,
         userId,
+        storageId: "",
       });
 
-      const storage = new Storage({
-        account,
-        password: "",
-        storageId,
-        usageLocation,
-        userId,
-        description,
-        link,
-      });
+      const storageRepository = new PostgresStorageRepository();
+      const createStorage = new CreateStorage(storage, storageRepository);
 
-      return res.status(200).json({ storage });
+      await createStorage.execute();
+
+      return res.status(200).json({
+        props: {
+          account: storage.account,
+          password: "",
+          description: storage.description,
+          link: storage.link,
+          userId: storage.userId,
+          storageId: storage.storageId,
+        },
+      });
     } catch (e) {
       next(e);
     }
