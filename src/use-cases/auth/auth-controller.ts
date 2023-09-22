@@ -22,13 +22,14 @@ export class AuthController {
         });
       }
 
-      const userRepository = new PostgresShowUserPerEmailRepository();
+      const showUserPerEmailRepository =
+        new PostgresShowUserPerEmailRepository();
       const createRefreshTokenRepository = new PostgresCreateRefreshToken();
       const deleteRefreshTokenRepository =
         new PostgresDeleteRefreshTokenRepository();
 
       const auth = new AuthUser(
-        userRepository,
+        showUserPerEmailRepository,
         createRefreshTokenRepository,
         deleteRefreshTokenRepository
       );

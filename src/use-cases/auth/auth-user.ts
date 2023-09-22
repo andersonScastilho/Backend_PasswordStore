@@ -18,27 +18,27 @@ export class AuthUser {
     private deleteRefreshTokenRepository: DeleteRefreshTokenRepository
   ) {}
   async execute({ email, password }: LoginUserRequest) {
-    const user = await this.showUserPerEmailRepository.show(email);
+    const userSchema = await this.showUserPerEmailRepository.show(email);
 
-    if (!user) {
+    if (!userSchema) {
       throw Error("User not found");
     }
-    if (user.verifiedEmail !== true) {
+    if (userSchema.verifiedEmail !== true) {
       throw Error("Unverified email");
     }
 
-    const instanceUser = new User({
-      userEmail: user.email,
-      userFullName: user.fullName,
-      userId: user.id,
-      userPassword: user.password_hash,
+    const user = new User({
+      userEmail: userSchema.email,
+      userFullName: userSchema.fullName,
+      userId: userSchema.id,
+      userPassword: userSchema.password_hash,
     });
 
     const auth = new Auth();
 
-    await this.deleteRefreshTokenRepository.delete(user.id);
+    await this.deleteRefreshTokenRepository.delete(userSchema.id);
 
-    const token = await auth.authentication(instanceUser, password);
+    const token = await auth.authentication(user, password);
 
     const uuid = uudiv4();
     const expiresIn = dayjs().add(7, "days").unix();
@@ -46,7 +46,7 @@ export class AuthUser {
     const refreshToken = await this.createRefreshTokenRepository.create({
       expiresIn: expiresIn,
       id: uuid,
-      userId: instanceUser.userId,
+      userId: user.userId,
     });
 
     return { token, refreshToken };
