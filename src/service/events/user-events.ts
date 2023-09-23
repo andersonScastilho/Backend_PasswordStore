@@ -47,7 +47,7 @@ export class initializeEventsOn {
   private async _sendEmailToVerify() {
     myEmitter.on("user/sendEmail-verify", async (userEmail, userId) => {
       const auth = new Auth();
-      const token = await auth.authenticationProvider(userId, userEmail);
+      const token = await auth.authenticationVerifyEmail(userId, userEmail);
 
       const subject = "Verificação de Email";
       const text = `<!doctype html>
@@ -462,7 +462,7 @@ export class initializeEventsOn {
     myEmitter.on("user/sendEmail-forgotPassword", async (userId, userEmail) => {
       const auth = new Auth();
 
-      const token = await auth.authenticationProvider(userId, userEmail);
+      const token = await auth.authenticationForgotPassword(userId, userEmail);
 
       const subject = "Esqueci Minha Senha";
       const text = `<!doctype html>

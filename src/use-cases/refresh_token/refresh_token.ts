@@ -38,7 +38,7 @@ export class RefreshToken {
       throw Error("Refresh_token expired");
     }
 
-    const token = await this._auth.authenticationProvider(
+    const token = await this._auth.authenticationRefreshToken(
       refreshToken.userId,
       user.email
     );

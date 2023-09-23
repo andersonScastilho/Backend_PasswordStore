@@ -31,6 +31,7 @@ class Auth {
     if (!userPerId) {
       throw Error("User not found");
     }
+
     if (email !== userPerId.email) {
       throw Error("Invalid token");
     }
@@ -56,7 +57,29 @@ class Auth {
     return token;
   }
 
-  async authenticationProvider(userId: string, email: string) {
+  async authenticationRefreshToken(userId: string, email: string) {
+    const token = jwt.sign(
+      { id: userId, email: email },
+      process.env.TOKEN_SECRET ?? "",
+      {
+        expiresIn: process.env.TOKEN_EXPIRATION,
+      }
+    );
+    return token;
+  }
+
+  async authenticationForgotPassword(userId: string, email: string) {
+    const token = jwt.sign(
+      { id: userId, email: email },
+      process.env.TOKEN_SECRET ?? "",
+      {
+        expiresIn: process.env.TOKEN_EXPIRATION,
+      }
+    );
+    return token;
+  }
+
+  async authenticationVerifyEmail(userId: string, email: string) {
     const token = jwt.sign(
       { id: userId, email: email },
       process.env.TOKEN_SECRET ?? "",
