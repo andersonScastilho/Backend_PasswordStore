@@ -16,7 +16,7 @@ export class UpdateUser {
     private showUserPerUserIdRepository: ShowUserPerUserIdRepository,
     private updateUserRepository: UpdateUserRepository
   ) {}
-  async handle({
+  async execute({
     userId,
     email,
     fullName,
@@ -32,18 +32,20 @@ export class UpdateUser {
 
     const user = new User({
       userId: userSchema.id,
-      userEmail: email || userSchema.email,
-      userFullName: fullName || userSchema.fullName,
+      userEmail: userSchema.email,
+      userFullName: userSchema.fullName,
       userPassword: userSchema.password_hash,
+      verifiedEmail: userSchema.verifiedEmail,
     });
 
-    if (newPassword && oldPassword && newPasswordConfirmation) {
-      await user.updatePassword(
-        oldPassword,
-        newPassword,
-        newPasswordConfirmation
-      );
-    }
+    await user.updateUser({
+      email: email,
+      fullName: fullName,
+      userId,
+      newPassword,
+      oldPassword,
+      newPasswordConfirmation,
+    });
 
     const updatedUser = await this.updateUserRepository.update(user);
 

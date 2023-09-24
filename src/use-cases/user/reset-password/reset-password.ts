@@ -24,6 +24,7 @@ export class ResetPassword {
       userFullName: userSchema.fullName,
       userId: userSchema.id,
       userPassword: userSchema.password_hash,
+      verifiedEmail: userSchema.verifiedEmail,
     });
 
     await user.resetPassword(newPassword);

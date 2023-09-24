@@ -66,7 +66,7 @@ export class UpdateUserController {
         email: responseEmail,
         fullName: responseFullName,
         id: responseId,
-      } = await updateUser.handle({
+      } = await updateUser.execute({
         userId,
         email,
         fullName,

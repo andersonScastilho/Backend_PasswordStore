@@ -15,6 +15,7 @@ export class ShowUser {
       userFullName: userSchema.fullName,
       userId: userSchema.id,
       userPassword: userSchema.password_hash,
+      verifiedEmail: userSchema.verifiedEmail,
     });
 
     return user;

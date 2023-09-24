@@ -20,6 +20,7 @@ export class CreateUserController {
         userFullName: fullName,
         userPassword: password,
         userId: "",
+        verifiedEmail: false,
       });
 
       const createUserRepository = new PostgresCreateUserRepository();

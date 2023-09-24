@@ -6,8 +6,18 @@ export interface UserProps {
   userEmail: string;
   userPassword: string;
   userId: string;
+  verifiedEmail: boolean;
 }
 
+interface UpdateUser {
+  fullName?: string;
+  email?: string;
+  userId?: string;
+  verifiedEmail?: boolean;
+  oldPassword?: string;
+  newPassword?: string;
+  newPasswordConfirmation?: string;
+}
 export class User {
   private _props: UserProps;
 
@@ -88,6 +98,26 @@ export class User {
     this._props.userPassword = password;
 
     return;
+  }
+  async updateUser(props: UpdateUser) {
+    if (props.email) {
+      this._props.userEmail = props.email;
+    }
+    if (props.fullName) {
+      this._props.userFullName = props.fullName;
+    }
+
+    if (
+      props.newPassword &&
+      props.oldPassword &&
+      props.newPasswordConfirmation
+    ) {
+      await this.updatePassword(
+        props.oldPassword,
+        props.newPassword,
+        props.newPasswordConfirmation
+      );
+    }
   }
   async resetPassword(newPassword: string) {
     const newPasswordHash = await this._encryptedPassword(newPassword);
