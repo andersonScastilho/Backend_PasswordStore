@@ -1,11 +1,15 @@
 import { Storage } from "entities/Storage";
 import { ShowStorageRepository } from "repositories/storage/show-storage-repository";
-import {
-  UpdateStorageParams,
-  UpdateStorageRepository,
-} from "repositories/storage/update-storage-repository";
-import { encrypt } from "utils/crypt";
-
+import { UpdateStorageRepository } from "repositories/storage/update-storage-repository";
+export interface UpdateStorageParams {
+  account?: string;
+  usageLocation?: string;
+  description?: string;
+  link?: string;
+  storageId: string;
+  userId: string;
+  password?: string;
+}
 export class UpdateStorage {
   constructor(
     private updateStorageReposirory: UpdateStorageRepository,
@@ -29,34 +33,28 @@ export class UpdateStorage {
     if (!storageSchema) {
       throw Error("Storage not found");
     }
-    let passwordEncrypted;
-
-    if (password) {
-      const { iv, content, tag } = encrypt(password);
-      const encryptedPassword = `${iv}:${content}:${tag}`;
-
-      passwordEncrypted = encryptedPassword;
-    }
-
-    const updatedStorage = await this.updateStorageReposirory.update({
-      storageId: storageId,
-      account: account,
-      userId: userId,
-      description: description,
-      link: link,
-      usageLocation: usageLocation,
-      password: password ? passwordEncrypted : undefined,
-    });
 
     const storage = new Storage({
-      account: updatedStorage.account,
-      password: "",
-      storageId: updatedStorage.id,
-      usageLocation: updatedStorage.usageLocation,
-      userId: updatedStorage.userId,
-      description: updatedStorage.description || "",
-      link: updatedStorage.link || "",
+      account: storageSchema.account,
+      description: storageSchema.description,
+      link: storageSchema.link,
+      password: storageSchema.password,
+      storageId: storageSchema.id,
+      usageLocation: storageSchema.usageLocation,
+      userId: storageSchema.userId,
     });
+
+    storage.updateStorage({
+      account,
+      description,
+      link,
+      userId,
+      storageId,
+      password,
+      usageLocation,
+    });
+
+    await this.updateStorageReposirory.update(storage);
 
     return storage;
   }

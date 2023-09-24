@@ -1,33 +1,24 @@
 import { prismaClient } from "database/prisma-client";
+import { Storage } from "entities/Storage";
 import { StorageSchema } from "models/storage-schema";
-import {
-  UpdateStorageParams,
-  UpdateStorageRepository,
-} from "repositories/storage/update-storage-repository";
+import { UpdateStorageRepository } from "repositories/storage/update-storage-repository";
 
 export class PostgresUpdateStorageRepository
   implements UpdateStorageRepository
 {
-  async update({
-    account,
-    description,
-    link,
-    usageLocation,
-    storageId,
-    password,
-  }: UpdateStorageParams): Promise<StorageSchema> {
-    const storage = await prismaClient.storage.update({
+  async update(storage: Storage): Promise<StorageSchema> {
+    const storageSchema = await prismaClient.storage.update({
       where: {
-        id: storageId,
+        id: storage.storageId,
       },
       data: {
-        account: account,
-        description: description,
-        link: link,
-        usageLocation: usageLocation,
-        password: password,
+        account: storage.account,
+        description: storage.description,
+        link: storage.link,
+        usageLocation: storage.usageLocation,
+        password: storage.password,
       },
     });
-    return storage;
+    return storageSchema;
   }
 }

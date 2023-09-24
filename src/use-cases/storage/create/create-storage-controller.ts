@@ -28,8 +28,8 @@ export class CreateStorageController {
         account,
         password,
         usageLocation,
-        description,
-        link,
+        description: description || null,
+        link: link || null,
         userId,
         storageId: "",
       });
@@ -42,6 +42,7 @@ export class CreateStorageController {
       return res.status(200).json({
         props: {
           account: storage.account,
+          usageLocation: storage.usageLocation,
           password: "",
           description: storage.description,
           link: storage.link,

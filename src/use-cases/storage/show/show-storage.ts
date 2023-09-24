@@ -4,22 +4,25 @@ import { ShowStorageRepository } from "repositories/storage/show-storage-reposit
 export class ShowStorage {
   constructor(private showStorageRepository: ShowStorageRepository) {}
   async execute(storageId: string, userId: string) {
-    const storage = await this.showStorageRepository.show(storageId, userId);
+    const storageSchema = await this.showStorageRepository.show(
+      storageId,
+      userId
+    );
 
-    if (!storage) {
+    if (!storageSchema) {
       throw Error("Storage not found");
     }
 
-    const instanceStorage = new Storage({
-      account: storage.account,
+    const storage = new Storage({
+      account: storageSchema.account,
       password: "",
-      storageId: storage.id,
-      usageLocation: storage.usageLocation,
-      userId: storage.userId,
-      description: storage.description,
-      link: storage.link,
+      storageId: storageSchema.id,
+      usageLocation: storageSchema.usageLocation,
+      userId: storageSchema.userId,
+      description: storageSchema.description,
+      link: storageSchema.link,
     });
 
-    return instanceStorage;
+    return storage;
   }
 }

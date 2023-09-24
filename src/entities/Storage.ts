@@ -12,6 +12,8 @@ interface StorageProps {
   userId: string;
 }
 
+type updateUser = Partial<Storage>;
+
 export class Storage {
   private props: StorageProps;
 
@@ -60,5 +62,29 @@ export class Storage {
     this.props.storageId = uuid;
 
     return;
+  }
+
+  async updateStorage(props: updateUser) {
+    if (props.password) {
+      const { iv, content, tag } = encrypt(props.password);
+      const encryptedPassword = `${iv}:${content}:${tag}`;
+
+      this.props.password = encryptedPassword;
+    }
+
+    if (props.account) {
+      this.props.account = props.account;
+    }
+
+    if (props.description) {
+      this.props.description = props.description;
+    }
+
+    if (props.link) {
+      this.props.link = props.link;
+    }
+    if (props.usageLocation) {
+      this.props.usageLocation = props.usageLocation;
+    }
   }
 }
