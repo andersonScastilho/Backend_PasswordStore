@@ -56,9 +56,12 @@ export class UpdateUserController {
       }
 
       const showUserRepository = new PostgresShowUserPerUserIdRepository();
+      const showUserPerEmailRepository =
+        new PostgresShowUserPerUserIdRepository();
       const updateUserRepository = new PostgresUpdateUserRepository();
       const updateUser = new UpdateUser(
         showUserRepository,
+        showUserPerEmailRepository,
         updateUserRepository
       );
 

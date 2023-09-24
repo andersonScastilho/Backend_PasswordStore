@@ -1,4 +1,5 @@
 import { User } from "entities/User";
+import { ShowUserPerEmailRepository } from "repositories/user/show-user-email-repository";
 import { ShowUserPerUserIdRepository } from "repositories/user/show-user-userId-repository";
 import { UpdateUserRepository } from "repositories/user/update-user-repository";
 
@@ -14,6 +15,7 @@ interface UpdateUserRequest {
 export class UpdateUser {
   constructor(
     private showUserPerUserIdRepository: ShowUserPerUserIdRepository,
+    private showUserPerUserEmailRepository: ShowUserPerEmailRepository,
     private updateUserRepository: UpdateUserRepository
   ) {}
   async execute({
@@ -28,6 +30,14 @@ export class UpdateUser {
 
     if (!userSchema) {
       throw Error("User not found");
+    }
+
+    if (email) {
+      const userEmail = await this.showUserPerUserEmailRepository.show(email);
+
+      if (userEmail) {
+        throw Error("Email in use");
+      }
     }
 
     const user = new User({
