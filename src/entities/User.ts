@@ -93,7 +93,7 @@ export class User {
 
     this._props.userId = userId;
 
-    const password = await this._encryptedPassword(this._props.userId);
+    const password = await this._encryptedPassword(this._props.userPassword);
 
     this._props.userPassword = password;
 

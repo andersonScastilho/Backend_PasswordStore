@@ -64,7 +64,7 @@ export class Storage {
     return;
   }
 
-  async updateStorage(props: updateUser) {
+  updateStorage(props: updateUser) {
     if (props.password) {
       const { iv, content, tag } = encrypt(props.password);
       const encryptedPassword = `${iv}:${content}:${tag}`;
