@@ -1,7 +1,7 @@
 import { User } from "entities/User";
 import { myEmitter } from "service/events/user-events";
 import { ShowUserPerUserIdRepository } from "repositories/user/show-user-userId-repository";
-import Auth from "service/auth";
+import Auth from "service/Auth";
 
 export class ResetPassword {
   constructor(private showUserPerIdRepository: ShowUserPerUserIdRepository) {}

@@ -1,5 +1,5 @@
 import { User } from "entities/User";
-import Auth from "service/auth";
+import Auth from "service/Auth";
 import { CreateRefreshTokenRepository } from "repositories/refresh_token/create-refresh_token-repository";
 import { ShowUserPerEmailRepository } from "repositories/user/show-user-email-repository";
 import dayjs from "dayjs";
@@ -32,6 +32,7 @@ export class AuthUser {
       userFullName: userSchema.fullName,
       userId: userSchema.id,
       userPassword: userSchema.password_hash,
+      verifiedEmail: userSchema.verifiedEmail,
     });
 
     const auth = new Auth();
