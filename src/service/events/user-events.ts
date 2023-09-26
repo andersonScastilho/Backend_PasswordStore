@@ -2,6 +2,8 @@ import EventEmitter from "events";
 import { prismaClient } from "database/prisma-client";
 import Auth from "service/Auth";
 import SendEmail from "utils/SendEmail";
+import AuthForgotPassword from "service/auth-forgotPassword";
+import AuthVerifyEmail from "service/auth-verifyEmail";
 
 class MyEmitter extends EventEmitter {}
 
@@ -46,8 +48,8 @@ export class initializeEventsOn {
 
   private async _sendEmailToVerify() {
     myEmitter.on("user/sendEmail-verify", async (userEmail, userId) => {
-      const auth = new Auth();
-      const token = await auth.authenticationVerifyEmail(userId, userEmail);
+      const auth = new AuthVerifyEmail();
+      const token = auth.authVerifyEmail(userId, userEmail);
 
       const subject = "Verificação de Email";
       const text = `<!doctype html>
@@ -460,9 +462,9 @@ export class initializeEventsOn {
 
   private async _sendEmailForgotPassword() {
     myEmitter.on("user/sendEmail-forgotPassword", async (userId, userEmail) => {
-      const auth = new Auth();
+      const auth = new AuthForgotPassword();
 
-      const token = await auth.authenticationForgotPassword(userId, userEmail);
+      const token = auth.authForgotPassword(userId, userEmail);
 
       const subject = "Esqueci Minha Senha";
       const text = `<!doctype html>

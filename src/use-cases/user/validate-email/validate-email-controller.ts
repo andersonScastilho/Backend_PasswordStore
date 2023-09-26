@@ -14,7 +14,7 @@ export default class ValidateEmailController {
 
       if (!token) {
         return res.status(401).json({
-          error: "Não foi possivel validar o email",
+          error: "Token required",
         });
       }
 

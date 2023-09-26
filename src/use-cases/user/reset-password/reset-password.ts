@@ -1,14 +1,14 @@
 import { User } from "entities/User";
 import { myEmitter } from "service/events/user-events";
 import { ShowUserPerUserIdRepository } from "repositories/user/show-user-userId-repository";
-import Auth from "service/Auth";
+import AuthForgotPassword from "service/auth-forgotPassword";
 
 export class ResetPassword {
   constructor(private showUserPerIdRepository: ShowUserPerUserIdRepository) {}
   async execute(token: string, newPassword: string) {
-    const auth = new Auth(this.showUserPerIdRepository);
+    const auth = new AuthForgotPassword();
     const fullFieldToken = `Bearer ${token}`;
-    const userId = await auth.validAuth(fullFieldToken);
+    const userId = auth.validateForgotPassword(fullFieldToken);
 
     if (!userId) {
       throw Error("Invalid token");

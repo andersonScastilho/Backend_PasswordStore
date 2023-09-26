@@ -6,6 +6,7 @@ import { ShowUserPerUserIdRepository } from "repositories/user/show-user-userId-
 type JwtPayload = {
   id: string;
   email: string;
+  type: string;
 };
 
 class Auth {
@@ -21,7 +22,7 @@ class Auth {
       throw Error("Invalid token");
     }
 
-    const { id, email } = jwt.verify(
+    const { id, email, type } = jwt.verify(
       token,
       process.env.TOKEN_SECRET ?? ""
     ) as JwtPayload;
@@ -32,9 +33,10 @@ class Auth {
       throw Error("User not found");
     }
 
-    if (email !== userPerId.email) {
-      throw Error("Invalid token");
-    }
+    if (type !== "auth")
+      if (email !== userPerId.email) {
+        throw Error("Invalid token");
+      }
 
     return id;
   }
@@ -47,7 +49,7 @@ class Auth {
     }
 
     const token = jwt.sign(
-      { id: user.userId, email: user.userEmail },
+      { id: user.userId, email: user.userEmail, type: "auth" },
       process.env.TOKEN_SECRET ?? "",
       {
         expiresIn: process.env.TOKEN_EXPIRATION,
@@ -59,29 +61,7 @@ class Auth {
 
   async authenticationRefreshToken(userId: string, email: string) {
     const token = jwt.sign(
-      { id: userId, email: email },
-      process.env.TOKEN_SECRET ?? "",
-      {
-        expiresIn: process.env.TOKEN_EXPIRATION,
-      }
-    );
-    return token;
-  }
-
-  async authenticationForgotPassword(userId: string, email: string) {
-    const token = jwt.sign(
-      { id: userId, email: email },
-      process.env.TOKEN_SECRET ?? "",
-      {
-        expiresIn: process.env.TOKEN_EXPIRATION,
-      }
-    );
-    return token;
-  }
-
-  async authenticationVerifyEmail(userId: string, email: string) {
-    const token = jwt.sign(
-      { id: userId, email: email },
+      { id: userId, email: email, type: "auth" },
       process.env.TOKEN_SECRET ?? "",
       {
         expiresIn: process.env.TOKEN_EXPIRATION,

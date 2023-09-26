@@ -1,13 +1,14 @@
 import { myEmitter } from "service/events/user-events";
 import { ShowUserPerUserIdRepository } from "repositories/user/show-user-userId-repository";
-import Auth from "service/Auth";
+import AuthVerifyEmail from "service/auth-verifyEmail";
 
 export class ValidateEmail {
   constructor(private showUserPerIdRepository: ShowUserPerUserIdRepository) {}
   async execute(token: string) {
-    const auth = new Auth(this.showUserPerIdRepository);
+    const auth = new AuthVerifyEmail();
 
-    const userId = await auth.validAuth(token);
+    const userId = auth.validateVerifyEmail(token);
+
     const user = await this.showUserPerIdRepository.show(userId);
 
     if (!user) {
