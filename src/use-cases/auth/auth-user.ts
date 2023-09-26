@@ -1,5 +1,5 @@
 import { User } from "entities/User";
-import Auth from "service/Auth";
+import Auth from "service/auth-login";
 import { CreateRefreshTokenRepository } from "repositories/refresh_token/create-refresh_token-repository";
 import { ShowUserPerEmailRepository } from "repositories/user/show-user-email-repository";
 import dayjs from "dayjs";

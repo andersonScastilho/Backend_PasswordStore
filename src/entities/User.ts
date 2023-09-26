@@ -53,7 +53,7 @@ export class User {
     return passwordIsValid;
   }
 
-  async updatePassword(
+  private async _updatePassword(
     oldPassword: string,
     newPassword: string,
     newPasswordConfirmation: string
@@ -112,7 +112,7 @@ export class User {
       props.oldPassword &&
       props.newPasswordConfirmation
     ) {
-      await this.updatePassword(
+      await this._updatePassword(
         props.oldPassword,
         props.newPassword,
         props.newPasswordConfirmation

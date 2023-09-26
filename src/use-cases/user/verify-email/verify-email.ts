@@ -1,6 +1,5 @@
 import { myEmitter } from "service/events/user-events";
 import { ShowUserPerEmailRepository } from "repositories/user/show-user-email-repository";
-import Auth from "service/Auth";
 
 export class VerifyEmail {
   constructor(private showUserPerEmailRepository: ShowUserPerEmailRepository) {}

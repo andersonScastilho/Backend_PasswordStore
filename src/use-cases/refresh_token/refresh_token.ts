@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import Auth from "service/Auth";
+import Auth from "../../service/auth-login";
 import { ShowRefreshTokenRepository } from "repositories/refresh_token/show-refresh_token-repository";
 import { ShowUserPerUserIdRepository } from "repositories/user/show-user-userId-repository";
 

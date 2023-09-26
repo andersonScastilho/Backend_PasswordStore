@@ -1,7 +1,6 @@
 import EventEmitter from "events";
 import { prismaClient } from "database/prisma-client";
-import Auth from "service/Auth";
-import SendEmail from "utils/SendEmail";
+import SendEmail from "../../utils/sendEmail";
 import AuthForgotPassword from "service/auth-forgotPassword";
 import AuthVerifyEmail from "service/auth-verifyEmail";
 

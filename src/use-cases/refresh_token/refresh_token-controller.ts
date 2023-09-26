@@ -3,7 +3,7 @@ import { RefreshToken } from "./refresh_token";
 import { PostgresShowRefreshTokenRepository } from "repositories/postgres/refresh_token/postgres-show-refresh_token-repository";
 import { z } from "zod";
 import { PostgresShowUserPerUserIdRepository } from "repositories/postgres/user/postgres-show-user-userId-repository";
-import Auth from "service/Auth";
+import Auth from "service/auth-login";
 
 const ParamsSchema = z.object({
   refresh_token: z.string(),
