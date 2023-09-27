@@ -14,6 +14,7 @@ export class initializeEventsOn {
     this._verifiedEmail();
     this._sendEmailToVerify();
     this._sendEmailForgotPassword();
+    this._notVerifiedEmail();
   }
 
   private _verifiedEmail() {
@@ -24,6 +25,18 @@ export class initializeEventsOn {
         },
 
         data: { verifiedEmail: true },
+      });
+    });
+  }
+
+  private _notVerifiedEmail() {
+    myEmitter.on("user/email/not-verified", async (userId: string) => {
+      await prismaClient.user.update({
+        where: {
+          id: userId,
+        },
+
+        data: { verifiedEmail: false },
       });
     });
   }

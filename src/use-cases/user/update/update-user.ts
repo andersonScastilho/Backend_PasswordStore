@@ -2,6 +2,7 @@ import { User } from "entities/User";
 import { ShowUserPerEmailRepository } from "repositories/user/show-user-email-repository";
 import { ShowUserPerUserIdRepository } from "repositories/user/show-user-userId-repository";
 import { UpdateUserRepository } from "repositories/user/update-user-repository";
+import { myEmitter } from "service/events/user-events";
 
 interface UpdateUserRequest {
   userId: string;
@@ -58,6 +59,10 @@ export class UpdateUser {
     });
 
     const updatedUser = await this.updateUserRepository.update(user);
+
+    if (email) {
+      myEmitter.emit("user/email/not-verified", updatedUser.id);
+    }
 
     return updatedUser;
   }
