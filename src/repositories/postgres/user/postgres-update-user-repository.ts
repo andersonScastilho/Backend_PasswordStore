@@ -1,5 +1,5 @@
 import { prismaClient } from "database/prisma-client";
-import { User } from "entities/User";
+import { User } from "entities/user/User";
 import { UserSchema } from "models/user-schema";
 import { UpdateUserRepository } from "repositories/user/update-user-repository";
 

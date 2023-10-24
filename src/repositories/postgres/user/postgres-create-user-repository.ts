@@ -1,4 +1,4 @@
-import { User } from "entities/User";
+import { User } from "entities/user/User";
 
 import { prismaClient } from "database/prisma-client";
 

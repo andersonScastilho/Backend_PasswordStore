@@ -1,15 +1,56 @@
 import bcrypt from "bcrypt";
-import { v4 as uuidv4 } from "uuid";
+import { randomUUID } from "crypto";
+import { UserType } from "./userTypes";
 
-export interface UserProps {
-  userFullName: string;
-  userEmail: string;
-  userPassword: string;
-  userId: string;
-  verifiedEmail: boolean;
+export class User {
+  get userEmail() {
+    return this._props.email;
+  }
+
+  get userFullName() {
+    return this._props.fullName;
+  }
+
+  get userPassword() {
+    return this._props.password;
+  }
+
+  get userId() {
+    return this._props.userId;
+  }
+
+  get verifiedEmail() {
+    return this._props.verifiedEmail;
+  }
+
+  constructor(private readonly _props: UserType) {}
+
+  async create() {
+    const minSalt = 15;
+    const maxSalt = 35;
+
+    const saltPassworHash = Math.floor(
+      Math.random() * (maxSalt - minSalt) + minSalt
+    );
+
+    this._props.password = await bcrypt.hash(
+      this._props.password,
+      saltPassworHash
+    );
+
+    this._props.userId = randomUUID();
+
+    return new User({
+      email: this._props.email,
+      fullName: this._props.fullName,
+      userId: this._props.userId,
+      verifiedEmail: this._props.verifiedEmail,
+      password: this._props.password,
+    });
+  }
 }
 
-interface UpdateUser {
+/* interface UpdateUser {
   fullName?: string;
   email?: string;
   userId?: string;
@@ -18,28 +59,7 @@ interface UpdateUser {
   newPassword?: string;
   newPasswordConfirmation?: string;
 }
-export class User {
-  private _props: UserProps;
 
-  get userEmail() {
-    return this._props.userEmail;
-  }
-
-  get userFullName() {
-    return this._props.userFullName;
-  }
-
-  get userPassword() {
-    return this._props.userPassword;
-  }
-
-  get userId() {
-    return this._props.userId;
-  }
-
-  constructor(props: UserProps) {
-    this._props = props;
-  }
 
   private async _encryptedPassword(password: string) {
     const hashPassword = await bcrypt.hash(password, 10);
@@ -126,4 +146,4 @@ export class User {
 
     return;
   }
-}
+*/

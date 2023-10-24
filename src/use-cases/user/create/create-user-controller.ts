@@ -3,7 +3,7 @@ import { z } from "zod";
 import { CreateUser } from "./create-user";
 import { PostgresCreateUserRepository } from "repositories/postgres/user/postgres-create-user-repository";
 import { PostgresShowUserPerEmailRepository } from "repositories/postgres/user/postgres-show-user-email-repository";
-import { User } from "entities/User";
+import { User } from "entities/user/User";
 
 const BodySchema = z.object({
   email: z.string().email(),

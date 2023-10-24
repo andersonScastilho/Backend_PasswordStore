@@ -1,4 +1,4 @@
-import { User } from "entities/User";
+import { User } from "entities/user/User";
 import { myEmitter } from "service/events/user-events";
 import { ShowUserPerUserIdRepository } from "repositories/user/show-user-userId-repository";
 import AuthForgotPassword from "service/auth-forgotPassword";

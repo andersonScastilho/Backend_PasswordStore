@@ -1,4 +1,4 @@
-import { User } from "entities/User";
+import { User } from "entities/user/User";
 import { ShowUserPerEmailRepository } from "repositories/user/show-user-email-repository";
 import { ShowUserPerUserIdRepository } from "repositories/user/show-user-userId-repository";
 import { UpdateUserRepository } from "repositories/user/update-user-repository";
