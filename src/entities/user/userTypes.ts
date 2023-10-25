@@ -5,3 +5,5 @@ export type UserType = {
   verifiedEmail: boolean;
   password: string;
 };
+
+export type UserTypeReturn = Partial<UserType>;

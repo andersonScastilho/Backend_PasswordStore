@@ -1,4 +1,5 @@
 import { User } from "entities/user/User";
+import { BadRequest } from "helpers/classes/BadRequest";
 import { CreateUserRepository } from "repositories/user/create-user-repository";
 import { ShowUserPerEmailRepository } from "repositories/user/show-user-email-repository";
 
@@ -8,19 +9,19 @@ export class CreateUser {
     private _createUserRepository: CreateUserRepository,
     private _showUserperEmailRepository: ShowUserPerEmailRepository
   ) {}
-  async execute(): Promise<void> {
+  async execute(): Promise<User> {
     const userExist = await this._showUserperEmailRepository.show(
       this._user.userEmail
     );
 
     if (userExist) {
-      throw Error("Email in use");
+      throw new BadRequest("Email in use.");
     }
 
-    await this._user.createUser();
+    const user = await this._user.createUser();
 
-    await this._createUserRepository.create(this._user);
+    await this._createUserRepository.create(user);
 
-    return;
+    return user;
   }
 }

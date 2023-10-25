@@ -25,9 +25,9 @@ export class User {
 
   constructor(private readonly _props: UserType) {}
 
-  async create() {
-    const minSalt = 15;
-    const maxSalt = 35;
+  async createUser() {
+    const minSalt = 5;
+    const maxSalt = 10;
 
     const saltPassworHash = Math.floor(
       Math.random() * (maxSalt - minSalt) + minSalt
@@ -50,7 +50,7 @@ export class User {
   }
 }
 
-/* interface UpdateUser {
+/* interface UpdateUser {   
   fullName?: string;
   email?: string;
   userId?: string;

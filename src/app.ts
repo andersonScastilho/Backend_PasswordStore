@@ -22,7 +22,7 @@ class App {
     this._middlewares();
     this._router();
     this._lastMiddlewares();
-    new initializeEventsOn();
+    // new initializeEventsOn();
   }
 
   private _middlewares() {
@@ -42,7 +42,7 @@ class App {
       },
     };
 
-    this.app.use(cors(corsOptions));
+    this.app.use(cors());
     this.app.use(helmet());
   }
 

@@ -5,20 +5,23 @@ import { PostgresCreateUserRepository } from "repositories/postgres/user/postgre
 import { PostgresShowUserPerEmailRepository } from "repositories/postgres/user/postgres-show-user-email-repository";
 import { User } from "entities/user/User";
 
-const BodySchema = z.object({
-  email: z.string().email(),
-  fullName: z.string(),
-  password: z.string().min(8),
-});
+const requestBodySchema = z
+  .object({
+    email: z.string().email(),
+    fullName: z.string(),
+    password: z.string().min(8),
+  })
+  .strict();
+
 export class CreateUserController {
   async handle(req: Request, res: Response, next: NextFunction) {
     try {
-      const { email, fullName, password } = BodySchema.parse(req.body);
+      const { email, fullName, password } = requestBodySchema.parse(req.body);
 
-      const user = new User({
-        userEmail: email,
-        userFullName: fullName,
-        userPassword: password,
+      const newUser = new User({
+        email,
+        fullName,
+        password,
         userId: "",
         verifiedEmail: false,
       });
@@ -27,17 +30,23 @@ export class CreateUserController {
       const showUserPerEmailRepository =
         new PostgresShowUserPerEmailRepository();
 
-      const createUser = new CreateUser(
-        user,
+      const createUserService = new CreateUser(
+        newUser,
         createUserRepository,
         showUserPerEmailRepository
       );
 
-      await createUser.execute();
+      const { userEmail, userFullName } = await createUserService.execute();
 
-      return res.status(200).json();
-    } catch (e) {
-      next(e);
+      return res.status(201).json({
+        message: "Usuário criado com sucesso",
+        user: {
+          email: userEmail,
+          fullName: userFullName,
+        },
+      });
+    } catch (error) {
+      next(error);
     }
   }
 }

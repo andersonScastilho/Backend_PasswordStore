@@ -2,6 +2,7 @@ import { ErrorRequestHandler } from "express";
 import { Prisma } from "@prisma/client";
 import { ZodError } from "zod";
 import { fromZodError } from "zod-validation-error";
+import { CustomError } from "helpers/classes/CustomError";
 
 export const errorHandler: ErrorRequestHandler = async (
   error,
@@ -9,33 +10,27 @@ export const errorHandler: ErrorRequestHandler = async (
   res,
   next
 ) => {
-  if (error instanceof Prisma.PrismaClientInitializationError) {
-    return res.status(500).json({ error: "Failed to connect to the database" });
-  }
-
-  if (error instanceof Prisma.PrismaClientKnownRequestError) {
-    if (error.code === "P2025") {
-      return res.status(400).json({ error: "The record no exists" });
-    }
-
-    if (error.code === "P2002") {
-      return res.status(400).json({ error: "Record already exists" });
-    }
-
-    return res.status(400).json({ error: error.message });
+  if (error instanceof CustomError) {
+    return res.status(error.statusCode).json({
+      error: {
+        message: error.message,
+      },
+    });
   }
 
   if (error instanceof ZodError) {
-    const { message } = fromZodError(error);
-    return res.status(400).json({ error: message });
-  }
+    const zodErrors: Record<string, string> = {};
 
-  if (error instanceof Error) {
-    if (error.message === "invalid token") {
-      return res.status(401).json({ error: error.message });
-    }
+    error.issues.forEach((zodError) => {
+      const [path] = zodError.path;
+      zodErrors[path ?? "error"] = zodError.message;
+    });
 
-    return res.status(400).json({ error: error.message });
+    return res.status(400).json({
+      message:
+        "The request data is missing or invalid. Please check your input and try again",
+      errors: zodErrors,
+    });
   }
 
   if (error) {
