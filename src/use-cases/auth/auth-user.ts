@@ -28,10 +28,10 @@ export class AuthUser {
     }
 
     const user = new User({
-      userEmail: userSchema.email,
-      userFullName: userSchema.fullName,
+      email: userSchema.email,
+      fullName: userSchema.fullName,
       userId: userSchema.id,
-      userPassword: userSchema.password_hash,
+      password: userSchema.password_hash,
       verifiedEmail: userSchema.verifiedEmail,
     });
 
