@@ -1,3 +1,4 @@
+import { Unauthorized } from "helpers/classes/Unauthorized";
 import jwt from "jsonwebtoken";
 
 type JwtPayload = {
@@ -16,7 +17,7 @@ class AuthForgotPassword {
     );
 
     if (!tokenIsValid) {
-      throw Error("Invalid token");
+      throw new Unauthorized("Invalid token");
     }
 
     const { id, type } = jwt.verify(
@@ -25,7 +26,7 @@ class AuthForgotPassword {
     ) as JwtPayload;
 
     if (type !== "forgot-password") {
-      throw Error("Invalid token");
+      throw new Unauthorized("Invalid token");
     }
 
     return id;

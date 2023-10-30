@@ -1,3 +1,4 @@
+import { Unauthorized } from "helpers/classes/Unauthorized";
 import jwt from "jsonwebtoken";
 
 type JwtPayload = {
@@ -15,7 +16,7 @@ class AuthVerifyEmail {
       process.env.TOKEN_SECRET_VERIFY_EMAIL ?? ""
     );
     if (!tokenIsValid) {
-      throw Error("Invalid token");
+      throw new Unauthorized("Invalid token");
     }
 
     const { id, type } = jwt.verify(
@@ -24,7 +25,7 @@ class AuthVerifyEmail {
     ) as JwtPayload;
 
     if (type !== "verifyEmail") {
-      throw Error("Invalid token");
+      throw new Unauthorized("Invalid token");
     }
 
     return id;
