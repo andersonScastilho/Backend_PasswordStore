@@ -7,6 +7,7 @@ import { PostgresCreateRefreshToken } from "repositories/postgres/refresh_token/
 import { PostgresDeleteRefreshTokenRepository } from "repositories/postgres/refresh_token/postgres-delete-refresh_token-repository";
 import { z } from "zod";
 import Auth from "service/auth-login";
+import { BadRequest } from "helpers/classes/BadRequest";
 
 const BodySchema = z.object({
   email: z.string().email(),
@@ -18,9 +19,7 @@ export class AuthController {
       const { email, password } = BodySchema.parse(req.body);
 
       if (!email || !password) {
-        return res.status(400).json({
-          error: "Missing data",
-        });
+        throw new BadRequest("Missing data");
       }
 
       const showUserPerEmailRepository =

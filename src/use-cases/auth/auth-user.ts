@@ -5,6 +5,8 @@ import dayjs from "dayjs";
 import { v4 as uudiv4 } from "uuid";
 import { DeleteRefreshTokenRepository } from "repositories/refresh_token/delete-refresh_token-repository";
 import Auth from "service/auth-login";
+import { NotFound } from "helpers/classes/NotFound";
+import { BadRequest } from "helpers/classes/BadRequest";
 
 interface LoginUserRequest {
   email: string;
@@ -22,10 +24,10 @@ export class AuthUser {
     const userSchema = await this.showUserPerEmailRepository.show(email);
 
     if (!userSchema) {
-      throw Error("User not found");
+      throw new NotFound("User not found");
     }
     if (userSchema.verifiedEmail !== true) {
-      throw Error("Unverified email");
+      throw new BadRequest("Unverified email");
     }
 
     const user = new User({

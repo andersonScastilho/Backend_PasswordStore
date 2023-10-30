@@ -2,6 +2,8 @@ import dayjs from "dayjs";
 import Auth from "../../service/auth-login";
 import { ShowRefreshTokenRepository } from "repositories/refresh_token/show-refresh_token-repository";
 import { ShowUserPerUserIdRepository } from "repositories/user/show-user-userId-repository";
+import { NotFound } from "helpers/classes/NotFound";
+import { Unauthorized } from "helpers/classes/Unauthorized";
 
 export class RefreshToken {
   constructor(
@@ -15,7 +17,7 @@ export class RefreshToken {
     );
 
     if (!refreshToken) {
-      throw Error("Refresh token invalid");
+      throw new Unauthorized("Refresh token invalid");
     }
 
     const user = await this.showUserPerUserIdRepository.show(
@@ -23,11 +25,11 @@ export class RefreshToken {
     );
 
     if (!user) {
-      throw Error("User not found");
+      throw new NotFound("User not found");
     }
 
     if (user.verifiedEmail !== true) {
-      throw Error("Unverified email");
+      throw new Unauthorized("Unverified email");
     }
 
     const refreshTokenExpired = dayjs().isAfter(
@@ -35,7 +37,7 @@ export class RefreshToken {
     );
 
     if (refreshTokenExpired) {
-      throw Error("Refresh_token expired");
+      throw new Unauthorized("Refresh_token expired");
     }
 
     const token = await this._auth.authenticationRefreshToken(
