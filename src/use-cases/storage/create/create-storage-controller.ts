@@ -3,7 +3,7 @@ import { Request, Response, NextFunction } from "express";
 import { CreateStorage } from "./create-storage";
 import { PostgresStorageRepository } from "../../../repositories/postgres/storage/postgres-create-storage-repository";
 import { z } from "zod";
-import { Storage } from "entities/Storage";
+import { Storage } from "entities/storage/Storage";
 
 const BodySchema = z.object({
   password: z.string(),

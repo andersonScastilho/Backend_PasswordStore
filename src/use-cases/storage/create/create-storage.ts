@@ -1,4 +1,4 @@
-import { Storage } from "entities/Storage";
+import { Storage } from "entities/storage/Storage";
 import { CreateStorageRepository } from "repositories/storage/create-storage-repository";
 
 export class CreateStorage {

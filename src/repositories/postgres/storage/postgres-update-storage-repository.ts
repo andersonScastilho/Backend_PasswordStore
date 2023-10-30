@@ -1,5 +1,5 @@
 import { prismaClient } from "database/prisma-client";
-import { Storage } from "entities/Storage";
+import { Storage } from "entities/storage/Storage";
 import { InternalServerError } from "helpers/classes/InternalServerError";
 import { StorageSchema } from "models/storage-schema";
 import { UpdateStorageRepository } from "repositories/storage/update-storage-repository";

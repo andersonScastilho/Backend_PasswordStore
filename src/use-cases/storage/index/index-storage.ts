@@ -1,4 +1,4 @@
-import { Storage } from "entities/Storage";
+import { Storage } from "entities/storage/Storage";
 import { IndexStorageRepository } from "repositories/storage/index-storage-repository";
 
 export class IndexStorage {

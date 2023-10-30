@@ -1,6 +1,6 @@
 import { decrypt } from "utils/crypt";
 import { v4 as uuidv4 } from "uuid";
-import { encrypt } from "../utils/crypt";
+import { encrypt } from "../../utils/crypt";
 
 interface StorageProps {
   storageId: string;

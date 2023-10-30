@@ -1,4 +1,4 @@
-import { Storage } from "entities/Storage";
+import { Storage } from "entities/storage/Storage";
 import { ShowStorageRepository } from "repositories/storage/show-storage-repository";
 import bcrypt from "bcrypt";
 import { ShowUserPerUserIdRepository } from "repositories/user/show-user-userId-repository";
