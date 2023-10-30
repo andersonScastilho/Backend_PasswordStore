@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import { randomUUID } from "crypto";
 import { UserType } from "./userTypes";
+import { BadRequest } from "helpers/classes/BadRequest";
 
 export class User {
   get userEmail() {
@@ -40,13 +41,55 @@ export class User {
 
     this._props.userId = randomUUID();
 
-    return new User({
-      email: this._props.email,
-      fullName: this._props.fullName,
-      userId: this._props.userId,
-      verifiedEmail: this._props.verifiedEmail,
-      password: this._props.password,
-    });
+    return;
+  }
+  private async _encryptedPassword(password: string) {
+    const hashPassword = await bcrypt.hash(password, 10);
+
+    return hashPassword;
+  }
+
+  async comparePasswords(password: string) {
+    const passwordIsValid = await bcrypt.compare(password, this.userPassword);
+
+    return passwordIsValid;
+  }
+
+  private async _updatePassword(
+    oldPassword: string,
+    newPassword: string,
+    newPasswordConfirmation: string
+  ) {
+    const verifyPasswordIsStrong = (value: string) =>
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(
+        value
+      );
+
+    const isMatchPassword = await this.comparePasswords(oldPassword);
+
+    if (!isMatchPassword) {
+      throw new BadRequest("Invalid password");
+    }
+
+    if (newPassword !== newPasswordConfirmation) {
+      throw new BadRequest(
+        "Password confirmation must be the same as password"
+      );
+    }
+
+    const passwordIsStrong = verifyPasswordIsStrong(newPassword);
+
+    if (!passwordIsStrong) {
+      throw new BadRequest(
+        "Senha deve conter 8+ caracteres, minúscula, maiúscula e especial"
+      );
+    }
+
+    const encryptedPassword = await this._encryptedPassword(newPassword);
+
+    this._props.password = encryptedPassword;
+
+    return;
   }
 }
 

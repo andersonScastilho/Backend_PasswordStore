@@ -18,7 +18,7 @@ export class CreateUserController {
     try {
       const { email, fullName, password } = requestBodySchema.parse(req.body);
 
-      const newUser = new User({
+      const user = new User({
         email,
         fullName,
         password,
@@ -31,18 +31,18 @@ export class CreateUserController {
         new PostgresShowUserPerEmailRepository();
 
       const createUserService = new CreateUser(
-        newUser,
+        user,
         createUserRepository,
         showUserPerEmailRepository
       );
 
-      const { userEmail, userFullName } = await createUserService.execute();
+      await createUserService.execute();
 
       return res.status(201).json({
         message: "Usuário criado com sucesso",
         user: {
-          email: userEmail,
-          fullName: userFullName,
+          email: user.userEmail,
+          fullName: user.userFullName,
         },
       });
     } catch (error) {

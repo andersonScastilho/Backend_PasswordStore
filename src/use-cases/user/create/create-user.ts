@@ -9,7 +9,7 @@ export class CreateUser {
     private _createUserRepository: CreateUserRepository,
     private _showUserperEmailRepository: ShowUserPerEmailRepository
   ) {}
-  async execute(): Promise<User> {
+  async execute(): Promise<void> {
     const userExist = await this._showUserperEmailRepository.show(
       this._user.userEmail
     );
@@ -18,10 +18,10 @@ export class CreateUser {
       throw new BadRequest("Email in use.");
     }
 
-    const user = await this._user.createUser();
+    await this._user.createUser();
 
-    await this._createUserRepository.create(user);
+    await this._createUserRepository.create(this._user);
 
-    return user;
+    return;
   }
 }
