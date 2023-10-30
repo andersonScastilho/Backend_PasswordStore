@@ -3,9 +3,11 @@ import { PostgresShowUserPerEmailRepository } from "repositories/postgres/user/p
 import { z } from "zod";
 import { VerifyEmail } from "./verify-email";
 
-const bodySchema = z.object({
-  email: z.string().email(),
-});
+const bodySchema = z
+  .object({
+    email: z.string().email(),
+  })
+  .strict();
 
 export default class VerifyEmailController {
   async handle(req: Request, res: Response, next: NextFunction) {
@@ -15,9 +17,9 @@ export default class VerifyEmailController {
       const showUserPerEmailRepository =
         new PostgresShowUserPerEmailRepository();
 
-      const verifyEmail = new VerifyEmail(showUserPerEmailRepository);
+      const verifyEmailService = new VerifyEmail(showUserPerEmailRepository);
 
-      await verifyEmail.execute(email);
+      await verifyEmailService.execute(email);
 
       return res.status(200).json({
         message: "Foi enviado um email para validar seu email é verdadeiro",

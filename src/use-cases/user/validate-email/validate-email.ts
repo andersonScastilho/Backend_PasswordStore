@@ -3,11 +3,12 @@ import { ShowUserPerUserIdRepository } from "repositories/user/show-user-userId-
 import AuthVerifyEmail from "service/auth-verifyEmail";
 
 export class ValidateEmail {
-  constructor(private showUserPerIdRepository: ShowUserPerUserIdRepository) {}
+  constructor(
+    private authVerifyEmail: AuthVerifyEmail,
+    private showUserPerIdRepository: ShowUserPerUserIdRepository
+  ) {}
   async execute(token: string) {
-    const auth = new AuthVerifyEmail();
-
-    const userId = auth.validateVerifyEmail(token);
+    const userId = this.authVerifyEmail.validateVerifyEmail(token);
 
     const user = await this.showUserPerIdRepository.show(userId);
 

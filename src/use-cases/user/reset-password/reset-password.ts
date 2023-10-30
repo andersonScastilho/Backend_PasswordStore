@@ -2,28 +2,32 @@ import { User } from "entities/user/User";
 import { myEmitter } from "service/events/user-events";
 import { ShowUserPerUserIdRepository } from "repositories/user/show-user-userId-repository";
 import AuthForgotPassword from "service/auth-forgotPassword";
+import { NotFound } from "helpers/classes/NotFound";
+import { Unauthorized } from "helpers/classes/Unauthorized";
 
 export class ResetPassword {
-  constructor(private showUserPerIdRepository: ShowUserPerUserIdRepository) {}
+  constructor(
+    private auth: AuthForgotPassword,
+    private showUserPerIdRepository: ShowUserPerUserIdRepository
+  ) {}
   async execute(token: string, newPassword: string) {
-    const auth = new AuthForgotPassword();
     const fullFieldToken = `Bearer ${token}`;
-    const userId = auth.validateForgotPassword(fullFieldToken);
+    const userId = this.auth.validateForgotPassword(fullFieldToken);
 
     if (!userId) {
-      throw Error("Invalid token");
+      throw new Unauthorized("Invalid token");
     }
     const userSchema = await this.showUserPerIdRepository.show(userId);
 
     if (!userSchema) {
-      throw Error("User not found");
+      throw new NotFound("User not found");
     }
 
     const user = new User({
-      userEmail: userSchema.email,
-      userFullName: userSchema.fullName,
+      email: userSchema.email,
+      fullName: userSchema.fullName,
       userId: userSchema.id,
-      userPassword: userSchema.password_hash,
+      password: userSchema.password_hash,
       verifiedEmail: userSchema.verifiedEmail,
     });
 

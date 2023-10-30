@@ -1,4 +1,5 @@
 import { User } from "entities/user/User";
+import { NotFound } from "helpers/classes/NotFound";
 import { ShowUserPerUserIdRepository } from "repositories/user/show-user-userId-repository";
 
 export class ShowUser {
@@ -7,7 +8,7 @@ export class ShowUser {
     const userSchema = await this.showUserRepository.show(userId);
 
     if (!userSchema) {
-      throw Error("User not found");
+      throw new NotFound("User not found");
     }
 
     const user = new User({

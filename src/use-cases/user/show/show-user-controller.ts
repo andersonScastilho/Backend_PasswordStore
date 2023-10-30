@@ -3,9 +3,11 @@ import { PostgresShowUserPerUserIdRepository } from "repositories/postgres/user/
 import { ShowUser } from "./show-user";
 import { z } from "zod";
 
-const ParamsSchema = z.object({
-  userId: z.string(),
-});
+const ParamsSchema = z
+  .object({
+    userId: z.string(),
+  })
+  .strict();
 export class ShowUserController {
   async handle(req: Request, res: Response, next: NextFunction) {
     try {
@@ -13,9 +15,9 @@ export class ShowUserController {
 
       const userRepository = new PostgresShowUserPerUserIdRepository();
 
-      const showUser = new ShowUser(userRepository);
+      const showUserService = new ShowUser(userRepository);
 
-      const user = await showUser.execute(userId);
+      const user = await showUserService.execute(userId);
 
       return res.status(200).json({
         props: {
