@@ -6,6 +6,7 @@ import { PostgresShowUserPerEmailRepository } from "../../repositories/postgres/
 import { PostgresCreateRefreshToken } from "repositories/postgres/refresh_token/postgres-create-refresh_token-repository";
 import { PostgresDeleteRefreshTokenRepository } from "repositories/postgres/refresh_token/postgres-delete-refresh_token-repository";
 import { z } from "zod";
+import Auth from "service/auth-login";
 
 const BodySchema = z.object({
   email: z.string().email(),
@@ -28,13 +29,16 @@ export class AuthController {
       const deleteRefreshTokenRepository =
         new PostgresDeleteRefreshTokenRepository();
 
-      const auth = new AuthUser(
+      const auth = new Auth();
+
+      const authService = new AuthUser(
+        auth,
         showUserPerEmailRepository,
         createRefreshTokenRepository,
         deleteRefreshTokenRepository
       );
 
-      const token = await auth.execute({ email, password });
+      const token = await authService.execute({ email, password });
 
       return res.status(200).json(token);
     } catch (e) {

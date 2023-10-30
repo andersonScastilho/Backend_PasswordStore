@@ -1,10 +1,10 @@
 import { User } from "entities/user/User";
-import Auth from "service/auth-login";
 import { CreateRefreshTokenRepository } from "repositories/refresh_token/create-refresh_token-repository";
 import { ShowUserPerEmailRepository } from "repositories/user/show-user-email-repository";
 import dayjs from "dayjs";
 import { v4 as uudiv4 } from "uuid";
 import { DeleteRefreshTokenRepository } from "repositories/refresh_token/delete-refresh_token-repository";
+import Auth from "service/auth-login";
 
 interface LoginUserRequest {
   email: string;
@@ -13,6 +13,7 @@ interface LoginUserRequest {
 
 export class AuthUser {
   constructor(
+    private auth: Auth,
     private showUserPerEmailRepository: ShowUserPerEmailRepository,
     private createRefreshTokenRepository: CreateRefreshTokenRepository,
     private deleteRefreshTokenRepository: DeleteRefreshTokenRepository
@@ -35,11 +36,9 @@ export class AuthUser {
       verifiedEmail: userSchema.verifiedEmail,
     });
 
-    const auth = new Auth();
-
     await this.deleteRefreshTokenRepository.delete(userSchema.id);
 
-    const token = await auth.authentication(user, password);
+    const token = await this.auth.authentication(user, password);
 
     const uuid = uudiv4();
     const expiresIn = dayjs().add(7, "days").unix();
