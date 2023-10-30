@@ -1,3 +1,4 @@
+import { NotFound } from "helpers/classes/NotFound";
 import { DeleteStorageRepository } from "repositories/storage/delete-storage-repository";
 import { ShowStorageRepository } from "repositories/storage/show-storage-repository";
 
@@ -13,7 +14,7 @@ export class DeleteStorage {
     );
 
     if (!storageSchema) {
-      throw Error("Storage not found");
+      throw new NotFound("Storage not found");
     }
 
     await this.deleteStorageRepository.delete(storageId);

@@ -1,4 +1,5 @@
 import { Storage } from "entities/storage/Storage";
+import { NotFound } from "helpers/classes/NotFound";
 import { ShowStorageRepository } from "repositories/storage/show-storage-repository";
 
 export class ShowStorage {
@@ -10,7 +11,7 @@ export class ShowStorage {
     );
 
     if (!storageSchema) {
-      throw Error("Storage not found");
+      throw new NotFound("Storage not found");
     }
 
     const storage = new Storage({

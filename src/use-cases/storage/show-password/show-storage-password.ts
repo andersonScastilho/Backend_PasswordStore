@@ -2,6 +2,8 @@ import { Storage } from "entities/storage/Storage";
 import { ShowStorageRepository } from "repositories/storage/show-storage-repository";
 import bcrypt from "bcrypt";
 import { ShowUserPerUserIdRepository } from "repositories/user/show-user-userId-repository";
+import { Unauthorized } from "helpers/classes/Unauthorized";
+import { NotFound } from "helpers/classes/NotFound";
 
 export class ShowStoragePassword {
   constructor(
@@ -18,7 +20,7 @@ export class ShowStoragePassword {
       userId
     );
     if (!storageSchema) {
-      throw Error("Storage not found");
+      throw new NotFound("Storage not found");
     }
 
     const storage = new Storage({
@@ -34,13 +36,13 @@ export class ShowStoragePassword {
     const user = await this.showUserPerUserIdRepository.show(userId);
 
     if (!user) {
-      throw Error("User not found");
+      throw new NotFound("User not found");
     }
 
     const passwordIsValid = await bcrypt.compare(password, user.password_hash);
 
     if (!passwordIsValid) {
-      throw Error("Invalid password");
+      throw new Unauthorized("Invalid password");
     }
 
     const descryptedPassword = storage.showPassword(storage.password);

@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { PostgresIndexStorageRepository } from "repositories/postgres/storage/postgres-index-storage-repository";
 import { IndexStorage } from "./index-storage";
 import { z } from "zod";
+import { Unauthorized } from "helpers/classes/Unauthorized";
 
 const ParamsSchema = z.object({
   userId: z.string(),
@@ -12,15 +13,13 @@ export class IndexStorageController {
       const { userId } = ParamsSchema.parse(req.params);
 
       if (!userId) {
-        return res.status(401).json({
-          error: "Login required",
-        });
+        throw new Unauthorized("Login required");
       }
 
       const indexStorageRepository = new PostgresIndexStorageRepository();
-      const indexStorage = new IndexStorage(indexStorageRepository);
+      const indexStorageService = new IndexStorage(indexStorageRepository);
 
-      const storages = await indexStorage.execute(userId);
+      const storages = await indexStorageService.execute(userId);
 
       return res.status(200).json({ storages });
     } catch (e) {

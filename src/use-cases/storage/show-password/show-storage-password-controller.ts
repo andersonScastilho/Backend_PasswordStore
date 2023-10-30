@@ -3,6 +3,7 @@ import { PostgresShowStorageRepository } from "repositories/postgres/storage/pos
 import { ShowStoragePassword } from "./show-storage-password";
 import { PostgresShowUserPerUserIdRepository } from "repositories/postgres/user/postgres-show-user-userId-repository";
 import { z } from "zod";
+import { BadRequest } from "helpers/classes/BadRequest";
 
 const BodySchema = z.object({
   password: z.string(),
@@ -20,9 +21,7 @@ export class ShowStoragePasswordController {
 
       const { storageId, userId } = ParamsSchema.parse(req.params);
       if (!password) {
-        return res.status(400).json({
-          error: "Missing data",
-        });
+        throw new BadRequest("Missing data");
       }
       const showStorageRepository = new PostgresShowStorageRepository();
       const showUserPerUserIdRepository =

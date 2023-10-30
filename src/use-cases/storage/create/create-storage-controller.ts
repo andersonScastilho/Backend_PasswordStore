@@ -35,9 +35,12 @@ export class CreateStorageController {
       });
 
       const storageRepository = new PostgresStorageRepository();
-      const createStorage = new CreateStorage(storage, storageRepository);
+      const createStorageService = new CreateStorage(
+        storage,
+        storageRepository
+      );
 
-      await createStorage.execute();
+      await createStorageService.execute();
 
       return res.status(200).json({
         storage: {
