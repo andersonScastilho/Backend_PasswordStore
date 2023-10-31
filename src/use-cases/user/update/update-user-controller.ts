@@ -77,13 +77,13 @@ export class UpdateUserController {
         oldPassword,
       });
 
-      return {
+      res.status(200).json({
         message: "Usuario atualizado com sucesso",
         user: {
           email: updatedUser.email,
           fullName: updatedUser.fullName,
         },
-      };
+      });
     } catch (e) {
       next(e);
     }
