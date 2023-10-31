@@ -3,6 +3,8 @@ import { z } from "zod";
 import { UpdateUser } from "./update-user";
 import { PostgresShowUserPerUserIdRepository } from "repositories/postgres/user/postgres-show-user-userId-repository";
 import { PostgresUpdateUserRepository } from "repositories/postgres/user/postgres-update-user-repository";
+import { BadRequest } from "helpers/classes/BadRequest";
+import { User } from "entities/user/User";
 
 const BodySchema = z.object({
   email: z.string().email().optional(),
@@ -35,58 +37,75 @@ export class UpdateUserController {
 
       if (newPassword) {
         if (!newPasswordConfirmation) {
-          throw Error("newPasswordConfirmation is required to update password");
+          throw new BadRequest(
+            "newPasswordConfirmation is required to update password"
+          );
         }
         if (!oldPassword) {
-          throw Error("oldPassword is required to update password");
+          throw new BadRequest("oldPassword is required to update password");
         }
         if (newPasswordConfirmation !== newPassword) {
-          throw Error("the password and newPasswordConfirmation not is macth");
+          throw new BadRequest(
+            "the password and newPasswordConfirmation not is macth"
+          );
         }
-      }
-
-      if (
-        !email &&
-        !newPassword &&
-        !newPasswordConfirmation &&
-        !oldPassword &&
-        !fullName
-      ) {
-        throw Error("Missing data");
       }
 
       const showUserRepository = new PostgresShowUserPerUserIdRepository();
       const showUserPerEmailRepository =
         new PostgresShowUserPerUserIdRepository();
       const updateUserRepository = new PostgresUpdateUserRepository();
-      const updateUser = new UpdateUser(
+
+      const user = new User({
+        email: email || "",
+        fullName: fullName || "",
+        password: "",
+        userId: userId,
+        verifiedEmail: false,
+      });
+
+      const updateUserService = new UpdateUser(
+        user,
         showUserRepository,
         showUserPerEmailRepository,
         updateUserRepository
       );
 
-      const {
-        email: responseEmail,
-        fullName: responseFullName,
-        id: responseId,
-      } = await updateUser.execute({
-        userId,
-        email,
-        fullName,
+      const updatedUser = await updateUserService.execute({
         newPassword,
         newPasswordConfirmation,
         oldPassword,
       });
 
-      return res.status(200).json({
-        props: {
-          email: responseEmail,
-          fullName: responseFullName,
-          id: responseId,
+      return {
+        message: "Usuario atualizado com sucesso",
+        user: {
+          email: updatedUser.email,
+          fullName: updatedUser.fullName,
         },
-      });
+      };
     } catch (e) {
       next(e);
     }
   }
 }
+// const {
+//   email: responseEmail,
+//   fullName: responseFullName,
+//   id: responseId,
+// } = await updateUser.execute({
+//   userId,
+//   email,
+//   fullName,
+//   newPassword,
+//   newPasswordConfirmation,
+//   oldPassword,
+// });
+
+// return res.status(200).json({
+//   props: {
+//     email: responseEmail,
+//     fullName: responseFullName,
+//     id: responseId,
+//   },
+// });

@@ -3,6 +3,11 @@ import { randomUUID } from "crypto";
 import { UserType } from "./userTypes";
 import { BadRequest } from "helpers/classes/BadRequest";
 
+interface updateUserPassword {
+  oldPassword: string;
+  newPassword: string;
+  newPasswordConfirmation: string;
+}
 export class User {
   get userEmail() {
     return this._props.email;
@@ -22,6 +27,13 @@ export class User {
 
   get verifiedEmail() {
     return this._props.verifiedEmail;
+  }
+
+  set updateEmail(email: string) {
+    this._props.email = email;
+  }
+  set updateFullName(fullName: string) {
+    this._props.fullName = fullName;
   }
 
   constructor(private readonly _props: UserType) {}
@@ -55,11 +67,11 @@ export class User {
     return passwordIsValid;
   }
 
-  private async _updatePassword(
-    oldPassword: string,
-    newPassword: string,
-    newPasswordConfirmation: string
-  ) {
+  async updatePassword({
+    oldPassword,
+    newPassword,
+    newPasswordConfirmation,
+  }: updateUserPassword) {
     const verifyPasswordIsStrong = (value: string) =>
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(
         value
@@ -100,101 +112,3 @@ export class User {
     return;
   }
 }
-
-/* interface UpdateUser {   
-  fullName?: string;
-  email?: string;
-  userId?: string;
-  verifiedEmail?: boolean;
-  oldPassword?: string;
-  newPassword?: string;
-  newPasswordConfirmation?: string;
-}
-
-
-  private async _encryptedPassword(password: string) {
-    const hashPassword = await bcrypt.hash(password, 10);
-
-    return hashPassword;
-  }
-
-  async comparePasswords(password: string) {
-    const passwordIsValid = await bcrypt.compare(password, this.userPassword);
-
-    return passwordIsValid;
-  }
-
-  private async _updatePassword(
-    oldPassword: string,
-    newPassword: string,
-    newPasswordConfirmation: string
-  ) {
-    const verifyPasswordIsStrong = (value: string) =>
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(
-        value
-      );
-
-    const isMatchPassword = await this.comparePasswords(oldPassword);
-
-    if (!isMatchPassword) {
-      throw Error("Invalid password");
-    }
-
-    if (newPassword !== newPasswordConfirmation) {
-      throw Error("Password confirmation must be the same as password");
-    }
-
-    const passwordIsStrong = verifyPasswordIsStrong(newPassword);
-
-    if (!passwordIsStrong) {
-      throw Error(
-        "Senha deve conter 8+ caracteres, minúscula, maiúscula e especial"
-      );
-    }
-
-    const encryptedPassword = await this._encryptedPassword(newPassword);
-
-    this._props.userPassword = encryptedPassword;
-
-    return;
-  }
-
-  async createUser() {
-    const userId = uuidv4();
-
-    this._props.userId = userId;
-
-    const password = await this._encryptedPassword(this._props.userPassword);
-
-    this._props.userPassword = password;
-
-    return;
-  }
-  async updateUser(props: UpdateUser) {
-    if (props.email) {
-      this._props.userEmail = props.email;
-    }
-    if (props.fullName) {
-      this._props.userFullName = props.fullName;
-    }
-
-    if (
-      props.newPassword &&
-      props.oldPassword &&
-      props.newPasswordConfirmation
-    ) {
-      await this._updatePassword(
-        props.oldPassword,
-        props.newPassword,
-        props.newPasswordConfirmation
-      );
-    }
-  }
-  async resetPassword(newPassword: string) {
-    const newPasswordHash = await this._encryptedPassword(newPassword);
-
-    this._props.userPassword = newPasswordHash;
-
-    return;
-  }
-*/

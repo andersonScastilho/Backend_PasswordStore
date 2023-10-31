@@ -1,67 +1,65 @@
 import { User } from "entities/user/User";
+import { BadRequest } from "helpers/classes/BadRequest";
+import { NotFound } from "helpers/classes/NotFound";
 import { ShowUserPerEmailRepository } from "repositories/user/show-user-email-repository";
 import { ShowUserPerUserIdRepository } from "repositories/user/show-user-userId-repository";
 import { UpdateUserRepository } from "repositories/user/update-user-repository";
 import { myEmitter } from "service/events/user-events";
 
-interface UpdateUserRequest {
-  userId: string;
-  email?: string;
+interface updateUserPassword {
   oldPassword?: string;
-  fullName?: string;
   newPassword?: string;
   newPasswordConfirmation?: string;
 }
 
 export class UpdateUser {
   constructor(
+    private user: User,
     private showUserPerUserIdRepository: ShowUserPerUserIdRepository,
     private showUserPerUserEmailRepository: ShowUserPerEmailRepository,
     private updateUserRepository: UpdateUserRepository
   ) {}
   async execute({
-    userId,
-    email,
-    fullName,
-    oldPassword,
     newPassword,
     newPasswordConfirmation,
-  }: UpdateUserRequest) {
-    const userSchema = await this.showUserPerUserIdRepository.show(userId);
+    oldPassword,
+  }: updateUserPassword) {
+    const userSchema = await this.showUserPerUserIdRepository.show(
+      this.user.userId
+    );
 
     if (!userSchema) {
-      throw Error("User not found");
+      throw new NotFound("User not found");
     }
 
-    if (email) {
-      const userEmail = await this.showUserPerUserEmailRepository.show(email);
+    if (this.user.userEmail !== "") {
+      const userEmail = await this.showUserPerUserEmailRepository.show(
+        this.user.userEmail
+      );
 
       if (userEmail) {
-        throw Error("Email in use");
+        throw new BadRequest("Email in use");
       }
+    } else {
+      this.user.updateEmail = userSchema.email;
     }
 
-    const user = new User({
-      userId: userSchema.id,
-      userEmail: userSchema.email,
-      userFullName: userSchema.fullName,
-      userPassword: userSchema.password_hash,
-      verifiedEmail: userSchema.verifiedEmail,
-    });
+    if (this.user.userFullName === "") {
+      this.user.updateFullName = userSchema.fullName;
+    }
 
-    await user.updateUser({
-      email: email,
-      fullName: fullName,
-      userId,
-      newPassword,
-      oldPassword,
-      newPasswordConfirmation,
-    });
+    if (newPassword && newPasswordConfirmation && oldPassword) {
+      await this.user.updatePassword({
+        newPassword,
+        newPasswordConfirmation,
+        oldPassword,
+      });
+    }
 
-    const updatedUser = await this.updateUserRepository.update(user);
+    const updatedUser = await this.updateUserRepository.update(this.user);
 
-    if (email) {
-      myEmitter.emit("user/email/not-verified", updatedUser.id);
+    if (updatedUser.email !== userSchema.email) {
+      myEmitter.emit("user/email/not-verified", this.user.userId);
     }
 
     return updatedUser;
