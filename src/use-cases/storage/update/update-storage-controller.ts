@@ -48,7 +48,16 @@ export class UpdateStorageController {
         password,
       });
 
-      return res.status(200).json({ storage });
+      return res.status(200).json({
+        message: "Storage atualizado com sucesso",
+        storage: {
+          account: storage.account,
+          description: storage.description,
+          usageLocation: storage.usageLocation,
+          link: storage.link,
+          storageId: storage.storageId,
+        },
+      });
     } catch (e) {
       next(e);
     }
