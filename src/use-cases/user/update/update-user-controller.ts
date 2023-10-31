@@ -82,6 +82,7 @@ export class UpdateUserController {
         user: {
           email: updatedUser.email,
           fullName: updatedUser.fullName,
+          verifiedEmail: updatedUser.verifiedEmail,
         },
       });
     } catch (e) {

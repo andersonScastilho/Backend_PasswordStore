@@ -24,6 +24,7 @@ export class ShowUserController {
           email: user.userEmail,
           fullName: user.userFullName,
           id: userId,
+          verifiedEmail: user.verifiedEmail,
         },
       });
     } catch (e) {
