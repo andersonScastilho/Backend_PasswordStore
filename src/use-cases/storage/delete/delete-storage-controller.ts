@@ -24,7 +24,7 @@ export class DeleteStorageController {
 
       await deleteStorage.execute(storageId, userId);
 
-      return res.status(200).json({});
+      return res.status(200).json({ message: "Storage deletado com sucesso" });
     } catch (e) {
       next(e);
     }

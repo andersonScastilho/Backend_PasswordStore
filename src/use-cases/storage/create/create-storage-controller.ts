@@ -43,16 +43,15 @@ export class CreateStorageController {
       await createStorageService.execute();
 
       return res.status(200).json({
+        message: "Storage criado com sucesso",
         storage: {
-          props: {
-            account: storage.account,
-            usageLocation: storage.usageLocation,
-            password: "",
-            description: storage.description,
-            link: storage.link,
-            userId: storage.userId,
-            storageId: storage.storageId,
-          },
+          account: storage.account,
+          usageLocation: storage.usageLocation,
+          password: "",
+          description: storage.description,
+          link: storage.link,
+          userId: storage.userId,
+          storageId: storage.storageId,
         },
       });
     } catch (e) {

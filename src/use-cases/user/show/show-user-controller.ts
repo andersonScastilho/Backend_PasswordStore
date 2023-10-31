@@ -20,7 +20,8 @@ export class ShowUserController {
       const user = await showUserService.execute(userId);
 
       return res.status(200).json({
-        props: {
+        message: "Usuario encontrado com sucesso",
+        user: {
           email: user.userEmail,
           fullName: user.userFullName,
           id: userId,

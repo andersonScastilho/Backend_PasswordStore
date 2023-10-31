@@ -38,7 +38,12 @@ export class ShowStoragePasswordController {
         password
       );
 
-      return res.status(200).json({ descryptedPassword });
+      return res
+        .status(200)
+        .json({
+          message: "Senha desencriptografada com sucesso",
+          senha: descryptedPassword,
+        });
     } catch (e) {
       next(e);
     }
