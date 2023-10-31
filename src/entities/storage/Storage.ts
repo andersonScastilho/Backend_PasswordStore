@@ -1,21 +1,10 @@
 import { decrypt } from "utils/crypt";
 import { v4 as uuidv4 } from "uuid";
 import { encrypt } from "../../utils/crypt";
-
-interface StorageProps {
-  storageId: string;
-  password: string;
-  account: string;
-  usageLocation: string;
-  link: string | null;
-  description: string | null;
-  userId: string;
-}
-
-type updateUser = Partial<Storage>;
+import { StorageType, UpdateStorage } from "./storageTypes";
 
 export class Storage {
-  private props: StorageProps;
+  private props: StorageType;
 
   get storageId() {
     return this.props.storageId;
@@ -39,7 +28,7 @@ export class Storage {
     return this.props.userId;
   }
 
-  constructor(props: StorageProps) {
+  constructor(props: StorageType) {
     this.props = props;
   }
 
@@ -64,7 +53,7 @@ export class Storage {
     return;
   }
 
-  updateStorage(props: updateUser) {
+  updateStorage(props: UpdateStorage) {
     if (props.password) {
       const { iv, content, tag } = encrypt(props.password);
       const encryptedPassword = `${iv}:${content}:${tag}`;
