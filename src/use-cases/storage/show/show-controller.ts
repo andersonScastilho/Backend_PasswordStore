@@ -16,7 +16,18 @@ export class ShowStorageController {
       const showStorage = new ShowStorage(storageRepository);
       const storage = await showStorage.execute(storageId, userId);
 
-      return res.status(200).json({ storage });
+      return res.status(200).json({
+        message: "storage encontrado com sucesso",
+        storage: {
+          account: storage.account,
+          usageLocation: storage.usageLocation,
+          password: "",
+          description: storage.description,
+          link: storage.link,
+          userId: storage.userId,
+          storageId: storage.storageId,
+        },
+      });
     } catch (e) {
       next(e);
     }
