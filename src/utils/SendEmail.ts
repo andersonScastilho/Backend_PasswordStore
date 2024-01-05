@@ -1,7 +1,7 @@
 import nodemailer from "nodemailer";
 
 class SendEmail {
-  private readonly sender = "leosilvacast@gmail.com";
+  private readonly sender = "passtorageapp@gmail.com";
 
   constructor(
     private readonly _recipient: string,
@@ -13,11 +13,8 @@ class SendEmail {
     let transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        type: "OAuth2",
         user: process.env.MAIL_USERNAME,
-        clientId: process.env.OAUTH_CLIENTID,
-        clientSecret: process.env.OAUTH_CLIENT_SECRET,
-        refreshToken: process.env.OAUTH_REFRESH_TOKEN,
+        pass: process.env.MAIL_PASSWORD,
       },
     });
 
